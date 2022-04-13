@@ -1,0 +1,66 @@
+ZEPHYR {                                ZEPHYR provides the user with easy-to-use functions to set up
+    version                             Version of ZEPHYR
+    cacheMap                            Internal storage mechanism for loading/storing/retrieving images
+    layerMap                            Internal storage mechanism for different layers
+    spriteMap                           Internal storage for created Sprites
+    utils {                             Utilities for programmers
+        setTitle(title)                 Sets the tab name
+        addLayer(layerName)             Adds a layer to the layerMap for rendering
+        cache(imgURL)                   Loads the image at the specified path into memory (cacheMap)
+        setSprite(spriteName, obj)      Creates/sets a Sprite in memory to the provided object
+        getSprite(spriteName)           Returns a sprite object from storage
+        !createMouseListener()           Starts collecting data about mouse movements and clicks for interaction
+        !createKeyboardListener()        Starts collecting key presses for interaction
+        lap()                           A timing function similar to a stopwatch, it returns the time since the last lap()
+        testCollision()
+    }
+    scene {                             The visual ouput
+        width                           The width (in pixels) of the scene
+        height                          The height (in pixels) of the scene
+        antialias                       Boolean if the scene should smooth pixels
+        view                            The DOM element that holds the layered canvases
+        viewPx {
+            x
+            y
+        }
+    }
+    system {                            Functions that ZEPHYR uses to help do things
+        renderLoop()                    Self-calling loop that takes care of rendering Sprites to layers
+        lap
+    }
+    math {                              ZEPHYR's built-in math functions (collisions)
+        collision(a, b)                 Returns true/false if the objects are colliding
+    }
+    stat {
+        active                          True/False whether to get/show statistics
+        fps                             Current fps
+        ms                              Where performance.now() can be stored for inter-frame timings
+        element                         The actual DOM element that shows information
+        layerCulledSprites              Number of sprites that are already drawn from a previous frame
+        culledSprites                   Number of sprites outside the render window that are not drawn
+    }
+    Application(settings)               The "constructor" that sets up the scene and begins rendering
+}
+
+layer {                                 Stored structure for layers
+    edited                              If sprites are added that pertain to this layer, this lets the renderLoop know to clear
+    element                             The actual DOM element <canvas>
+    ctx                                 The context used for drawing
+    minXDraw                            Used for optimized clearing
+    minYDraw                            ^
+    maxXDraw                            ^
+    maxYDraw                            ^
+}
+
+sprite {                                Stored structure for Sprites
+    layer                               The layer that it will be drawn onto
+    src                                 The cached imgURL to draw
+    x                                   The x coordinate to draw the anchor of the Sprite at
+    y                                   The y coordinate to draw the anchor of the Sprite at
+    anchor {
+        x                               (0.0-1.0) the x position of the Sprite anchor, relative to image width
+        y                               (0.0-1.0) the y position of the Sprite anchor, relative to image width
+    }
+    draw                                Whether or not to draw the sprite during the renderLoop
+    data                                Engine-produced data for faster rendering and collision math
+}
