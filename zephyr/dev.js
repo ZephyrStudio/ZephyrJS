@@ -122,18 +122,15 @@ ZEPHYR.utils.createMouseListener = () => {
     ZEPHYR.mouse = {
         data: new Map()
     }
-    ZEPHYR.mouse.data.set("left", false);
-    ZEPHYR.mouse.data.set("middle", false);
-    ZEPHYR.mouse.data.set("right", false);
 
     ZEPHYR.mouse.getX = () => {
-        return ZEPHYR.mouse.data.get("x");
+        return +(ZEPHYR.mouse.data.get("x"));
     }
     ZEPHYR.mouse.getY = () => {
-        return ZEPHYR.mouse.data.get("y");
+        return +(ZEPHYR.mouse.data.get("y"));
     }
     ZEPHYR.mouse.isDown = (str) => {
-        return ZEPHYR.mouse.data.has(str) && ZEPHYR.mouse.data.get(str);
+        return !!(ZEPHYR.mouse.data.get(str));
     }
 
     document.body.onmousedown = async (e) => {
@@ -178,7 +175,7 @@ ZEPHYR.utils.createKeyListener = () => {
     }
 
     ZEPHYR.key.isDown = (str) => {
-        return ZEPHYR.key.data.has(str) && ZEPHYR.key.data.get(str);
+        return !!(ZEPHYR.key.data.get(str));
     }
 
     document.body.onkeydown = async (e) => {

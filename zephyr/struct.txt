@@ -1,13 +1,15 @@
 ZEPHYR {                                ZEPHYR provides the user with easy-to-use functions to set up
     version                             Version of ZEPHYR
-    mouseData
     mouse {
         data
         getX()
         getY()
         isDown(buttonString)
     }
-    keyboardData
+    key {
+        data
+        isDown(keyString)
+    }
     cacheMap                            Internal storage mechanism for loading/storing/retrieving images
     layerMap                            Internal storage mechanism for different layers
     spriteMap                           Internal storage for created Sprites
