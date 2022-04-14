@@ -17,7 +17,7 @@ ZEPHYR {                                ZEPHYR provides the user with easy-to-us
     scene {                             The visual ouput
         width                           The width (in pixels) of the scene
         height                          The height (in pixels) of the scene
-        antialias                       Boolean if the scene should smooth pixels
+        smooth                          Boolean if the scene should smooth pixels
         view                            The DOM element that holds the layered canvases
         viewPx {
             x
@@ -40,6 +40,12 @@ ZEPHYR {                                ZEPHYR provides the user with easy-to-us
         culledSprites                   Number of sprites outside the render window that are not drawn
     }
     Application(settings)               The "constructor" that sets up the scene and begins rendering
+        settings {
+            width: Number (pixel height of canvas)
+            height: Number (pixel height of canvas)
+            smooth: Boolean (True-sharp image scaling | False-interpolation)
+            statistics: Boolean (True-Show scene statistics | False-none)
+        }
 }
 
 layer {                                 Stored structure for layers

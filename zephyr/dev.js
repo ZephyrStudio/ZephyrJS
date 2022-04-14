@@ -52,7 +52,7 @@ ZEPHYR.utils.addLayer = (layerName) => {
     c.width = ZEPHYR.scene.width;
     c.height = ZEPHYR.scene.height;
     let ctx = c.getContext('2d');
-    ctx.imageSmoothingEnabled = ZEPHYR.antialias;
+    ctx.imageSmoothingEnabled = ZEPHYR.scene.smooth;
 
     let layer = {
         edited: true,
@@ -113,7 +113,7 @@ ZEPHYR.utils.createMouseListener = () => {
 
 // Application "constructor"
 ZEPHYR.Application = (settings) => {
-    // Pass in an object with width, height, antialias, etc.
+    // Pass in an object with width, height, sharp, etc.
 
     // Pixel dimensions
     ZEPHYR.scene.width = settings.width || screen.width; // Specified or screen
@@ -123,7 +123,10 @@ ZEPHYR.Application = (settings) => {
     ZEPHYR.scene.view.style.maxHeight = "calc(100vw * " + (ZEPHYR.scene.height / ZEPHYR.scene.width) + ")";
 
     // Misc. Settings
-    ZEPHYR.scene.antialias = !!(settings.antialias) || false;
+    ZEPHYR.scene.smooth = !!(settings.smooth) || false;
+    // if (ZEPHYR.scene.sharp) {
+    //     ZEPHYR.scene.view.style = "image-rendering: pixelated;image-rendering: -moz-crisp-edges;image-rendering: crisp-edges;";
+    // }
 
     ZEPHYR.scene.view.id = "zephyr-scene"; // Add id so stylings work
 
@@ -132,7 +135,7 @@ ZEPHYR.Application = (settings) => {
         s.id = "statistics";
         ZEPHYR.stat.active = true;
         ZEPHYR.stat.element = s;
-        ZEPHYR.stat.fps = 999;
+        ZEPHYR.stat.fps = 0;
         ZEPHYR.stat.ms = 0;
         ZEPHYR.stat.layerCulledSprites = 0;
         ZEPHYR.stat.culledSprites = 0;

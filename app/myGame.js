@@ -1,4 +1,4 @@
-ZEPHYR.Application({ width: 1920, height: 1080, antialias: true, statistics: true });
+ZEPHYR.Application({ width: 1920, height: 1080, smooth: false, statistics: true });
 
 window.onload = async () => {
 
@@ -22,7 +22,6 @@ window.onload = async () => {
 
 update = async () => {
     window.requestAnimationFrame(update);
-    console.log(ZEPHYR.utils.lap());
     let i = 0;
     while (i++ < 99) {
         let c = ZEPHYR.utils.getSprite("coconut" + i);
