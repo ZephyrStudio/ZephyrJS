@@ -1,5 +1,13 @@
 ZEPHYR {                                ZEPHYR provides the user with easy-to-use functions to set up
     version                             Version of ZEPHYR
+    mouseData
+    mouse {
+        data
+        getX()
+        getY()
+        isDown(buttonString)
+    }
+    keyboardData
     cacheMap                            Internal storage mechanism for loading/storing/retrieving images
     layerMap                            Internal storage mechanism for different layers
     spriteMap                           Internal storage for created Sprites
@@ -26,7 +34,12 @@ ZEPHYR {                                ZEPHYR provides the user with easy-to-us
     }
     system {                            Functions that ZEPHYR uses to help do things
         renderLoop()                    Self-calling loop that takes care of rendering Sprites to layers
+        getSceneDOMBounds()                
         lap
+        width
+        height
+        x
+        y
     }
     math {                              ZEPHYR's built-in math functions (collisions)
         collision(a, b)                 Returns true/false if the objects are colliding

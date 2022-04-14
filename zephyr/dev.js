@@ -13,7 +13,11 @@ const ZEPHYR = {
         view: document.createElement('div')
     },
     system: {
-        lap: performance.now()
+        lap: performance.now(),
+        width: -1,
+        height: -1,
+        x: -1,
+        y: -1
     },
     math: {},
     stat: {
@@ -24,7 +28,11 @@ console.log(ZEPHYR.version);
 
 // Setup because it's a website
 document.head.innerHTML += '<link type="text/css" rel="stylesheet" href="zephyr/style.css">';
+
 document.oncontextmenu = (e) => { e.preventDefault(); return false; }
+window.onresize = async(e) => {
+    ZEPHYR.system.getSceneDOMBounds();
+}
 
 ZEPHYR.utils.setTitle = (title) => {
     document.title = title;
@@ -52,7 +60,10 @@ ZEPHYR.utils.addLayer = (layerName) => {
     c.width = ZEPHYR.scene.width;
     c.height = ZEPHYR.scene.height;
     let ctx = c.getContext('2d');
-    ctx.imageSmoothingEnabled = ZEPHYR.scene.smooth;
+    // imageSmoothingEnabled should be user-controllable, but
+    // as long as Sprites aren't getting scaled and they're
+    // drawn at whole integer positions, we don't need this
+    ctx.imageSmoothingEnabled = false;
 
     let layer = {
         edited: true,
@@ -108,7 +119,75 @@ ZEPHYR.utils.lap = async () => {
 }
 
 ZEPHYR.utils.createMouseListener = () => {
-    
+    ZEPHYR.mouse = {
+        data: new Map()
+    }
+    ZEPHYR.mouse.data.set("left", false);
+    ZEPHYR.mouse.data.set("middle", false);
+    ZEPHYR.mouse.data.set("right", false);
+
+    ZEPHYR.mouse.getX = () => {
+        return ZEPHYR.mouse.data.get("x");
+    }
+    ZEPHYR.mouse.getY = () => {
+        return ZEPHYR.mouse.data.get("y");
+    }
+    ZEPHYR.mouse.isDown = (str) => {
+        return ZEPHYR.mouse.data.has(str) && ZEPHYR.mouse.data.get(str);
+    }
+
+    document.body.onmousedown = async (e) => {
+        switch (e.button) {
+            case(0): // Left click
+            ZEPHYR.mouse.data.set("left", true);
+            break;
+            case(1): // Left click
+            ZEPHYR.mouse.data.set("middle", true);
+            break;
+            case(2): // Left click
+            ZEPHYR.mouse.data.set("right", true);
+            break;
+        }
+    }
+
+    document.body.onmouseup = async (e) => {
+        switch (e.button) {
+            case(0): // Left click
+            ZEPHYR.mouse.data.set("left", false);
+            break;
+            case(1): // Left click
+            ZEPHYR.mouse.data.set("middle", false);
+            break;
+            case(2): // Left click
+            ZEPHYR.mouse.data.set("right", false);
+            break;
+        }
+    }
+
+    document.onmousemove = async (event) => {
+        ZEPHYR.mouse.data.set("x", (event.clientX - ZEPHYR.system.x) / ZEPHYR.system.width);
+        ZEPHYR.mouse.data.set("y", (event.clientY - ZEPHYR.system.y) / ZEPHYR.system.height);
+    }
+
+    ZEPHYR.system.getSceneDOMBounds();
+}
+
+ZEPHYR.utils.createKeyListener = () => {
+    ZEPHYR.key = {
+        data: new Map()
+    }
+
+    ZEPHYR.key.isDown = (str) => {
+        return ZEPHYR.key.data.has(str) && ZEPHYR.key.data.get(str);
+    }
+
+    document.body.onkeydown = async (e) => {
+        ZEPHYR.key.data.set(e.key.toLowerCase(), true);
+    }
+
+    document.body.onkeyup = async (e) => {
+        ZEPHYR.key.data.set(e.key.toLowerCase(), false);
+    }
 }
 
 // Application "constructor"
@@ -124,9 +203,9 @@ ZEPHYR.Application = (settings) => {
 
     // Misc. Settings
     ZEPHYR.scene.smooth = !!(settings.smooth) || false;
-    // if (ZEPHYR.scene.sharp) {
-    //     ZEPHYR.scene.view.style = "image-rendering: pixelated;image-rendering: -moz-crisp-edges;image-rendering: crisp-edges;";
-    // }
+    if (!ZEPHYR.scene.smooth) {
+        ZEPHYR.scene.view.classList.toggle("sharp");
+    }
 
     ZEPHYR.scene.view.id = "zephyr-scene"; // Add id so stylings work
 
@@ -145,16 +224,25 @@ ZEPHYR.Application = (settings) => {
     ZEPHYR.scene.viewPx = { x: 1.0 / ZEPHYR.scene.width, y: 1.0 / ZEPHYR.scene.height };
 
     document.body.appendChild(ZEPHYR.scene.view);
+
     ZEPHYR.system.renderLoop();
 }
 
-ZEPHYR.system.renderLoop = () => {
+ZEPHYR.system.getSceneDOMBounds = async () => {
+    let bound = ZEPHYR.scene.view.getBoundingClientRect();
+    ZEPHYR.system.width = bound.width;
+    ZEPHYR.system.height = bound.height;
+    ZEPHYR.system.x = bound.x;
+    ZEPHYR.system.y = bound.y;
+}
+
+ZEPHYR.system.renderLoop = async () => {
     window.requestAnimationFrame(ZEPHYR.system.renderLoop);
 
     // Statistic stuff
     if (ZEPHYR.stat.active) {
-        ZEPHYR.stat.fps += 150.0 / (performance.now() - ZEPHYR.stat.ms);
-        ZEPHYR.stat.fps /= 1.15;
+        ZEPHYR.stat.fps += 50.0 / (performance.now() - ZEPHYR.stat.ms);
+        ZEPHYR.stat.fps /= 1.05;
         ZEPHYR.stat.ms = performance.now();
         ZEPHYR.stat.layerCulledSprites = 0;
         ZEPHYR.stat.culledSprites = 0;
@@ -198,7 +286,7 @@ ZEPHYR.system.renderLoop = () => {
     });
 
     if (ZEPHYR.stat.active) {
-        ZEPHYR.stat.element.innerText = "FPS: " + ((ZEPHYR.stat.fps + 0.3) | 0) + '\nFrametime: ' + ((performance.now() - (ZEPHYR.stat.ms)) * 0.001).toFixed(3) + "s\n\nScene:\n" + ZEPHYR.spriteMap.size + " sprites on " + ZEPHYR.layerMap.size + " layers\nAvoided Sprite Redraws: " + ZEPHYR.stat.layerCulledSprites + "\nOffscreen-Culled Sprites: " + ZEPHYR.stat.culledSprites;
+        ZEPHYR.stat.element.innerText = "FPS: " + ((ZEPHYR.stat.fps + 0.1) | 0) + '\nFrametime: ' + ((performance.now() - (ZEPHYR.stat.ms)) * 0.001).toFixed(3) + "s\n\nScene:\n" + ZEPHYR.spriteMap.size + " sprites on " + ZEPHYR.layerMap.size + " layers\nAvoided Sprite Redraws: " + ZEPHYR.stat.layerCulledSprites + "\nOffscreen-Culled Sprites: " + ZEPHYR.stat.culledSprites;
     }
 }
 

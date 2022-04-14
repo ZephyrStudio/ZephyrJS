@@ -3,6 +3,12 @@
     padding: 0;
 }
 
+.sharp {
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
 html {
     background-color: #000;
 }
@@ -21,9 +27,6 @@ div#zephyr-scene {
     max-width: 100vw;
     position: relative;
     background-color: #000;
-    image-rendering: pixelated;
-    image-rendering: -moz-crisp-edges;
-    image-rendering: crisp-edges;
 }
 
 div#zephyr-scene canvas {
