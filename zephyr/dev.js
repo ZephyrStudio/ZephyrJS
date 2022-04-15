@@ -150,7 +150,7 @@ ZEPHYR.utils.setSprite = (spriteName, obj) => {
         }
         o.data.inScene = ZEPHYR.math.inScene(o.data);
     }
-    ZEPHYR.layerMap.get(o.layer).edited = edited;
+    ZEPHYR.layerMap.get(o.layer).edited |= edited;
 }
 ZEPHYR.utils.getSprite = (spriteName) => {
     return ZEPHYR.spriteMap.get(spriteName);
