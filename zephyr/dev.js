@@ -1,7 +1,7 @@
 "use strict"
 
 const ZEPHYR = {
-    version: "ZephyrJS 22.4.8",
+    version: "ZephyrJS 22.4.15",
     cacheMap: new Map(),
     layerMap: new Map(),
     spriteMap: new Map(),
@@ -10,7 +10,9 @@ const ZEPHYR = {
         width: 0,
         height: 0,
         antialias: false,
-        view: document.createElement('div')
+        view: document.createElement('div'),
+        pxScale: {},
+        viewCenter: {}
     },
     system: {
         lap: performance.now(),
@@ -30,14 +32,12 @@ console.log(ZEPHYR.version);
 document.head.innerHTML += '<link type="text/css" rel="stylesheet" href="zephyr/style.css">';
 
 document.oncontextmenu = (e) => { e.preventDefault(); return false; }
-window.onresize = async(e) => {
-    ZEPHYR.system.getSceneDOMBounds();
+window.onresize = async (e) => {
+ZEPHYR.system.getSceneDOMBounds();
 }
-
 ZEPHYR.utils.setTitle = (title) => {
     document.title = title;
 }
-
 // Image asset caching
 ZEPHYR.utils.cache = async (imgURL) => {
     if (ZEPHYR.cacheMap.has(imgURL)) return;
@@ -50,7 +50,6 @@ ZEPHYR.utils.cache = async (imgURL) => {
     await imageLoadPromise;
     ZEPHYR.cacheMap.set(imgURL, img);
 }
-
 // Layering functionality
 ZEPHYR.utils.addLayer = (layerName) => {
 
@@ -77,47 +76,90 @@ ZEPHYR.utils.addLayer = (layerName) => {
     ZEPHYR.layerMap.set(layerName, layer);
     ZEPHYR.scene.view.appendChild(layer.element);
 }
-
 ZEPHYR.utils.setSprite = (spriteName, obj) => {
-    let sprite = {
-        layer: obj.layer,
-        src: obj.src,
-        x: obj.x || 0,
-        y: obj.y || 0,
-        anchor: {},
-        draw: !!(obj.draw)
+    if (!ZEPHYR.spriteMap.has(spriteName)) { // Create default Sprite if new
+        let defSprite = {
+            layer: "",
+            src: "",
+            x: 0,
+            y: 0,
+            anchor: {
+                x: 0,
+                y: 0
+            },
+            draw: false,
+            cameraDependantPosition: false,
+            data: {
+                x: 0,
+                y: 0,
+                width: 0,
+                height: 0
+            }
+        }
+        ZEPHYR.spriteMap.set(spriteName, defSprite);
+    }
+    let edited = false;
+    let srcEdit = false;
+    let o = ZEPHYR.spriteMap.get(spriteName); // Original Sprite
+
+    if (obj.layer && o.layer !== obj.layer) {
+        o.layer = obj.layer;
+        edited = true;
+    }
+    if (ZEPHYR.cacheMap.has(obj.src) && o.src !== obj.src) {
+        o.src = obj.src;
+        edited = srcEdit = true;
+    }
+    if (o.x !== obj.x) {
+        o.x = obj.x;
+        edited = true;
+    }
+    if (o.y !== obj.y) {
+        o.y = obj.y;
+        edited = true;
     }
     if (obj.anchor) {
-        sprite.anchor.x = obj.anchor.x || 0.0;
-        sprite.anchor.y = obj.anchor.y || 0.0;
-    } else {
-        sprite.anchor = { x: 0.0, y: 0.0 };
+        if (obj.anchor.x !== o.anchor.x) {
+            o.anchor.x = obj.anchor.x;
+            edited = true;
+        }
+        if (obj.anchor.y !== o.anchor.y) {
+            o.anchor.y = obj.anchor.y;
+            edited = true;
+        }
     }
-    sprite.data = {};
-    if (ZEPHYR.spriteMap.has(spriteName) && ZEPHYR.spriteMap.get(spriteName).src == sprite.src) {
-        sprite.data.width = ZEPHYR.spriteMap.get(spriteName).data.width;
-        sprite.data.height = ZEPHYR.spriteMap.get(spriteName).data.height;
-    } else {
-        let img = ZEPHYR.cacheMap.get(sprite.src);
-        sprite.data.width = img.width;
-        sprite.data.height = img.height;
+    if (obj.draw != undefined && (o.draw ^ obj.draw)) {
+        o.draw = obj.draw;
+        edited = true;
     }
-    sprite.data.x = (sprite.x * ZEPHYR.scene.width - sprite.anchor.x * sprite.data.width) | 0;
-    sprite.data.y = (sprite.y * ZEPHYR.scene.height - sprite.anchor.y * sprite.data.height) | 0;
-    ZEPHYR.spriteMap.set(spriteName, sprite);
-    ZEPHYR.layerMap.get(sprite.layer).edited = true;
+    if (obj.cameraDependantPosition != undefined) {
+        o.cameraDependantPosition = obj.cameraDependantPosition;
+        edited = true;
+    }
+    if (edited) {
+        if (srcEdit) {
+            let img = ZEPHYR.cacheMap.get(obj.src);
+            o.data.width = img.width;
+            o.data.height = img.height;
+        }
+        o.data.x = (o.x * ZEPHYR.scene.width - o.anchor.x * o.data.width) | 0;
+        o.data.y = (o.y * ZEPHYR.scene.height - o.anchor.y * o.data.height) | 0;
+        if (o.cameraDependantPosition) {
+            o.data.x -= ZEPHYR.scene.x;
+            o.data.y -= ZEPHYR.scene.y;
+        }
+        o.data.inScene = ZEPHYR.math.inScene(o.data);
+    }
+    ZEPHYR.layerMap.get(o.layer).edited = edited;
 }
-
 ZEPHYR.utils.getSprite = (spriteName) => {
     return ZEPHYR.spriteMap.get(spriteName);
 }
-
 ZEPHYR.utils.lap = async () => {
     let t = performance.now() - ZEPHYR.system.lap;
     ZEPHYR.system.lap = performance.now();
     return t;
 }
-
 ZEPHYR.utils.createMouseListener = () => {
     ZEPHYR.mouse = {
         data: new Map()
@@ -135,58 +177,69 @@ ZEPHYR.utils.createMouseListener = () => {
 
     document.body.onmousedown = async (e) => {
         switch (e.button) {
-            case(0): // Left click
-            ZEPHYR.mouse.data.set("left", true);
-            break;
-            case(1): // Left click
-            ZEPHYR.mouse.data.set("middle", true);
-            break;
-            case(2): // Left click
-            ZEPHYR.mouse.data.set("right", true);
-            break;
+            case (0): // Left click
+                ZEPHYR.mouse.data.set("left", true);
+                break;
+            case (1): // Left click
+                ZEPHYR.mouse.data.set("middle", true);
+                break;
+            case (2): // Left click
+                ZEPHYR.mouse.data.set("right", true);
+                break;
         }
     }
-
     document.body.onmouseup = async (e) => {
         switch (e.button) {
-            case(0): // Left click
-            ZEPHYR.mouse.data.set("left", false);
-            break;
-            case(1): // Left click
-            ZEPHYR.mouse.data.set("middle", false);
-            break;
-            case(2): // Left click
-            ZEPHYR.mouse.data.set("right", false);
-            break;
+            case (0): // Left click
+                ZEPHYR.mouse.data.set("left", false);
+                break;
+            case (1): // Left click
+                ZEPHYR.mouse.data.set("middle", false);
+                break;
+            case (2): // Left click
+                ZEPHYR.mouse.data.set("right", false);
+                break;
         }
     }
-
     document.onmousemove = async (event) => {
         ZEPHYR.mouse.data.set("x", (event.clientX - ZEPHYR.system.x) / ZEPHYR.system.width);
         ZEPHYR.mouse.data.set("y", (event.clientY - ZEPHYR.system.y) / ZEPHYR.system.height);
     }
-
     ZEPHYR.system.getSceneDOMBounds();
 }
-
 ZEPHYR.utils.createKeyListener = () => {
     ZEPHYR.key = {
         data: new Map()
     }
-
     ZEPHYR.key.isDown = (str) => {
         return !!(ZEPHYR.key.data.get(str));
     }
-
     document.body.onkeydown = async (e) => {
         ZEPHYR.key.data.set(e.key.toLowerCase(), true);
     }
-
     document.body.onkeyup = async (e) => {
         ZEPHYR.key.data.set(e.key.toLowerCase(), false);
     }
 }
+ZEPHYR.utils.setViewCenter = (obj) => {
+    if (ZEPHYR.scene.viewCenter.x != obj.x || ZEPHYR.scene.viewCenter.y != obj.y) {
+        // Assign new value
+        ZEPHYR.scene.viewCenter.x = obj.x;
+        ZEPHYR.scene.viewCenter.y = obj.y;
 
+        // Recalculate ZEPHYR.scene x and y
+        ZEPHYR.scene.x = (obj.x - 0.5) * ZEPHYR.scene.width;
+        ZEPHYR.scene.y = (obj.y - 0.5) * ZEPHYR.scene.height;
+
+        ZEPHYR.spriteMap.forEach(function (sprite) {
+            if (sprite.cameraDependantPosition) {
+                sprite.data.x = (sprite.x * ZEPHYR.scene.width - sprite.anchor.x * sprite.data.width - ZEPHYR.scene.x) | 0;
+                sprite.data.y = (sprite.y * ZEPHYR.scene.height - sprite.anchor.y * sprite.data.height - ZEPHYR.scene.y) | 0;
+                sprite.data.inScene = ZEPHYR.math.inScene(sprite.data);
+            }
+        });
+    }
+}
 // Application "constructor"
 ZEPHYR.Application = (settings) => {
     // Pass in an object with width, height, sharp, etc.
@@ -194,6 +247,8 @@ ZEPHYR.Application = (settings) => {
     // Pixel dimensions
     ZEPHYR.scene.width = settings.width || screen.width; // Specified or screen
     ZEPHYR.scene.height = settings.height || screen.height; // Specified or system
+    ZEPHYR.scene.x = 0;
+    ZEPHYR.scene.y = 0;
     // Maxing visual size
     ZEPHYR.scene.view.style.width = "calc(100vh * " + (ZEPHYR.scene.width / ZEPHYR.scene.height) + ")";
     ZEPHYR.scene.view.style.maxHeight = "calc(100vw * " + (ZEPHYR.scene.height / ZEPHYR.scene.width) + ")";
@@ -218,13 +273,13 @@ ZEPHYR.Application = (settings) => {
         document.body.appendChild(ZEPHYR.stat.element);
     }
 
-    ZEPHYR.scene.viewPx = { x: 1.0 / ZEPHYR.scene.width, y: 1.0 / ZEPHYR.scene.height };
+    ZEPHYR.scene.pxScale = { x: 1.0 / ZEPHYR.scene.width, y: 1.0 / ZEPHYR.scene.height };
+    ZEPHYR.utils.setViewCenter(0.5, 0.5);
 
     document.body.appendChild(ZEPHYR.scene.view);
 
     ZEPHYR.system.renderLoop();
 }
-
 ZEPHYR.system.getSceneDOMBounds = async () => {
     let bound = ZEPHYR.scene.view.getBoundingClientRect();
     ZEPHYR.system.width = bound.width;
@@ -232,7 +287,6 @@ ZEPHYR.system.getSceneDOMBounds = async () => {
     ZEPHYR.system.x = bound.x;
     ZEPHYR.system.y = bound.y;
 }
-
 ZEPHYR.system.renderLoop = async () => {
     window.requestAnimationFrame(ZEPHYR.system.renderLoop);
 
@@ -255,6 +309,7 @@ ZEPHYR.system.renderLoop = async () => {
             layer.maxYDraw = 0;
         }
     });
+    
     ZEPHYR.spriteMap.forEach(function (sprite) {
         /*
         Ok so this if statement checks:
@@ -262,7 +317,7 @@ ZEPHYR.system.renderLoop = async () => {
             If the user says that the sprite is visible
             If the sprite is actually within the visual bounds of the canvas
         */
-        if (ZEPHYR.layerMap.get(sprite.layer).edited && sprite.draw && ZEPHYR.math.collision(sprite.data, { x: 0, y: 0, width: ZEPHYR.scene.width, height: ZEPHYR.scene.height })) { // Sprite should be drawn
+        if (ZEPHYR.layerMap.get(sprite.layer).edited && sprite.draw && sprite.data.inScene) { // Sprite should be drawn
             // Draw Sprite from pre-calculated data
             let l = ZEPHYR.layerMap.get(sprite.layer);
             l.ctx.drawImage(ZEPHYR.cacheMap.get(sprite.src), sprite.data.x, sprite.data.y);
@@ -274,7 +329,7 @@ ZEPHYR.system.renderLoop = async () => {
             l.maxYDraw = Math.max(l.maxYDraw, sprite.data.y + sprite.data.height);
         } else {
             ZEPHYR.stat.layerCulledSprites += !ZEPHYR.layerMap.get(sprite.layer).edited;
-            ZEPHYR.stat.culledSprites += !ZEPHYR.math.collision(sprite.data, { x: 0, y: 0, width: ZEPHYR.scene.width, height: ZEPHYR.scene.height });
+            ZEPHYR.stat.culledSprites += !sprite.data.inScene;
         }
     });
 
@@ -286,7 +341,9 @@ ZEPHYR.system.renderLoop = async () => {
         ZEPHYR.stat.element.innerText = "FPS: " + ((ZEPHYR.stat.fps + 0.1) | 0) + '\nFrametime: ' + ((performance.now() - (ZEPHYR.stat.ms)) * 0.001).toFixed(3) + "s\n\nScene:\n" + ZEPHYR.spriteMap.size + " sprites on " + ZEPHYR.layerMap.size + " layers\nAvoided Sprite Redraws: " + ZEPHYR.stat.layerCulledSprites + "\nOffscreen-Culled Sprites: " + ZEPHYR.stat.culledSprites;
     }
 }
-
+ZEPHYR.math.inScene = (a) => {
+    return ZEPHYR.math.collision(a, {x: 0, y: 0, width: ZEPHYR.scene.width, height: ZEPHYR.scene.height});
+}
 ZEPHYR.math.collision = (a, b) => {
     return (a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y);
 }
