@@ -32,7 +32,7 @@ console.log(ZEPHYR.version);
 document.head.innerHTML += '<link type="text/css" rel="stylesheet" href="zephyr/style.css">';
 
 document.oncontextmenu = (e) => { e.preventDefault(); return false; }
-window.onresize = async (e) => {
+window.onresize = async () => {
 ZEPHYR.system.getSceneDOMBounds();
 }
 ZEPHYR.utils.setTitle = (title) => {
@@ -309,7 +309,7 @@ ZEPHYR.system.renderLoop = async () => {
             layer.maxYDraw = 0;
         }
     });
-    
+
     ZEPHYR.spriteMap.forEach(function (sprite) {
         /*
         Ok so this if statement checks:
