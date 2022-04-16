@@ -233,9 +233,11 @@ ZEPHYR.utils.setViewCenter = (obj) => {
 
         ZEPHYR.spriteMap.forEach(function (sprite) {
             if (sprite.cameraDependantPosition) {
+                console.log(sprite);
                 sprite.data.x = (sprite.x * ZEPHYR.scene.width - sprite.anchor.x * sprite.data.width - ZEPHYR.scene.x) | 0;
                 sprite.data.y = (sprite.y * ZEPHYR.scene.height - sprite.anchor.y * sprite.data.height - ZEPHYR.scene.y) | 0;
                 sprite.data.inScene = ZEPHYR.math.inScene(sprite.data);
+                ZEPHYR.layerMap.get(sprite.layer).edited = true;
             }
         });
     }

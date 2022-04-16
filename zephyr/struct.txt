@@ -22,7 +22,7 @@ ZEPHYR {                                ZEPHYR provides the user with easy-to-us
         createMouseListener()           Starts collecting data about mouse movements and clicks for interaction
         createKeyListener()             Starts collecting key presses for interaction
         lap()                           A timing function similar to a stopwatch, it returns the time since the last lap()
-        setViewCenter(x, y)             Moves the scene camera, changing the rendered position of Sprites with the 
+        setViewCenter({x, y})             Moves the scene camera, changing the rendered position of Sprites with the 
     }
     scene {                             The visual ouput
         x                               The leftmost rendered pixel in the scene, used for culling sprites and set by setViewCenter()

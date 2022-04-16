@@ -7,7 +7,7 @@ let camera = {x: 0.5, y: 0.5};
 window.onload = async () => {
 
     testCoconut = {
-        src: "app/coconut.png",
+        src: "efficiency/coconut.png",
         health: 20,
         movement: 0,
         dialog: "I am a coconut",
@@ -18,23 +18,22 @@ window.onload = async () => {
     ZEPHYR.utils.createMouseListener();
     ZEPHYR.utils.createKeyListener();
 
-    ZEPHYR.utils.setTitle("coconut");
 
-    await ZEPHYR.utils.cache("app/coconut.png");
-    await ZEPHYR.utils.cache("app/background.jpg");
+    await ZEPHYR.utils.cache("efficiency/coconut.png");
+    await ZEPHYR.utils.cache("efficiency/background.jpg");
 
     ZEPHYR.utils.addLayer("background");
     ZEPHYR.utils.addLayer("foreground");
     ZEPHYR.utils.addLayer("cursor");
 
-    ZEPHYR.utils.setSprite("merryGoRound", { layer: "background", src: "app/background.jpg", x: 0.5, y: 0.5, anchor: { x: 0.5, y: 0.5 }, draw: true });
+    ZEPHYR.utils.setSprite("merryGoRound", { layer: "background", src: "efficiency/background.jpg", x: 0.5, y: 0.5, anchor: { x: 0.5, y: 0.5 }, draw: true });
 
     i = 0;
     while (i++ < 98) {
-        ZEPHYR.utils.setSprite("coconut" + i, { layer: "foreground", src: "app/coconut.png", x: Math.random() * 2.0 - 0.5, y: Math.random() * 2.0 - 0.5, anchor: { x: Math.random(), y: Math.random() }, draw: true, cameraDependantPosition: true });
+        ZEPHYR.utils.setSprite("coconut" + i, { layer: "foreground", src: "efficiency/coconut.png", x: Math.random() * 2.0 - 0.5, y: Math.random() * 2.0 - 0.5, anchor: { x: Math.random(), y: Math.random() }, draw: true, cameraDependantPosition: true });
     }
 
-    ZEPHYR.utils.setSprite("cursor", { layer: "cursor", src: "app/coconut.png", x: 0.5, y: 0.5, anchor: { x: 0.5, y: 0.5 }, draw: true });
+    ZEPHYR.utils.setSprite("cursor", { layer: "cursor", src: "efficiency/coconut.png", x: 0.5, y: 0.5, anchor: { x: 0.5, y: 0.5 }, draw: true });
 
     update();
 }
