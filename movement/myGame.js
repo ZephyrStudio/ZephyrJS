@@ -1,8 +1,8 @@
-ZEPHYR.Application({ width: 854, height: 480, smooth: false, statistics: true });
+ZEPHYR.Application({ width: 640, height: 360, smooth: false, statistics: true });
 
 const pxScale = ZEPHYR.scene.pxScale;
 
-const idleCount = 500;
+const idleCount = 10000;
 
 let camera = {
     x: 0.5,
@@ -13,7 +13,7 @@ let player = {
     src: "movement/idleUpLeft.png",
     x: 0.5,
     y: 0.9,
-    speed: 0.5,
+    speed: 1.0,
     movement: {
         x: 0,
         y: 0,
@@ -87,8 +87,7 @@ update = async () => {
     player.y = Math.min(player.y + player.movement.y, 0.9);
     ZEPHYR.utils.setSprite("player", player);
 
-    camera.x = camera.x * 0.95 + player.x * 0.05; // Track player
-    camera.y = Math.min(0.5, camera.y * 0.95 + player.y * 0.05);
+    camera.x = camera.x * 0.9 + player.x * 0.1; // Track player
 
     ZEPHYR.utils.setViewCenter(camera);
 }

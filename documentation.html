@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>ZephyrJS | Documentation</title>
+    <link rel="preload" as="style" href="page.css" onload="this.rel = 'stylesheet'">
+</head>
+
+<body>
+    <h4>ZephyrJS Documentation</h4>
+    <br>
+    <dt>ZEPHYR</dt>
+    <dd>The full application</dd>
+    <div class="block">
+        <dt class="value" title="ZEPHYR.version">version</dt>
+        <dd>Number: The current version of Zephyr. the version is the date which it was released, in the format YYMMDD</dd>
+        <dt class="object" title="ZEPHYR.mouse">mouse</dt>
+        <dd>Created when createMouseListener() is called, stores mouse data/functions</dd>
+        <div class="block">
+            <dt class="map" title="ZEPHYR.mouse.data">data</dt>
+            <dd>A map that stores data about the mouse (left/middle/right/x/y)</dd>
+            <dt class="function" title="ZEPHYR.mouse.getX()">getX()</dt>
+            <dd>Returns the last known mouse x-coord. Called asynchronously outside the render loop.</dd>
+            <dd>RETURNS: Number, where 0.0-1.0 is inside the scene</dd>
+            <dt class="function" title="ZEPHYR.mouse.getY()">getY()</dt>
+            <dd>Returns the last known mouse y-coord. Called asynchronously outside the render loop.</dd>
+            <dd>RETURNS: Number, where 0.0-1.0 is inside the scene</dd>
+            <dt class="function" title="ZEPHYR.mouse.isDown(...)">isDown(<i class="parameter" title='"left" or "middle" or "right"'>...</i>)</dt>
+            <dd>Returns true/false if the requested button is currently down</dd>
+            <dd>RETURNS: Boolean, True if the button is currently down, False if not</dd>
+        </div>
+        <dt class="object" title="ZEPHYR.key">key</dt>
+        <dd>Created when createKeyListener() is called, stores key data/functions</dd>
+        <div class="block">
+            <dt class="map" title="ZEPHYR.key.data">data</dt>
+            <dd>A map that stores data about the keys (a/b/c/1/2/3/shift...)</dd>
+            <dt class="function" title="ZEPHYR.key.isDown(...)">isDown(<i class="parameter" title='"a" or "b" or "1" or "shift" etc.'>...</i>)</dt>
+            <dd>Returns true/false if the requested key is currently down</dd>
+            <dd>RETURNS: Boolean, True if the key is currently down, False if not</dd>
+        </div>
+        <dt class="map" title="ZEPHYR.cacheMap">cacheMap</dt>
+        <dd>Map that stores images loaded with ZEPHYR.utils.cache(...), is used by Zephyr's render loop</dd>
+        <dt class="map" title="ZEPHYR.layerMap">layerMap</dt>
+        <dd>Map that stores the different "layers" (DOM canvases and other data) added with ZEPHYR.utils.addLayer(...) to use in the render loop</dd>
+        <dt class="map" title="ZEPHYR.spriteMap">spriteMap</dt>
+        <dd>Map that stores sprites added with ZEPHYR.utils.setSprite()for access from the render loop</dd>
+        <dt class="object" title="ZEPHYR.utils">utils</dt>
+        <dd>A set of commonly used functions for the user, which simplifies the developer's interactions with Zephyr</dd>
+        <div class="block">
+            <dt class="function" title="ZEPHYR.utils.setTitle(...)">setTitle(<i class="parameter" title="any String">...</i>)</dt>
+            <dd>Sets the document title</dd>
+            <dt class="function" title="ZEPHYR.utils.addLayer(...)">addLayer(<i class="parameter" title="any String">...</i>)</dt>
+            <dd>Adds a layer to the scene. All that is required is the name of the layer for reference by sprites</dd>
+            <dt class="function" title="ZEPHYR.utils.cache(...)">cache(<i class="parameter" title="image url/path">...</i>)</dt>
+            <dd>Asynchronously creates an image and waits for it to successfully decode (while images can be "loaded" canvas blocks if they haven't "decoded" yet). Best called in a loading function, not in an update loop</dd>
+            <dt class="function" title="ZEPHYR.utils.setSprite">setSprite(<i class="parameter" title="sprite-style object, see the sprite structure below">...</i>)</dt>
+            <dd></dd>
+            <dt class="function" title="ZEPHYR.utils.">(<i class="parameter" title="">...</i>)</dt>
+            <dd></dd>
+            <dt class="function" title="ZEPHYR.utils.">(<i class="parameter" title="">...</i>)</dt>
+            <dd></dd>
+            <dt class="function" title="ZEPHYR.utils.">(<i class="parameter" title="">...</i>)</dt>
+            <dd></dd>
+            <dt class="function" title="ZEPHYR.utils.">(<i class="parameter" title="">...</i>)</dt>
+            <dd></dd>
+        </div>
+    </div>
+
+    <dt>Sprite</dt>
+    <dd>Structure for a sprite-style object. Zephyr's render loop can handle these.</dd>
+    <dd>NOTE: For ZEPHYR.utils.setSprite(...), all of these are optional. The default values are listed along with the property description.</dd>
+    <div class="block">
+        <dt class="value" title="?.layer">layer</dt>
+        <dd>String: The layer that the sprite will be drawn on</dd>
+        <dd>DEFAULT: ""</dd>
+        <dt class="value" title="?.src">src</dt>
+        <dd>String: The image url/path to use.</dd>
+        <dd>DEFAULT: ""</dd>
+        <dd>NOTE: Make sure to cache this with ZEPHYR.utils.cache(...) before attempting to create the sprite, error will be thrown</dd>
+        <dt class="value" title="?.x">x</dt>
+        <dd>Number: The x coordinate value (scene has a width of 1.0) of where the sprite should be drawn</dd>
+        <dd>DEFAULT: 0.0</dd>
+        <dt class="value" title="?.y">y</dt>
+        <dd>Number: The y coordinate value (scene has a width of 1.0) of where the sprite should be drawn</dd>
+        <dd>DEFAULT: 0.0</dd>
+        <dt class="object" title="?.object">anchor</dt>
+        <dd>The position that the sprite should be drawn relative to</dd>
+        <div class="block">
+            <dt class="value" title="?.anchor.x">x</dt>
+            <dd>Number: The x location of where on the sprite's image the position is relative to (0.0 is left edge, 1.0 is right edge)</dd>
+            <dd>DEFAULT: 0.0</dd>
+            <dt class="value" title="?.anchor.y">y</dt>
+            <dd>Number: The y location of where on the sprite's image the position is relative to (0.0 is top edge, 1.0 is botton edge)</dd>
+            <dd>DEFAULT: 0.0</dd>
+        </div>
+        <dt class="value" title="?.draw">draw</dt>
+        <dd>Boolean: whether to draw the sprite or not</dd>
+        <dd>DEFAULT: false</dd>
+        <dt class="value" title="?.cameraDependantPosition">cameraDependantPosition</dt>
+        <dd>Boolean: whether or not moving the scene view center should affect where this is drawn</dd>
+        <dd>DEFAULT: false</dd>
+        <dt class="object" title="?.data">data</dt>
+        <dd>Stored data for Zephyr's render loop: x,y in real canvas pixels, width and height</dd>
+        <dd>NOTE: This is not an accepted parameter for ZEPHYR.utils.setSprite(...), data is auto-generated by Zephyr when the sprite is set or the scene view center is moved.</dd>
+    </div>
+</body>
+
+</html>

@@ -1,7 +1,7 @@
 "use strict"
 
 const ZEPHYR = {
-    version: "ZephyrJS 22.4.15",
+    version: 220419,
     cacheMap: new Map(),
     layerMap: new Map(),
     spriteMap: new Map(),
@@ -26,14 +26,14 @@ const ZEPHYR = {
         active: false
     }
 }
-console.log(ZEPHYR.version);
+console.log("ZephyrJS Version " + ZEPHYR.version);
 
 // Setup because it's a website
 document.head.innerHTML += '<link type="text/css" rel="stylesheet" href="zephyr/style.css">';
 
 document.oncontextmenu = (e) => { e.preventDefault(); return false; }
 window.onresize = async () => {
-ZEPHYR.system.getSceneDOMBounds();
+    ZEPHYR.system.getSceneDOMBounds();
 }
 ZEPHYR.utils.setTitle = (title) => {
     document.title = title;
@@ -41,13 +41,9 @@ ZEPHYR.utils.setTitle = (title) => {
 // Image asset caching
 ZEPHYR.utils.cache = async (imgURL) => {
     if (ZEPHYR.cacheMap.has(imgURL)) return;
-    let img;
-    const imageLoadPromise = new Promise(resolve => {
-        img = new Image();
-        img.onload = resolve;
-        img.src = imgURL;
-    });
-    await imageLoadPromise;
+    let img = new Image();
+    img.src = imgURL;
+    await img.decode();
     ZEPHYR.cacheMap.set(imgURL, img);
 }
 // Layering functionality
@@ -63,6 +59,7 @@ ZEPHYR.utils.addLayer = (layerName) => {
     // as long as Sprites aren't getting scaled and they're
     // drawn at whole integer positions, we don't need this
     ctx.imageSmoothingEnabled = false;
+    ctx.fillStyle = "red";
 
     let layer = {
         edited: true,
@@ -221,21 +218,22 @@ ZEPHYR.utils.createKeyListener = () => {
         ZEPHYR.key.data.set(e.key.toLowerCase(), false);
     }
 }
-ZEPHYR.utils.setViewCenter = (obj) => {
-    if (ZEPHYR.scene.viewCenter.x != obj.x || ZEPHYR.scene.viewCenter.y != obj.y) {
+ZEPHYR.utils.setViewCenter = async (obj) => {
+    let changeX = ZEPHYR.scene.viewCenter.x != ((obj.x * ZEPHYR.scene.width + 0.5) | 0);
+    let changeY = ZEPHYR.scene.viewCenter.y != ((obj.y * ZEPHYR.scene.height + 0.5) | 0);
+    if (changeX || changeY) {
         // Assign new value
         ZEPHYR.scene.viewCenter.x = obj.x;
         ZEPHYR.scene.viewCenter.y = obj.y;
-
         // Recalculate ZEPHYR.scene x and y
         ZEPHYR.scene.x = (obj.x - 0.5) * ZEPHYR.scene.width;
         ZEPHYR.scene.y = (obj.y - 0.5) * ZEPHYR.scene.height;
-
         ZEPHYR.spriteMap.forEach(function (sprite) {
             if (sprite.cameraDependantPosition) {
-                console.log(sprite);
-                sprite.data.x = (sprite.x * ZEPHYR.scene.width - sprite.anchor.x * sprite.data.width - ZEPHYR.scene.x) | 0;
-                sprite.data.y = (sprite.y * ZEPHYR.scene.height - sprite.anchor.y * sprite.data.height - ZEPHYR.scene.y) | 0;
+                if (changeX)
+                    sprite.data.x = (sprite.x * ZEPHYR.scene.width - sprite.anchor.x * sprite.data.width - ZEPHYR.scene.x) | 0;
+                if (changeY)
+                    sprite.data.y = (sprite.y * ZEPHYR.scene.height - sprite.anchor.y * sprite.data.height - ZEPHYR.scene.y) | 0;
                 sprite.data.inScene = ZEPHYR.math.inScene(sprite.data);
                 ZEPHYR.layerMap.get(sprite.layer).edited = true;
             }
@@ -289,7 +287,8 @@ ZEPHYR.system.getSceneDOMBounds = async () => {
     ZEPHYR.system.x = bound.x;
     ZEPHYR.system.y = bound.y;
 }
-ZEPHYR.system.renderLoop = async () => {
+
+ZEPHYR.system.renderLoop = () => {
     window.requestAnimationFrame(ZEPHYR.system.renderLoop);
 
     // Statistic stuff
@@ -304,7 +303,9 @@ ZEPHYR.system.renderLoop = async () => {
     // Clear layers that have been edited
     ZEPHYR.layerMap.forEach(function (layer) {
         if (layer.edited) {
-            layer.ctx.clearRect(Math.max(layer.minXDraw, 0), Math.max(layer.minYDraw, 0), Math.max(layer.maxXDraw, ZEPHYR.scene.width), Math.max(layer.maxYDraw, ZEPHYR.scene.height));
+            layer.ctx.clearRect(0, 0, ZEPHYR.scene.width, ZEPHYR.scene.height);
+            layer.ctx.clearRect(Math.max(layer.minXDraw, 0), Math.max(layer.minYDraw, 0), Math.min(layer.maxXDraw - layer.minXDraw, ZEPHYR.scene.width), Math.min(layer.maxYDraw - layer.minYDraw, ZEPHYR.scene.height));
+            //layer.ctx.fillRect(Math.max(layer.minXDraw, 0), Math.max(layer.minYDraw, 0), Math.min(layer.maxXDraw - layer.minXDraw, ZEPHYR.scene.width), Math.min(layer.maxYDraw - layer.minYDraw, ZEPHYR.scene.height));
             layer.minXDraw = ZEPHYR.scene.width;
             layer.minYDraw = ZEPHYR.scene.height;
             layer.maxXDraw = 0;
@@ -344,7 +345,8 @@ ZEPHYR.system.renderLoop = async () => {
     }
 }
 ZEPHYR.math.inScene = (a) => {
-    return ZEPHYR.math.collision(a, {x: 0, y: 0, width: ZEPHYR.scene.width, height: ZEPHYR.scene.height});
+    return a.x <= ZEPHYR.scene.width && a.x + a.width >= 0 && a.y <= ZEPHYR.scene.height && a.y + a.height >= 0;
+    // return ZEPHYR.math.collision(a, { x: 0, y: 0, width: ZEPHYR.scene.width, height: ZEPHYR.scene.height });
 }
 ZEPHYR.math.collision = (a, b) => {
     return (a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y);
