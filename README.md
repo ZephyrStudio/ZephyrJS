@@ -1,5 +1,6 @@
 <h1>ZephyrJS</h1>
-<h4>A Javascript game engine: Zephyr takes care of the engine, you make the game</h4>
-<p> Links | <a href="https://github.com/OttCS/ZephyrJS/blob/main/zephyr/struct.txt">Zephyr App Structure</a></p>
-
-<b>This readme is in progress, and will be much more fleshed out in the future</b>
+<p>LINKS | <a href="https://ottcs.netlify.app">OttCS Portfolio</a></p>
+<h2>About</h2>
+<p>Lorem ipsum dolor sit amet</p>
+<h2>How to Use</h2>
+<p>After downloading the repository, you only need the "zephyr" folder. Put the folder in the same directory as the html file. You're all set!</p>

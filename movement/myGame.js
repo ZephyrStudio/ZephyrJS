@@ -1,6 +1,6 @@
 ZEPHYR.Application({ width: 640, height: 360, smooth: false, statistics: true });
 
-const pxScale = ZEPHYR.scene.pxScale;
+const pxScale = ZEPHYR.utils.getPixelScale();
 
 const idleCount = 10000;
 

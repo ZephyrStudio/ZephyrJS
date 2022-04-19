@@ -100,6 +100,9 @@ ZEPHYR.utils.setSprite = (spriteName, obj) => {
     let o = ZEPHYR.spriteMap.get(spriteName); // Original Sprite
 
     if (obj.layer && o.layer !== obj.layer) {
+        if (ZEPHYR.layerMap.has(o.layer)) {
+            ZEPHYR.layerMap.get(o.layer).edited |= edited; // Let old layer know that it has changed
+        }
         o.layer = obj.layer;
         edited = true;
     }
@@ -240,6 +243,10 @@ ZEPHYR.utils.setViewCenter = async (obj) => {
         });
     }
 }
+// Gets the size of a pixel in the scene
+ZEPHYR.utils.getPixelScale = () => {
+    return { x: 1.0 / ZEPHYR.scene.width, y: 1.0 / ZEPHYR.scene.height };
+}
 // Application "constructor"
 ZEPHYR.Application = (settings) => {
     // Pass in an object with width, height, sharp, etc.
@@ -273,7 +280,6 @@ ZEPHYR.Application = (settings) => {
         document.body.appendChild(ZEPHYR.stat.element);
     }
 
-    ZEPHYR.scene.pxScale = { x: 1.0 / ZEPHYR.scene.width, y: 1.0 / ZEPHYR.scene.height };
     ZEPHYR.utils.setViewCenter(0.5, 0.5);
 
     document.body.appendChild(ZEPHYR.scene.view);

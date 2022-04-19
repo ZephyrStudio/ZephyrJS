@@ -1,6 +1,6 @@
 ZEPHYR.Application({ width: 1920, height: 1080, smooth: false, statistics: true });
 
-const pxScale = ZEPHYR.scene.pxScale;
+const pxScale = ZEPHYR.utils.getPixelScale();
 let testCoconut = {};
 let camera = {x: 0.5, y: 0.5};
 
