@@ -9,5 +9,5 @@ There are plenty of canvas optimization guides out there, and having to recreate
 ## How to Use It
 
 In the [release](/release) folder, you can find the zephyr.js file. Just by downloading the file including the line
-> <script src="../path/to/zephyr.js"></script>
+**<script src="../path/to/zephyr.js"></script>**
 all of the functionality of Zephyr has been added! Check out the demo files for more examples of how to use Zephyr, and check out the [documentation](documentation.html)
