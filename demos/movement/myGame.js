@@ -49,7 +49,7 @@ window.onload = async () => {
     ZEPHYR.ticker.add(update);
 }
 
-update = async(delta) => {
+update = (delta) => {
     if (player.y < 0.9) { // In air
         if (ZEPHYR.key.isDown("w") && player.movement.y < 0.0) {
             player.movement.y += pxScale.y * (0.03) * delta;

@@ -240,7 +240,7 @@ ZEPHYR.utils.createKeyListener = () => {
         ZEPHYR.key.data.set(e.key.toLowerCase(), false);
     }
 }
-ZEPHYR.utils.setViewCenter = async (obj) => {
+ZEPHYR.utils.setViewCenter = (obj) => {
     let changeX = ZEPHYR.scene.viewCenter.x != ((obj.x * ZEPHYR.scene.width + 0.5) | 0);
     let changeY = ZEPHYR.scene.viewCenter.y != ((obj.y * ZEPHYR.scene.height + 0.5) | 0);
     if (changeX || changeY) {
@@ -325,7 +325,7 @@ ZEPHYR.appendScene = (parent) => {
     parent.appendChild(ZEPHYR.scene.view);
 }
 
-ZEPHYR.system.getSceneDOMBounds = async () => {
+ZEPHYR.system.getSceneDOMBounds = () => {
     let bound = ZEPHYR.scene.view.getBoundingClientRect();
     ZEPHYR.system.width = bound.width;
     ZEPHYR.system.height = bound.height;
@@ -350,7 +350,7 @@ ZEPHYR.system.renderLoop = async () => {
     }
 
     // Clear layers that have been edited
-    ZEPHYR.layerMap.forEach((layer) => {
+    ZEPHYR.layerMap.forEach(async (layer) => {
         if (layer.edited) {
             layer.ctx.clearRect(0, 0, ZEPHYR.scene.width, ZEPHYR.scene.height);
             layer.ctx.clearRect(Math.max(layer.minXDraw, 0), Math.max(layer.minYDraw, 0), Math.min(layer.maxXDraw - layer.minXDraw, ZEPHYR.scene.width), Math.min(layer.maxYDraw - layer.minYDraw, ZEPHYR.scene.height));
@@ -362,7 +362,7 @@ ZEPHYR.system.renderLoop = async () => {
         }
     });
 
-    ZEPHYR.spriteMap.forEach((sprite) => {
+    ZEPHYR.spriteMap.forEach(async (sprite) => {
         /*
         Ok so this if statement checks:
             If the layer has been edited and needs to be redrawn
@@ -385,7 +385,7 @@ ZEPHYR.system.renderLoop = async () => {
         }
     });
 
-    ZEPHYR.layerMap.forEach(function (layer) {
+    ZEPHYR.layerMap.forEach(async (layer) => {
         layer.edited = false;
     });
 
