@@ -60,6 +60,10 @@
             color: #f58235;
         }
 
+        .set {
+            color: #ffd866;
+        }
+
         .object {
             color: #6ed5e6;
         }
@@ -117,6 +121,8 @@
             to use in the render loop</dd>
         <dt class="map" title="ZEPHYR.spriteMap">spriteMap</dt>
         <dd>Map that stores sprites added with ZEPHYR.utils.setSprite()for access from the render loop</dd>
+        <dt class="set" title="ZEPHYR.ticker">ticker</dt>
+        <dd>Set that stores the developer-added update functions to call every frame: Use the ZEPHYR.ticker.add((delta) => {}) function to add one (or more!)</dd>
         <dt class="object" title="ZEPHYR.utils">utils</dt>
         <dd>A set of commonly used functions for the user, which simplifies the developer's interactions with Zephyr
         </dd>
@@ -124,9 +130,13 @@
             <dt class="function" title="ZEPHYR.utils.setTitle(documentTitle)">setTitle(<i class="string"
                     title="String">documentTitle</i>)</dt>
             <dd>Sets the document title</dd>
-            <dt class="function" title="ZEPHYR.utils.addLayer(layerIdentifier)">addLayer(<i class="string"
-                    title="String">layerIdentifier</i>)</dt>
-            <dd>Adds a layer to the scene. All that is required is the name of the layer for reference by sprites</dd>
+            <dt class="function" title="ZEPHYR.utils.setLayer(layerIdentifier, layerSettingsObject)">setLayer(<i
+                    class="string" title="String">layerIdentifier</i>, <i class="object"
+                    title="Layer Settings Object">layerSettingsObject</i>)</dt>
+            <dd>Adds a layer to the scene, or changes the settings of an existing one. All that is required is the name
+                of the layer for reference by sprites and the desired settings (<a
+                    href="https://developer.mozilla.org/en-US/docs/Web/CSS/opacity">opacity</a>, <a
+                    href="https://developer.mozilla.org/en-US/docs/Web/CSS/mix-blend-mode">blend</a>)</dd>
             <dt class="function" title="ZEPHYR.utils.cache(imgURL)">cache(<i class="string" title="String">imgURL</i>)
             </dt>
             <dd>Asynchronously creates an image and waits for it to successfully decode (while images can be "loaded"
@@ -146,8 +156,6 @@
             <dd>Sets up and starts Zephyr's built-in asynchronous mouse listener</dd>
             <dt class="function" title="ZEPHYR.utils.createKeyListener()">createKeyListener()</dt>
             <dd>Sets up and starts Zephyr's built-in asynchronous keyboard listener</dd>
-            <dt class="function" title="ZEPHYR.utils.lap()">lap()</dt>
-            <dd>Similar to a stopwatch, this returns the time since ZEPHYR.utils.lap() was last called</dd>
             <dt class="function" title="ZEPHYR.utils.setViewCenter(coords)">setViewCenter(<i class="object"
                     title="Object w/ x and y properties">coords</i>)</dt>
             <dd>Sets thev view center of the scene, like moving a camera</dd>
@@ -187,8 +195,8 @@
         <div class="block">
             <dt class="function" title="ZEPHYR.system.renderLoop()">renderLoop()</dt>
             <dd>The function that gets called to clear and redraw and the browser-allowed refresh rate.</dd>
-            <dt class="value" title="ZEPHYR.system.lap">lap</dt>
-            <dd>Stored millisecond time of the last ZEPHYR.utils.lap() call</dd>
+            <dt class="value" title="ZEPHYR.system.delta">delta</dt>
+            <dd>Stored millisecond time of the last render call</dd>
             <dt class="function" title="ZEPHYR.system.getSceneDOMBounds()">getSceneDOMBounds()</dt>
             <dd>Gets and stores the document pixel offset of the scene</dd>
             <dt class="value" title="ZEPHYR.system.width">width</dt>

@@ -4,7 +4,9 @@ ZephyrJS is a powerful, high speed/efficiency canvas system for web-based animat
 
 ## Tell Me Why
 
-There are plenty of canvas optimization guides out there, and having to recreate them in every project is a pain. Zephyr, "a breeze from the west" does all of the work. Using effective, benchmarked methods to give you room to work without worrying about how optimized it can be
+There are plenty of canvas optimization guides out there, and having to recreate them in every project is a pain. Zephyr, "a breeze from the west" does all of the work. Using effective, benchmarked methods to give you room to work without worrying about how optimized it can be.
+
+Messing with WebGL can be tough. From understanding vertex/fragment shaders to having to run a local server just to bypass browser security with images, canvas is better suited to easily distributable games. Zephyr lets you work how you normally do, without worrying about browser security regarding images. Only Brave browser stops canvases on its strictest anti-fingerprinting mode, so you can reach people in any browser.
 
 ## How to Use It
 

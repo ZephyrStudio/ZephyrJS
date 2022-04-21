@@ -5,6 +5,7 @@ const ZEPHYR = {
     cacheMap: new Map(),
     layerMap: new Map(),
     spriteMap: new Map(),
+    ticker: new Set(),
     utils: {},
     scene: {
         width: 0,
@@ -15,7 +16,7 @@ const ZEPHYR = {
         viewCenter: {}
     },
     system: {
-        lap: performance.now(),
+        delta: performance.now(),
         width: -1,
         height: -1,
         x: -1,
@@ -24,9 +25,8 @@ const ZEPHYR = {
     math: {},
     stat: {
         active: false
-    }
+    },
 }
-console.log("ZephyrJS Version " + ZEPHYR.version);
 
 // Setup because it's a website
 // document.head.innerHTML += '<link type="text/css" rel="stylesheet" href="zephyr/style.css">';
@@ -46,35 +46,54 @@ ZEPHYR.utils.cache = async (imgURL) => {
     await img.decode();
     ZEPHYR.cacheMap.set(imgURL, img);
 }
+// Cache array of URLs
+ZEPHYR.utils.cacheAll = async (imgURLs) => {
+    imgURLs.forEach(async (currentValue) => {
+        await ZEPHYR.utils.cache(currentValue);
+    });
+}
 // Layering functionality
-ZEPHYR.utils.addLayer = (layerName) => {
+ZEPHYR.utils.setLayer = (layerName, settingsObj) => {
+    let layer = {};
+    if (!ZEPHYR.layerMap.has(layerName)) {
+        // DOM canvas setup
+        let c = document.createElement('canvas');
+        c.id = layerName;
+        c.width = ZEPHYR.scene.width;
+        c.height = ZEPHYR.scene.height;
+        c.style.position = "absolute";
+        c.style.top = 0;
+        c.style.left = 0;
+        c.style.width = "100%";
+        c.style.height = "100%";
+        c.innerText = "Canvas is not supported in your browser";
+        let ctx = c.getContext('2d');
+        ctx.imageSmoothingEnabled = false;
 
-    // DOM canvas setup
-    let c = document.createElement('canvas');
-    c.id = layerName;
-    c.width = ZEPHYR.scene.width;
-    c.height = ZEPHYR.scene.height;
-    c.style.position = "absolute";
-    c.style.top = 0;
-    c.style.left = 0;
-    c.style.width = "100%";
-    c.style.height = "100%";
-    let ctx = c.getContext('2d');
-    // imageSmoothingEnabled should be user-controllable, but
-    // as long as Sprites aren't getting scaled and they're
-    // drawn at whole integer positions, we don't need this
-    ctx.imageSmoothingEnabled = false;
-    ctx.fillStyle = "red";
-
-    let layer = {
-        edited: true,
-        element: c,
-        ctx: ctx,
-        minXDraw: 0,
-        minYDraw: 0,
-        maxXDraw: ZEPHYR.scene.width,
-        maxYDraw: ZEPHYR.scene.height
+        layer = {
+            edited: true,
+            element: c,
+            ctx: ctx,
+            minXDraw: 0,
+            minYDraw: 0,
+            maxXDraw: ZEPHYR.scene.width,
+            maxYDraw: ZEPHYR.scene.height,
+            settings: {}
+        }
+    } else {
+        layer = ZEPHYR.layerMap.get(layerName);
     }
+
+    if (layer.settings.blend != settingsObj.blend) {
+        layer.settings.blend = settingsObj.blend;
+        layer.element.style.mixBlendMode = settingsObj.blend;
+    }
+
+    if (layer.settings.opacity != settingsObj.opacity) {
+        layer.settings.opacity = settingsObj.opacity;
+        layer.element.style.opacity = settingsObj.opacity;
+    }
+
     ZEPHYR.layerMap.set(layerName, layer);
     ZEPHYR.scene.view.appendChild(layer.element);
 }
@@ -159,11 +178,6 @@ ZEPHYR.utils.setSprite = (spriteName, obj) => {
 }
 ZEPHYR.utils.getSprite = (spriteName) => {
     return ZEPHYR.spriteMap.get(spriteName);
-}
-ZEPHYR.utils.lap = async () => {
-    let t = performance.now() - ZEPHYR.system.lap;
-    ZEPHYR.system.lap = performance.now();
-    return t;
 }
 ZEPHYR.utils.createMouseListener = () => {
     ZEPHYR.mouse = {
@@ -321,6 +335,10 @@ ZEPHYR.system.getSceneDOMBounds = async () => {
 
 ZEPHYR.system.renderLoop = async () => {
     window.requestAnimationFrame(ZEPHYR.system.renderLoop);
+    ZEPHYR.ticker.forEach((fn) => {
+        fn(performance.now() - ZEPHYR.system.delta);
+    });
+    ZEPHYR.system.delta = performance.now();
 
     // Statistic stuff
     if (ZEPHYR.stat.active) {
@@ -332,19 +350,19 @@ ZEPHYR.system.renderLoop = async () => {
     }
 
     // Clear layers that have been edited
-    ZEPHYR.layerMap.forEach(function (layer) {
+    ZEPHYR.layerMap.forEach((layer) => {
         if (layer.edited) {
             layer.ctx.clearRect(0, 0, ZEPHYR.scene.width, ZEPHYR.scene.height);
             layer.ctx.clearRect(Math.max(layer.minXDraw, 0), Math.max(layer.minYDraw, 0), Math.min(layer.maxXDraw - layer.minXDraw, ZEPHYR.scene.width), Math.min(layer.maxYDraw - layer.minYDraw, ZEPHYR.scene.height));
             //layer.ctx.fillRect(Math.max(layer.minXDraw, 0), Math.max(layer.minYDraw, 0), Math.min(layer.maxXDraw - layer.minXDraw, ZEPHYR.scene.width), Math.min(layer.maxYDraw - layer.minYDraw, ZEPHYR.scene.height));
-            layer.minXDraw = ZEPHYR.scene.width;
-            layer.minYDraw = ZEPHYR.scene.height;
-            layer.maxXDraw = 0;
-            layer.maxYDraw = 0;
+            layer.minXDraw = Math.MAX_SAFE_INTEGER;
+            layer.minYDraw = Math.MAX_SAFE_INTEGER;
+            layer.maxXDraw = Math.MIN_SAFE_INTEGER;
+            layer.maxYDraw = Math.MIN_SAFE_INTEGER;
         }
     });
 
-    ZEPHYR.spriteMap.forEach(function (sprite) {
+    ZEPHYR.spriteMap.forEach((sprite) => {
         /*
         Ok so this if statement checks:
             If the layer has been edited and needs to be redrawn
