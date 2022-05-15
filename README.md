@@ -1,4 +1,5 @@
-# ZephyrJS
+<b>NOTE: Zephyr is currently undergoing an overhaul to utilize PixiJS as a WebGL backend! Check back for frequent changes.</b>
+<h1>ZephyrJS</h1>
 
 ZephyrJS is a powerful, high speed/efficiency canvas system for web-based animations, games, and more.
 
