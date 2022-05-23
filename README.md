@@ -1,4 +1,5 @@
 <h1>ZephyrJS</h1>
+<b>Download: https://raw.githubusercontent.com/OttCS/ZephyrJS/main/dev/zepyhr.js</b>
 
 <p>An expansion on PixiJS to provide the tools you need to quickly develop games and interactive content.</p>
 
@@ -8,7 +9,7 @@
 
 <h2>How to Use It</h2>
 
-<p>In the <u>/dev</u> folder, you can find the zephyr.js file. Just by downloading the file including the following lines:</p>
+<p>Just by downloading the file including the following lines:</p>
 
 <code>&lt;script src="https&#58;//pixijs.download/release/pixi.js"&gt;&lt;/script&gt;</code>
 <br/>
