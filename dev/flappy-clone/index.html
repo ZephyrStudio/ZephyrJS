@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Flappy Sprint</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            caret-color: transparent;
+            image-rendering: crisp-edges;
+        }
+
+        html {
+            background-color: "#000";
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #PIXI {
+            display: block;
+            margin: 0 auto;
+            width: 100vw;
+            height: calc(100vw * 9 / 16);
+            max-height: 100vh;
+            max-width: calc(100vh * 16 / 9);
+        }
+    </style>
+    <script src="https://pixijs.download/release/pixi.js"></script> <!-- This'll let me keep Zephyr VERY up to date -->
+    <script src="../zepyhr.js"></script>
+</head>
+
+<body>
+    <script src="app.js"></script> <!-- Testing -->
+</body>
+
+</html>
