@@ -8,7 +8,7 @@
 
 <h2>How to Use It</h2>
 
-<p>In the <u>/release</u> folder, you can find the zephyr.js file. Just by downloading the file including the following lines:</p>
+<p>In the <u>/dev</u> folder, you can find the zephyr.js file. Just by downloading the file including the following lines:</p>
 
 <code>&lt;script src="https&#58;//pixijs.download/release/pixi.js"&gt;&lt;/script&gt;</code>
 <br/>
