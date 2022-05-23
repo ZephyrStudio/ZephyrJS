@@ -6,7 +6,7 @@
 
 <p>PixiJS on its own is very powerful, but a lot of work is needed to make it work for web-based games. PhaserIO is exclusively used to make games, and not all of the functionality is easily translatable back to Pixi. ZephyrJS directly ADDS to Pixi instead of wrapping it, letting you use the full functionality of Pixi so that the work is translatable.</p>
 
-<h2><a href="https://raw.githubusercontent.com/OttCS/ZephyrJS/main/dev/zepyhr.js">Download</a> & Get Started!</h2>
+<h2><a href="https://raw.githubusercontent.com/OttCS/ZephyrJS/main/dev/zepyhr.js" target="_blank">Download</a> & Get Started!</h2>
 
 <p>Just by downloading the file including the following lines:</p>
 
