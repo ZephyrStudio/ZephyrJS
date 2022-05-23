@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: There's Something Strange in the Neighborhood
 title: ''
 labels: ''
 assignees: ''
