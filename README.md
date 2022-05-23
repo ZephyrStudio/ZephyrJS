@@ -10,7 +10,7 @@
 
 <p>In the <u>/release</u> folder, you can find the zephyr.js file. Just by downloading the file including the following lines</p>
 
-<code>&lt;script src="https://pixijs.download/release/pixi.js"&gt&lt;/script&gt</code>
+<code>&lt;script src="https://pixijs.download/release/pixi.js"&gt;&lt;/script&gt;</code>
 
 <code>&lt;script src="../path/to/zephyr.js"&gt;&lt;/script&gt;</code>
 
