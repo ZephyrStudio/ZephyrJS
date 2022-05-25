@@ -1,6 +1,6 @@
 "use strict"
 // ZEPHYR.js directly builds on top of PixiJS for ease of use
-PIXI.zephyr = "ZephyrJS version 22.5.23";
+PIXI.zephyr = "ZephyrJS version 22.5.25";
 
 PIXI.input = {
     keyMap: new Map(),
@@ -15,14 +15,15 @@ PIXI.input = {
         return PIXI.input.keyMap.has(keyStr);
     },
 
+    mouseContainer: document.getElementsByTagName("html")[0],
     mouseMap: new Map(),
-    getMouseFired: (btnStr) => {
-        let r = PIXI.input.mouseMap.get(btnStr);
-        PIXI.input.keyMap.set(btnStr, false);
+    getMouseFired: (btn) => {
+        let r = PIXI.input.mouseMap.get(btn);
+        PIXI.input.keyMap.set(btn, false);
         return r;
     },
-    getMouseDown: (btnStr) => {
-        return PIXI.input.mouseMap.has(btnStr);
+    getMouseDown: (btn) => {
+        return PIXI.input.mouseMap.has(btn);
     },
     getMouseX: () => {
         return PIXI.input.mouseMap.get('x');
@@ -63,8 +64,9 @@ window.addEventListener('keyup', (e) => {
 
 // Mouse
 window.addEventListener('mousemove', (e) => {
-    PIXI.input.mouseMap.set('x', e.x / window.innerWidth);
-    PIXI.input.mouseMap.set('y', e.y / window.innerHeight);
+    let bounds = PIXI.input.mouseContainer.getBoundingClientRect();
+    PIXI.input.mouseMap.set('x', (e.x - bounds.left) / bounds.width);
+    PIXI.input.mouseMap.set('y', (e.y - bounds.top) / bounds.height);
 });
 window.addEventListener('mousedown', (e) => {
     PIXI.input.mouseMap.set(e.button, true);
