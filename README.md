@@ -1,8 +1,7 @@
 <h1>ZephyrJS</h1>
 <p><b>Expands PixiJS for easy game development!</b></p>
 <p>Links <a href="https://github.com/OttCS/zephyrjs" title="Check out the github page for downloads, documentation, and more!">Github</a> <a href="https://ottcs.netlify.app" title="Check out my portfolio!">OttCS</a></p>
-<p>Demos <a href="https://github.com/OttCS/ZephyrJS/discussions/categories/show-and-tell">Show and Tell</a></p>
-<p>Want to show off your demo? Go to the "Show and Tell" link and start a discussion!</p>
+<p>Demos <a href="https://github.com/OttCS/ZephyrJS/discussions/categories/show-and-tell"> Github Show and Tell</a></p>
 
 <h2>Tell Me Why</h2>
 
