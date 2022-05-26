@@ -15,4 +15,4 @@
 
 <p>all of the functionality of PixiJS and Zephyr have been added!</p>
 
-<p>For more on the functionality, check out the <a href="https://github.com/OttCS/ZephyrJS/blob/main/dev/notes/documentation.md">documentation</a>!<p>
+<p>For more on the functionality, check out the <a href="https://github.com/OttCS/ZephyrJS/tree/main/dev">documentation</a>!<p>
