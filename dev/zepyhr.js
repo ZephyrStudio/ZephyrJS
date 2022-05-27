@@ -34,7 +34,7 @@ PIXI.input = {
 }
 
 PIXI.collision = {
-    aabb: (a, b) => {
+    aabb: (a, b) => { // Axis-Aligned Bounding Box method
         return !(
             a.x + a.width < b.x ||
             a.y + a.height < b.y ||
@@ -42,6 +42,11 @@ PIXI.collision = {
             a.y > b.y + b.height
         );
     },
+    radius: (a, b) => { // Circle collision
+        return (
+            Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2)) <= a.r + b.r
+        );
+    }
 }
 
 // https://www.w3schools.com/jsref/met_element_requestfullscreen.asp

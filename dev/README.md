@@ -32,6 +32,10 @@ PIXI.collision.aabb(a, b): Returns boolean
  - Checks if the two provided objects are colliding with the aabb algorithm
  - NOTE: Both a and b are formatted as a javascript object with x, y, width, and height where (x,y) is the top-leftmost point.
 
+PIXI.collision.radius(a, b): Returns boolean
+ - Checks if the two provided objects are colliding with the standard point-radius method of circle collision
+ - NOTE: Both a and b are formatted as a javascript object with x, y, and r where (x,y) is the centermost point and r is the radius.
+
 ## PIXI.utils
 
 PIXI.utils.openFullScreen(view)
