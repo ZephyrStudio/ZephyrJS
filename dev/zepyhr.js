@@ -1,6 +1,6 @@
 "use strict"
 // ZEPHYR.js directly builds on top of PixiJS for ease of use
-PIXI.zephyr = "ZephyrJS version 22.5.26";
+PIXI.zephyr = "ZephyrJS version 22.7.14";
 
 PIXI.input = {
     keyMap: new Map(),
