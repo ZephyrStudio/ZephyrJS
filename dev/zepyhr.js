@@ -59,6 +59,43 @@ PIXI.utils.openFullScreen = (view) => {
         view.msRequestFullscreen(); // IE11
 }
 
+PIXI.utils.saveObjectToFile = (name, state) => {
+    let blobState = new Blob([JSON.stringify(state)], {type: 'text/plain'});
+    let a = document.createElement('a');
+    a.download = name + ".json";
+    a.href = window.URL.createObjectURL(blobState);
+    a.click();
+};
+
+PIXI.utils.readObjectFromFile = () => {
+    return new Promise(resolve => {
+        let input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+
+        document.body.onfocus = () => {
+            if (input) {
+                let res = null;
+                if(input.target) {
+                    console.log("Files picked");
+                    let file = input.target.files[0]; 
+                    let reader = new FileReader();
+                    reader.readAsText(file,'UTF-8');
+                    reader.onload = readerEvent => {
+                        res = JSON.parse(readerEvent.target.result);
+                    }
+                } else {
+                    console.log("No files picked");
+                }
+                input = null;
+                resolve(res);
+            }
+        }
+
+        input.click();
+    });
+};
+
 // Keyboard
 window.addEventListener('keydown', (e) => {
     PIXI.input.keyMap.set(e.key.toLowerCase(), true);

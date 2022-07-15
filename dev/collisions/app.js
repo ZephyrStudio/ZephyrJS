@@ -46,5 +46,4 @@ app.ticker.add((deltaTime) => {
         }
     });
 
-
 });
