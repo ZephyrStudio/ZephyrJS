@@ -5,7 +5,7 @@ document.body.appendChild(app.view);
 
 PIXI.input.mouseContainer = app.view;
 
-const diceImg = [PIXI.Texture.from("assets/character.png"), PIXI.Texture.from("assets/one.png"), PIXI.Texture.from("assets/two.png"), PIXI.Texture.from("assets/three.png"), PIXI.Texture.from("assets/four.png"), PIXI.Texture.from("assets/five.png"), PIXI.Texture.from("assets/six.png")];
+const diceImg = [null, PIXI.Texture.from("assets/one.png"), PIXI.Texture.from("assets/two.png"), PIXI.Texture.from("assets/three.png"), PIXI.Texture.from("assets/four.png"), PIXI.Texture.from("assets/five.png"), PIXI.Texture.from("assets/six.png")];
 
 // const dangerTint = [0xffffff, 0xffff00, 0xffcc00, 0xff9900, 0xff6600, 0xff3300, 0xff0000];
 const dangerTint = [0xffffff, 0xff20ff, 0x8020ff, 0x2020ff, 0x2080ff, 0x20ffff, 0x20ff80];
