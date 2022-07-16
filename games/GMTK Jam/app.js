@@ -7,7 +7,9 @@ PIXI.input.mouseContainer = app.view;
 
 const diceImg = [PIXI.Texture.from("assets/character.png"), PIXI.Texture.from("assets/one.png"), PIXI.Texture.from("assets/two.png"), PIXI.Texture.from("assets/three.png"), PIXI.Texture.from("assets/four.png"), PIXI.Texture.from("assets/five.png"), PIXI.Texture.from("assets/six.png")];
 
-const dangerTint = [0xffffff, 0xffff00, 0xffcc00, 0xff9900, 0xff6600, 0xff3300, 0xff0000];
+// const dangerTint = [0xffffff, 0xffff00, 0xffcc00, 0xff9900, 0xff6600, 0xff3300, 0xff0000];
+const dangerTint = [0xffffff, 0xff20ff, 0x8020ff, 0x2020ff, 0x2080ff, 0x20ffff, 0x20ff80];
+
 const lifeTint = [0xff8877, 0xff9988, 0xffaa99, 0xffbbaa, 0xffccbb, 0xffddcc, 0xffeedd];
 // USEFUL FUNCTIONS
 
@@ -41,7 +43,7 @@ const states = {
     jumpMult: 3,
     danger: 3,
     dangerSpawnBoost: 0,
-    level: 1,
+    level: 0,
     dangerCount: 0,
     score: 0
 }
@@ -59,11 +61,17 @@ const textStyle = new PIXI.TextStyle({
 
 // Menu stuff
 
-const infoText = new PIXI.Text("  [F] to enter fullscreen\n  [Esc] to pause the game\n\n [A] is left, [D] is right\n[W] is jump, [S] is to drop\n\nGetting hit by an enemy die\n will lower your health by\n the shown number, jumping\n on top of it will restore\n your health by the number\n\n\n\n         Press [W]", textStyle);
+const infoText = new PIXI.Text("  [F] to enter fullscreen\n  [Esc] to pause the game\n\n [A] is left, [D] is right\n[W] is jump, [S] is to drop\n\nGetting hit by an enemy die\n will lower your health by\n the shown number, jumping\n on top of it will restore\n your health by the number\n\n\n         Press [W]", textStyle);
 infoText.x = app.view.width * 0.5;
 infoText.y = app.view.height * 0.5;
 infoText.anchor = { x: 0.5, y: 0.5 };
 menu.addChild(infoText);
+
+const menuScore = new PIXI.Text("", textStyle);
+menuScore.x = app.view.width * 0.5;
+menuScore.y = app.view.height * 0.05;
+menuScore.anchor = { x: 0.5, y: 0.5 };
+menu.addChild(menuScore);
 
 // Allocation stuff
 const topMessage = new PIXI.Text("Lady Luck rolls again!", textStyle)
@@ -79,26 +87,26 @@ let rollSprite = [];
 const statName = [];
 
 statName[0] = new PIXI.Text("Jump Height", textStyle)
-statName[0].x = app.view.width * 0.3;
+statName[0].x = app.view.width * 0.2;
 statName[0].y = app.view.height * 0.4;
 statName[0].anchor = { x: 0.5, y: 0.5 };
 allocationScreen.addChild(statName[0]);
 
-statName[1] = new PIXI.Text("Difficulty", textStyle)
-statName[1].x = app.view.width * 0.7;
+statName[1] = new PIXI.Text("Top Speed", textStyle)
+statName[1].x = app.view.width * 0.4;
 statName[1].y = app.view.height * 0.4;
 statName[1].anchor = { x: 0.5, y: 0.5 };
 allocationScreen.addChild(statName[1]);
 
-statName[2] = new PIXI.Text("Top Speed", textStyle)
-statName[2].x = app.view.width * 0.3;
-statName[2].y = app.view.height * 0.65;
+statName[2] = new PIXI.Text("Difficulty", textStyle)
+statName[2].x = app.view.width * 0.6;
+statName[2].y = app.view.height * 0.4;
 statName[2].anchor = { x: 0.5, y: 0.5 };
 allocationScreen.addChild(statName[2]);
 
 statName[3] = new PIXI.Text("Starting Health", textStyle)
-statName[3].x = app.view.width * 0.7;
-statName[3].y = app.view.height * 0.65;
+statName[3].x = app.view.width * 0.8;
+statName[3].y = app.view.height * 0.4;
 statName[3].anchor = { x: 0.5, y: 0.5 };
 allocationScreen.addChild(statName[3]);
 
@@ -143,13 +151,34 @@ app.ticker.add((deltaTime) => {
     if (PIXI.input.getKeyFired("f")) {
         PIXI.utils.openFullScreen(app.view);
     }
-    if (!states.start) {
+    if (!states.start || states.life <= 0) {
 
         menu.visible = true;
         scene.visible = false;
         allocationScreen.visible = false;
+        menuScore.text = "Level " + states.level + " | " + states.score + " points";
+        rollSprite = [];
 
-        states.start = PIXI.input.getKeyFired("w");
+        if (PIXI.input.getKeyFired("w")) {
+            states.start = true;
+            states.life = 6;
+            states.speed = 3;
+            states.speedMult = 3;
+            states.jump = 3;
+            states.jumpMult = 3;
+            states.danger = 3;
+            states.dangerSpawnBoost = 0;
+            states.level = 1;
+            states.dangerCount = 0;
+            states.score = 0;
+
+            player.x = app.view.width * 0.5;
+            player.y = app.view.height;
+            player.anchor = { x: 0.5, y: 1.0 };
+            player.vec = { x: 0, y: 0 };
+            player.tint = 0x33ff44;
+            states.allocation = true;
+        }
     } else {
 
         menu.visible = false;
@@ -169,7 +198,7 @@ app.ticker.add((deltaTime) => {
                     let num = rand(1, 6);
                     rollSprite[i] = new PIXI.Sprite.from(diceImg[num]);
                     rollSprite[i].x = (app.view.width * (i + 1) * 0.2) ^ 0;
-                    rollSprite[i].y = (0.25 * app.view.height) ^ 0;
+                    rollSprite[i].y = (0.3 * app.view.height) ^ 0;
                     rollSprite[i].anchor = { x: 0.5, y: 1 };
                     rollSprite[i].facing = num;
                     rollSprite[i].tint = dangerTint[7 - num];
@@ -206,12 +235,20 @@ app.ticker.add((deltaTime) => {
                     if (Math.abs(danger.vec.y) < 0.25 && danger.y == app.view.height) {
                         newRolls[danger.slot] = danger.facing;
                         danger.x = ((danger.slot + 1) * 0.2 * app.view.width) ^ 0;
-                        danger.y = (0.25 * app.view.height) ^ 0;
+                        danger.y = (0.3 * app.view.height) ^ 0;
                         danger.roll = false;
                     }
                 }
-
             });
+
+            if (PIXI.input.getKeyFired("w")) {
+                states.level++;
+                states.allocation = false;
+                states.jump = newRolls[0];
+                states.speed = newRolls[1];
+                states.danger = newRolls[2];
+                states.life = newRolls[3];
+            }
 
         } else {
             if (!states.pause) {
@@ -224,7 +261,7 @@ app.ticker.add((deltaTime) => {
                 player.texture = diceImg[t];
                 player.tint = lifeTint[t];
 
-                score.text = states.score + " points, " + (25 + states.level * 5 - states.dangerCount) + " dice left";
+                score.text = "Level " + states.level + " | " + states.score + " points, " + (25 + states.level * 5 - states.dangerCount) + " dice left";
 
                 // X velocity
                 player.vec.x = clamp(player.vec.x * (1 - (0.1 * deltaTime) * (player.vec.y == 0)) + (PIXI.input.getKeyDown("d") - PIXI.input.getKeyDown("a")) * (player.vec.y == 0) * states.speedMult, states.speed * -states.speedMult, states.speed * states.speedMult);
@@ -282,15 +319,15 @@ app.ticker.add((deltaTime) => {
                     }
                     if (PIXI.collision.aabb(player, danger)) {
                         if (player.y + player.height * 0.45 < danger.y) {
-                            // Jumped on top, score up AND heal
+                            // Jumped on top, score up AND heal AND bounce
                             states.life = clamp(states.life + danger.facing, 1, 6)
-                            states.score += danger.facing;
+                            player.vec.y = -24 - states.jump * states.jumpMult;
+                            states.score += danger.facing * 3;
                             states.dangerCount++;
                         } else {
                             // Hit by danger, lose life
                             states.life -= danger.facing;
                         }
-                        player.vec.y = -40 - states.jump * states.jumpMult;
                         scene.removeChild(danger);
                         dangerSet.delete(danger);
                     } else if (Math.abs(danger.vec.y) < 0.25 && danger.y == app.view.height) {
@@ -301,7 +338,7 @@ app.ticker.add((deltaTime) => {
                     }
                 });
 
-                if (dangerSet.size < states.danger + states.level && Math.random() < 0.0002 + states.dangerSpawnBoost) {
+                if (dangerSet.size < states.danger + states.level && Math.random() < states.dangerSpawnBoost) {
                     states.dangerSpawnBoost = 0;
                     let num = rand(1, 6);
                     let newDanger = PIXI.Sprite.from(diceImg[num]);
@@ -327,7 +364,7 @@ app.ticker.add((deltaTime) => {
                     scene.addChild(newDanger);
                     dangerSet.add(newDanger);
                 } else {
-                    states.dangerSpawnBoost += 0.0001 * (states.danger + states.level);
+                    states.dangerSpawnBoost += 0.00005 * (states.danger + states.level);
                 }
 
                 if (states.dangerCount >= 25 + states.level * 5) {
