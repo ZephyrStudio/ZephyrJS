@@ -34,7 +34,6 @@ app.stage.addChild(menu);
 
 const states = {
     start: false,
-    pause: false,
     allocation: false,
     life: 6,
     speed: 3,
@@ -56,12 +55,12 @@ const textStyle = new PIXI.TextStyle({
     fontFamily: 'monospace',
     fontSize: 32,
     fontWeight: 600,
-    fill: ['#F3FFBD']
+    fill: ["#ffffff"]
 });
 
 // Menu stuff
 
-const infoText = new PIXI.Text("  [F] to enter fullscreen\n  [Esc] to pause the game\n\n [A] is left, [D] is right\n[W] is jump, [S] is to drop\n\nGetting hit by an enemy die\n will lower your health by\n the shown number, jumping\n on top of it will restore\n your health by the number\n\n\n          Press [E]", textStyle);
+const infoText = new PIXI.Text("  [F] to enter fullscreen\n\n [A] is left, [D] is right\n[W] is jump, [S] is to drop\n\nGetting hit by an enemy die\n will lower your health by\n the shown number, jumping\n on top of it will restore\n your health by the number\n\n\n          Press [E]", textStyle);
 infoText.x = app.view.width * 0.5;
 infoText.y = app.view.height * 0.5;
 infoText.anchor = { x: 0.5, y: 0.5 };
@@ -164,7 +163,7 @@ app.ticker.add((deltaTime) => {
             states.allocation = true;
             states.life = 6;
             states.speed = 3;
-            states.speedMult = 3;
+            states.speedMult = 2;
             states.jump = 3;
             states.jumpMult = 3;
             states.danger = 3;
@@ -214,7 +213,7 @@ app.ticker.add((deltaTime) => {
                         if (danger.vec.y < -1) {
                             danger.facing = rand(1, 6);
                             danger.texture = diceImg[danger.facing];
-                            danger.tint = dangerTint[danger.facing];
+                            danger.tint = dangerTint[7 - danger.facing];
                         }
                     }
                     danger.x = (danger.x + danger.vec.x) ^ 0;
@@ -297,33 +296,29 @@ app.ticker.add((deltaTime) => {
 
             // Dangers
             dangerSet.forEach((danger) => {
-                switch (danger.type) {
-                    case 0:
-                        danger.vec.y++;
-                        danger.y = (danger.y + danger.vec.y) ^ 0;
-                        if (danger.y >= app.view.height) {
-                            danger.y = app.view.height;
-                            danger.vec.y *= -phys.bounce;
-                            danger.vec.x = danger.vec.x * phys.bounce + (Math.random() - 0.5) * danger.vec.y;
-                            if (danger.vec.y < -2) {
-                                states.score += danger.facing;
-                                danger.facing = rand(1, 6);
-                                danger.texture = diceImg[danger.facing];
-                                danger.tint = dangerTint[danger.facing];
-                            }
-                        }
-                        danger.x = (danger.x + danger.vec.x) ^ 0;
-                        if (danger.x < danger.width * 0.5) {
-                            danger.x = danger.width * 0.5;
-                            danger.vec.x *= -phys.bounce;
-                        } else if (danger.x > app.view.width - danger.width * 0.5) {
-                            danger.x = app.view.width - danger.width * 0.5;
-                            danger.vec.x *= -phys.bounce;
-                        }
-                        break;
+                danger.vec.y++;
+                danger.y = (danger.y + danger.vec.y) ^ 0;
+                if (danger.y >= app.view.height) {
+                    danger.y = app.view.height;
+                    danger.vec.y *= -phys.bounce;
+                    danger.vec.x = danger.vec.x * phys.bounce + (Math.random() - 0.5) * danger.vec.y;
+                    if (danger.vec.y < -2) {
+                        states.score += danger.facing;
+                        danger.facing = rand(1, 6);
+                        danger.texture = diceImg[danger.facing];
+                        danger.tint = dangerTint[danger.facing];
+                    }
+                }
+                danger.x = (danger.x + danger.vec.x) ^ 0;
+                if (danger.x < danger.width * 0.5) {
+                    danger.x = danger.width * 0.5;
+                    danger.vec.x *= -phys.bounce;
+                } else if (danger.x > app.view.width - danger.width * 0.5) {
+                    danger.x = app.view.width - danger.width * 0.5;
+                    danger.vec.x *= -phys.bounce;
                 }
                 if (PIXI.collision.aabb(player, danger)) {
-                    if (player.y + player.height * 0.45 < danger.y) {
+                    if (player.y + player.height * 0.25 < danger.y) {
                         // Jumped on top, score up AND heal AND bounce
                         states.life = clamp(states.life + danger.facing, 1, 6)
                         player.vec.y = -24 - states.jump * states.jumpMult;
@@ -347,25 +342,20 @@ app.ticker.add((deltaTime) => {
                 states.dangerSpawnBoost = 0;
                 let num = rand(1, 6);
                 let newDanger = PIXI.Sprite.from(diceImg[num]);
-                newDanger.type = 0;
                 newDanger.facing = num;
-                switch (newDanger.type) {
-                    case 0:
-                        newDanger.width = 64;
-                        newDanger.height = 64;
-                        newDanger.y = 0;
-                        newDanger.x = clamp(player.x + ((Math.random() - 0.5) * app.view.width), newDanger.width * 0.5, app.view.width - newDanger.width * 0.5) ^ 0;
-                        newDanger.vec = {
-                            x: 0,
-                            y: 0
-                        }
-                        newDanger.anchor = {
-                            x: 0.5,
-                            y: 1.0
-                        }
-                        newDanger.tint = dangerTint[num];
-                        break;
+                newDanger.width = 64;
+                newDanger.height = 64;
+                newDanger.y = 0;
+                newDanger.x = clamp(player.x + ((Math.random() - 0.5) * app.view.width), newDanger.width * 0.5, app.view.width - newDanger.width * 0.5) ^ 0;
+                newDanger.vec = {
+                    x: 0,
+                    y: 0
                 }
+                newDanger.anchor = {
+                    x: 0.5,
+                    y: 1.0
+                }
+                newDanger.tint = dangerTint[num];
                 scene.addChild(newDanger);
                 dangerSet.add(newDanger);
             } else {
