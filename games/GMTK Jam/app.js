@@ -7,6 +7,10 @@ PIXI.input.mouseContainer = app.view;
 
 const diceImg = [null, PIXI.Texture.from("assets/one.png"), PIXI.Texture.from("assets/two.png"), PIXI.Texture.from("assets/three.png"), PIXI.Texture.from("assets/four.png"), PIXI.Texture.from("assets/five.png"), PIXI.Texture.from("assets/six.png")];
 
+const sound = {
+    hurt: PIXI.sound.Sound.from("assets/hurt.mp3"),
+}
+
 // const dangerTint = [0xffffff, 0xffff00, 0xffcc00, 0xff9900, 0xff6600, 0xff3300, 0xff0000];
 const dangerTint = [0xffffff, 0xff20ff, 0x8020ff, 0x2020ff, 0x2080ff, 0x20ffff, 0x20ff80];
 
@@ -26,11 +30,15 @@ const rand = (min, max) => {
 const scene = new PIXI.Container();
 app.stage.addChild(scene);
 
+const bloomContainer = new PIXI.ParticleContainer();
+bloomContainer.visible = false;
+app.stage.addChild(bloomContainer);
+
 const allocationScreen = new PIXI.Container();
 app.stage.addChild(allocationScreen);
 
-const menu = new PIXI.Container();
-app.stage.addChild(menu);
+const menuContainer = new PIXI.Container();
+app.stage.addChild(menuContainer);
 
 const states = {
     start: false,
@@ -48,7 +56,8 @@ const states = {
 }
 
 const phys = {
-    bounce: 0.4
+    bounce: 0.4,
+    shake: 64
 }
 
 const textStyle = new PIXI.TextStyle({
@@ -59,18 +68,21 @@ const textStyle = new PIXI.TextStyle({
 });
 
 // Menu stuff
+const menu = {
+    score: new PIXI.Text("", textStyle),
+    info: new PIXI.Text("  [F] to enter fullscreen\n\n [A] is left, [D] is right\n[W] is jump, [S] is to drop\n\nGetting hit by an enemy die\n will lower your health by\n the shown number, jumping\n on top of it will restore\n your health by the number\n\n\n          Press [E]", textStyle)
+}
 
-const infoText = new PIXI.Text("  [F] to enter fullscreen\n\n [A] is left, [D] is right\n[W] is jump, [S] is to drop\n\nGetting hit by an enemy die\n will lower your health by\n the shown number, jumping\n on top of it will restore\n your health by the number\n\n\n          Press [E]", textStyle);
-infoText.x = app.view.width * 0.5;
-infoText.y = app.view.height * 0.5;
-infoText.anchor = { x: 0.5, y: 0.5 };
-menu.addChild(infoText);
+menu.score = new PIXI.Text("", textStyle);
+menu.score.x = app.view.width * 0.5;
+menu.score.y = app.view.height * 0.05;
+menu.score.anchor = { x: 0.5, y: 0.5 };
+menuContainer.addChild(menu.score);
 
-const menuScore = new PIXI.Text("", textStyle);
-menuScore.x = app.view.width * 0.5;
-menuScore.y = app.view.height * 0.05;
-menuScore.anchor = { x: 0.5, y: 0.5 };
-menu.addChild(menuScore);
+menu.info.x = app.view.width * 0.5;
+menu.info.y = app.view.height * 0.5;
+menu.info.anchor = { x: 0.5, y: 0.5 };
+menuContainer.addChild(menu.info);
 
 // Allocation stuff
 const topMessage = new PIXI.Text("Lady Luck rolls again!", textStyle)
@@ -141,10 +153,6 @@ score.y = app.view.height * 0.05;
 score.anchor = { x: 0.5, y: 0.5 };
 scene.addChild(score);
 
-menu.visible = false;
-scene.visible = true;
-allocationScreen.visible = false;
-
 // PLAY GAME
 
 app.ticker.add((deltaTime) => {
@@ -153,10 +161,10 @@ app.ticker.add((deltaTime) => {
     }
     if (!states.start || states.life <= 0) {
 
-        menu.visible = true;
+        menuContainer.visible = true;
         scene.visible = false;
         allocationScreen.visible = false;
-        menuScore.text = "Level " + states.level + " | " + states.score + " points";
+        menu.score.text = "Level " + states.level + " | " + states.score + " points";
 
         if (PIXI.input.getKeyFired("e")) {
             states.start = true;
@@ -179,7 +187,7 @@ app.ticker.add((deltaTime) => {
         }
     } else {
 
-        menu.visible = false;
+        menuContainer.visible = false;
 
         if (states.allocation) {
 
@@ -254,12 +262,17 @@ app.ticker.add((deltaTime) => {
                         scene.removeChild(danger);
                         dangerSet.delete(danger);
                     });
+                    scene.x = 0; // Reset screen shake
                 }
             }
 
         } else {
             allocationScreen.visible = false;
             scene.visible = true;
+
+            if (scene.x != 0) {
+                scene.x += (0 - scene.x) * 1.875;
+            }
 
             let t = Math.max(states.life, 1);
             player.texture = diceImg[t];
@@ -318,7 +331,7 @@ app.ticker.add((deltaTime) => {
                     danger.vec.x *= -phys.bounce;
                 }
                 if (PIXI.collision.aabb(player, danger)) {
-                    if (player.y + player.height * 0.25 < danger.y) {
+                    if (player.y + player.height * 0.35 < danger.y) {
                         // Jumped on top, score up AND heal AND bounce
                         states.life = clamp(states.life + danger.facing, 1, 6)
                         player.vec.y = -24 - states.jump * states.jumpMult;
@@ -327,6 +340,8 @@ app.ticker.add((deltaTime) => {
                     } else {
                         // Hit by danger, lose life
                         states.life -= danger.facing;
+                        scene.x += phys.shake;
+                        sound.hurt.play();
                     }
                     scene.removeChild(danger);
                     dangerSet.delete(danger);
