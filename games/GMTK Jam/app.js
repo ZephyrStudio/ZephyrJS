@@ -1,5 +1,5 @@
 // SYSTEM SETUP
-const app = new PIXI.Application({ width: 1920, height: 1080, backgroundColor: 0x111111, antialias: false });
+const app = new PIXI.Application({ width: 1920, height: 1080, backgroundColor: 0x000000, antialias: false });
 app.view.id = "PIXI";
 document.body.appendChild(app.view);
 
@@ -7,14 +7,44 @@ PIXI.input.mouseContainer = app.view;
 
 const diceImg = [null, PIXI.Texture.from("assets/one.png"), PIXI.Texture.from("assets/two.png"), PIXI.Texture.from("assets/three.png"), PIXI.Texture.from("assets/four.png"), PIXI.Texture.from("assets/five.png"), PIXI.Texture.from("assets/six.png")];
 
+const img = {
+    bg: PIXI.Texture.from("assets/background.png"),
+}
+
 const sound = {
-    hurt: PIXI.sound.Sound.from("assets/hurt.mp3"),
+    hit: [PIXI.sound.Sound.from("assets/hitS.wav"),PIXI.sound.Sound.from("assets/hitM.wav"),PIXI.sound.Sound.from("assets/hitL.wav")],
+    bounce: [PIXI.sound.Sound.from("assets/bounceS.wav"),PIXI.sound.Sound.from("assets/bounceM.wav"),PIXI.sound.Sound.from("assets/bounceL.wav")]
 }
 
 // const dangerTint = [0xffffff, 0xffff00, 0xffcc00, 0xff9900, 0xff6600, 0xff3300, 0xff0000];
-const dangerTint = [0xffffff, 0xff20ff, 0x8020ff, 0x2020ff, 0x2080ff, 0x20ffff, 0x20ff80];
+const dangerTint = [
+    0xffffff,
+    0xD92BBC,
+    0xD92B9F,
+    0xD92B82,
+    0xD92B65,
+    0xD92B48,
+    0xD92B2B
+];
 
-const lifeTint = [0xff8877, 0xff9988, 0xffaa99, 0xffbbaa, 0xffccbb, 0xffddcc, 0xffeedd];
+const lifeTint = [
+    0xff2211,
+    0xff4433,
+    0xff6655,
+    0xff8877,
+    0xffaa99,
+    0xffccbb,
+    0xffeedd
+];
+
+const bgTint = [
+    0x773355,
+    0x775533,
+    0x557733,
+    0x553377,
+    0x335577,
+    0x337755,
+]
 // USEFUL FUNCTIONS
 
 const clamp = (x, min, max) => {
@@ -26,13 +56,14 @@ const rand = (min, max) => {
 }
 
 // GAME SETUP
+let bg = PIXI.Sprite.from(img.bg);
+bg.anchor = {x:0.5, y:0};
+bg.x = 0.5 * app.view.width;
+bg.y = 0;
+app.stage.addChild(bg);
 
 const scene = new PIXI.Container();
 app.stage.addChild(scene);
-
-const bloomContainer = new PIXI.ParticleContainer();
-bloomContainer.visible = false;
-app.stage.addChild(bloomContainer);
 
 const allocationScreen = new PIXI.Container();
 app.stage.addChild(allocationScreen);
@@ -159,12 +190,16 @@ app.ticker.add((deltaTime) => {
     if (PIXI.input.getKeyFired("f")) {
         PIXI.utils.openFullScreen(app.view);
     }
+    if (app.stage.x != 0) {
+        app.stage.x += (0 - app.stage.x) * 1.75;
+    }
     if (!states.start || states.life <= 0) {
-
         menuContainer.visible = true;
         scene.visible = false;
         allocationScreen.visible = false;
         menu.score.text = "Level " + states.level + " | " + states.score + " points";
+
+        bg.tint = bgTint[0];
 
         if (PIXI.input.getKeyFired("e")) {
             states.start = true;
@@ -194,6 +229,8 @@ app.ticker.add((deltaTime) => {
             scene.visible = false;
             allocationScreen.visible = true;
 
+            bg.tint = bgTint[0];
+
             if (rollSprite.length == 0) {
                 for (let i = 0; i < 4; i++) {
                     let num = rand(1, 6);
@@ -203,7 +240,7 @@ app.ticker.add((deltaTime) => {
                     rollSprite[i].anchor = { x: 0.5, y: 1 };
                     rollSprite[i].facing = num;
                     rollSprite[i].tint = dangerTint[7 - num];
-                    rollSprite[i].vec = { x: 0, y: 0 };
+                    rollSprite[i].vec = { x: rand(-16, 16), y: rand(-16, 16) };
                     rollSprite[i].roll = true;
                     rollSprite[i].slot = i;
                     allocationScreen.addChild(rollSprite[i]);
@@ -222,6 +259,7 @@ app.ticker.add((deltaTime) => {
                             danger.facing = rand(1, 6);
                             danger.texture = diceImg[danger.facing];
                             danger.tint = dangerTint[7 - danger.facing];
+                            sound.bounce[rand(0, 2)].play();
                         }
                     }
                     danger.x = (danger.x + danger.vec.x) ^ 0;
@@ -258,21 +296,18 @@ app.ticker.add((deltaTime) => {
                     newRolls = [];
                     directions.visible = false;
 
+                    bg.tint = bgTint[rand(1, bgTint.length - 1)];
+
                     dangerSet.forEach((danger) => {
                         scene.removeChild(danger);
                         dangerSet.delete(danger);
                     });
-                    scene.x = 0; // Reset screen shake
                 }
             }
 
         } else {
             allocationScreen.visible = false;
             scene.visible = true;
-
-            if (scene.x != 0) {
-                scene.x += (0 - scene.x) * 1.875;
-            }
 
             let t = Math.max(states.life, 1);
             player.texture = diceImg[t];
@@ -304,6 +339,7 @@ app.ticker.add((deltaTime) => {
                 player.x = (app.view.width - player.width * 0.5);
                 player.vec.x *= -phys.bounce;
             }
+            player.x = (player.x + 0.5) ^ 0;
             // Player Y position
             player.y = Math.min(player.y + player.vec.y, app.view.height) ^ 0;
 
@@ -320,6 +356,7 @@ app.ticker.add((deltaTime) => {
                         danger.facing = rand(1, 6);
                         danger.texture = diceImg[danger.facing];
                         danger.tint = dangerTint[danger.facing];
+                        sound.bounce[rand(0, 2)].play();
                     }
                 }
                 danger.x = (danger.x + danger.vec.x) ^ 0;
@@ -331,7 +368,7 @@ app.ticker.add((deltaTime) => {
                     danger.vec.x *= -phys.bounce;
                 }
                 if (PIXI.collision.aabb(player, danger)) {
-                    if (player.y + player.height * 0.35 < danger.y) {
+                    if (player.y - player.vec.y * 0.5 < danger.y) {
                         // Jumped on top, score up AND heal AND bounce
                         states.life = clamp(states.life + danger.facing, 1, 6)
                         player.vec.y = -24 - states.jump * states.jumpMult;
@@ -340,9 +377,9 @@ app.ticker.add((deltaTime) => {
                     } else {
                         // Hit by danger, lose life
                         states.life -= danger.facing;
-                        scene.x += phys.shake;
-                        sound.hurt.play();
+                        app.stage.x += phys.shake;
                     }
+                    sound.hit[rand(0, 2)].play();
                     scene.removeChild(danger);
                     dangerSet.delete(danger);
                 } else if (Math.abs(danger.vec.y) < 0.25 && danger.y == app.view.height) {
