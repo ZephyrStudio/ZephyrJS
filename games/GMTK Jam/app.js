@@ -61,7 +61,7 @@ const textStyle = new PIXI.TextStyle({
 
 // Menu stuff
 
-const infoText = new PIXI.Text("  [F] to enter fullscreen\n  [Esc] to pause the game\n\n [A] is left, [D] is right\n[W] is jump, [S] is to drop\n\nGetting hit by an enemy die\n will lower your health by\n the shown number, jumping\n on top of it will restore\n your health by the number\n\n\n       Press [Enter]", textStyle);
+const infoText = new PIXI.Text("  [F] to enter fullscreen\n  [Esc] to pause the game\n\n [A] is left, [D] is right\n[W] is jump, [S] is to drop\n\nGetting hit by an enemy die\n will lower your health by\n the shown number, jumping\n on top of it will restore\n your health by the number\n\n\n          Press [E]", textStyle);
 infoText.x = app.view.width * 0.5;
 infoText.y = app.view.height * 0.5;
 infoText.anchor = { x: 0.5, y: 0.5 };
@@ -159,7 +159,7 @@ app.ticker.add((deltaTime) => {
         allocationScreen.visible = false;
         menuScore.text = "Level " + states.level + " | " + states.score + " points";
 
-        if (PIXI.input.getKeyFired("enter")) {
+        if (PIXI.input.getKeyFired("e")) {
             states.start = true;
             states.allocation = true;
             states.life = 6;
@@ -211,8 +211,7 @@ app.ticker.add((deltaTime) => {
                         danger.y = app.view.height;
                         danger.vec.y *= -phys.bounce;
                         danger.vec.x = danger.vec.x * phys.bounce + (Math.random() - 0.5) * danger.vec.y;
-                        if (danger.vec.y < -2) {
-                            states.score += danger.facing;
+                        if (danger.vec.y < -1) {
                             danger.facing = rand(1, 6);
                             danger.texture = diceImg[danger.facing];
                             danger.tint = dangerTint[danger.facing];
@@ -251,6 +250,11 @@ app.ticker.add((deltaTime) => {
                     rollSprite = [];
                     newRolls = [];
                     directions.visible = false;
+
+                    dangerSet.forEach((danger) => {
+                        scene.removeChild(danger);
+                        dangerSet.delete(danger);
+                    });
                 }
             }
 
