@@ -61,7 +61,7 @@ const textStyle = new PIXI.TextStyle({
 
 // Menu stuff
 
-const infoText = new PIXI.Text("  [F] to enter fullscreen\n  [Esc] to pause the game\n\n [A] is left, [D] is right\n[W] is jump, [S] is to drop\n\nGetting hit by an enemy die\n will lower your health by\n the shown number, jumping\n on top of it will restore\n your health by the number\n\n\n         Press [W]", textStyle);
+const infoText = new PIXI.Text("  [F] to enter fullscreen\n  [Esc] to pause the game\n\n [A] is left, [D] is right\n[W] is jump, [S] is to drop\n\nGetting hit by an enemy die\n will lower your health by\n the shown number, jumping\n on top of it will restore\n your health by the number\n\n\n       Press [Enter]", textStyle);
 infoText.x = app.view.width * 0.5;
 infoText.y = app.view.height * 0.5;
 infoText.anchor = { x: 0.5, y: 0.5 };
@@ -80,7 +80,7 @@ topMessage.y = app.view.height * 0.1;
 topMessage.anchor = { x: 0.5, y: 0.5 };
 allocationScreen.addChild(topMessage);
 
-const newRolls = [0, 0, 0, 0];
+let newRolls = [];
 
 let rollSprite = [];
 
@@ -110,10 +110,11 @@ statName[3].y = app.view.height * 0.4;
 statName[3].anchor = { x: 0.5, y: 0.5 };
 allocationScreen.addChild(statName[3]);
 
-const directions = new PIXI.Text("Set the rules for the next level by dragging the dice", textStyle)
+const directions = new PIXI.Text("Press [W] try your luck in the next level...", textStyle)
 directions.x = app.view.width * 0.5;
-directions.y = app.view.height * 0.85;
+directions.y = app.view.height * 0.9;
 directions.anchor = { x: 0.5, y: 0.5 };
+directions.visible = false;
 allocationScreen.addChild(directions);
 
 // Scene stuff
@@ -157,10 +158,10 @@ app.ticker.add((deltaTime) => {
         scene.visible = false;
         allocationScreen.visible = false;
         menuScore.text = "Level " + states.level + " | " + states.score + " points";
-        rollSprite = [];
 
-        if (PIXI.input.getKeyFired("w")) {
+        if (PIXI.input.getKeyFired("enter")) {
             states.start = true;
+            states.allocation = true;
             states.life = 6;
             states.speed = 3;
             states.speedMult = 3;
@@ -168,7 +169,7 @@ app.ticker.add((deltaTime) => {
             states.jumpMult = 3;
             states.danger = 3;
             states.dangerSpawnBoost = 0;
-            states.level = 1;
+            states.level = 0;
             states.dangerCount = 0;
             states.score = 0;
 
@@ -176,17 +177,10 @@ app.ticker.add((deltaTime) => {
             player.y = app.view.height;
             player.anchor = { x: 0.5, y: 1.0 };
             player.vec = { x: 0, y: 0 };
-            player.tint = 0x33ff44;
-            states.allocation = true;
         }
     } else {
 
         menu.visible = false;
-
-        if (!states.pause && PIXI.input.getKeyFired("escape")) {
-            states.pause = true;
-            pauseText.visible = true;
-        }
 
         if (states.allocation) {
 
@@ -241,144 +235,141 @@ app.ticker.add((deltaTime) => {
                 }
             });
 
-            if (PIXI.input.getKeyFired("w")) {
-                states.level++;
-                states.allocation = false;
-                states.jump = newRolls[0];
-                states.speed = newRolls[1];
-                states.danger = newRolls[2];
-                states.life = newRolls[3];
+            if (newRolls.length == 4) {
+                directions.visible = true;
+                if (PIXI.input.getKeyFired("w")) {
+                    states.dangerCount = 0;
+                    states.level++;
+                    states.allocation = false;
+                    states.jump = newRolls[0];
+                    states.speed = newRolls[1];
+                    states.danger = newRolls[2];
+                    states.life = newRolls[3];
+                    for (let i = 0; i < 4; i++) {
+                        allocationScreen.removeChild(rollSprite[i]);
+                    }
+                    rollSprite = [];
+                    newRolls = [];
+                    directions.visible = false;
+                }
             }
 
         } else {
-            if (!states.pause) {
+            allocationScreen.visible = false;
+            scene.visible = true;
 
+            let t = Math.max(states.life, 1);
+            player.texture = diceImg[t];
+            player.tint = lifeTint[t];
 
-                allocationScreen.visible = false;
-                scene.visible = true;
+            score.text = "Level " + states.level + " | " + states.score + " points, " + (25 + states.level * 5 - states.dangerCount) + " dice left";
 
-                let t = Math.max(states.life, 1);
-                player.texture = diceImg[t];
-                player.tint = lifeTint[t];
+            // X velocity
+            player.vec.x = clamp(player.vec.x * (1 - (0.1 * deltaTime) * (player.vec.y == 0)) + (PIXI.input.getKeyDown("d") - PIXI.input.getKeyDown("a")) * (player.vec.y == 0) * states.speedMult, (states.speed + 2) * -states.speedMult, (states.speed + 2) * states.speedMult);
 
-                score.text = "Level " + states.level + " | " + states.score + " points, " + (25 + states.level * 5 - states.dangerCount) + " dice left";
-
-                // X velocity
-                player.vec.x = clamp(player.vec.x * (1 - (0.1 * deltaTime) * (player.vec.y == 0)) + (PIXI.input.getKeyDown("d") - PIXI.input.getKeyDown("a")) * (player.vec.y == 0) * states.speedMult, states.speed * -states.speedMult, states.speed * states.speedMult);
-
-                // Y velocity
-                if (player.y < app.view.height) {
-                    player.vec.y += 1 + 1.5 * (!PIXI.input.getKeyDown("w") || (player.vec.y > 0)) + 2.5 * PIXI.input.getKeyDown("s");
-                } else {
-                    if (PIXI.input.getKeyFired("w")) {
-                        player.vec.y = -14 - states.jump * states.jumpMult;
-                    } else {
-                        player.vec.y = 0;
-                        player.y = app.view.height;
-                    }
-                }
-
-                // Player X position
-                player.x += player.vec.x;
-                if (player.x < player.width * 0.5) {
-                    player.x = player.width * 0.5;
-                    player.vec.x *= -phys.bounce;
-                } else if (player.x > app.view.width - player.width * 0.5) {
-                    player.x = (app.view.width - player.width * 0.5);
-                    player.vec.x *= -phys.bounce;
-                }
-                // Player Y position
-                player.y = Math.min(player.y + player.vec.y, app.view.height) ^ 0;
-
-                // Dangers
-                dangerSet.forEach((danger) => {
-                    switch (danger.type) {
-                        case 0:
-                            danger.vec.y++;
-                            danger.y = (danger.y + danger.vec.y) ^ 0;
-                            if (danger.y >= app.view.height) {
-                                danger.y = app.view.height;
-                                danger.vec.y *= -phys.bounce;
-                                danger.vec.x = danger.vec.x * phys.bounce + (Math.random() - 0.5) * danger.vec.y;
-                                if (danger.vec.y < -2) {
-                                    states.score += danger.facing;
-                                    danger.facing = rand(1, 6);
-                                    danger.texture = diceImg[danger.facing];
-                                    danger.tint = dangerTint[danger.facing];
-                                }
-                            }
-                            danger.x = (danger.x + danger.vec.x) ^ 0;
-                            if (danger.x < danger.width * 0.5) {
-                                danger.x = danger.width * 0.5;
-                                danger.vec.x *= -phys.bounce;
-                            } else if (danger.x > app.view.width - danger.width * 0.5) {
-                                danger.x = app.view.width - danger.width * 0.5;
-                                danger.vec.x *= -phys.bounce;
-                            }
-                            break;
-                    }
-                    if (PIXI.collision.aabb(player, danger)) {
-                        if (player.y + player.height * 0.45 < danger.y) {
-                            // Jumped on top, score up AND heal AND bounce
-                            states.life = clamp(states.life + danger.facing, 1, 6)
-                            player.vec.y = -24 - states.jump * states.jumpMult;
-                            states.score += danger.facing * 3;
-                            states.dangerCount++;
-                        } else {
-                            // Hit by danger, lose life
-                            states.life -= danger.facing;
-                        }
-                        scene.removeChild(danger);
-                        dangerSet.delete(danger);
-                    } else if (Math.abs(danger.vec.y) < 0.25 && danger.y == app.view.height) {
-                        states.score += danger.facing;
-                        states.dangerCount++;
-                        scene.removeChild(danger);
-                        dangerSet.delete(danger);
-                    }
-                });
-
-                if (dangerSet.size < states.danger + states.level && Math.random() < states.dangerSpawnBoost) {
-                    states.dangerSpawnBoost = 0;
-                    let num = rand(1, 6);
-                    let newDanger = PIXI.Sprite.from(diceImg[num]);
-                    newDanger.type = 0;
-                    newDanger.facing = num;
-                    switch (newDanger.type) {
-                        case 0:
-                            newDanger.width = 64;
-                            newDanger.height = 64;
-                            newDanger.y = 0;
-                            newDanger.x = clamp(player.x + ((Math.random() - 0.5) * app.view.width), newDanger.width * 0.5, app.view.width - newDanger.width * 0.5) ^ 0;
-                            newDanger.vec = {
-                                x: 0,
-                                y: 0
-                            }
-                            newDanger.anchor = {
-                                x: 0.5,
-                                y: 1.0
-                            }
-                            newDanger.tint = dangerTint[num];
-                            break;
-                    }
-                    scene.addChild(newDanger);
-                    dangerSet.add(newDanger);
-                } else {
-                    states.dangerSpawnBoost += 0.00005 * (states.danger + states.level);
-                }
-
-                if (states.dangerCount >= 25 + states.level * 5) {
-                    states.dangerCount = 0;
-                    states.level++;
-                    states.pause = true;
-                    states.allocation = true;
-                    rollSprite = [];
-                }
+            // Y velocity
+            if (player.y < app.view.height) {
+                player.vec.y += 1 + 1.5 * (!PIXI.input.getKeyDown("w") || (player.vec.y > 0)) + 2.5 * PIXI.input.getKeyDown("s");
             } else {
-                if (PIXI.input.getKeyFired("escape")) {
-                    states.pause = false;
-                    pauseText.visible = false;
+                if (PIXI.input.getKeyFired("w")) {
+                    player.vec.y = -14 - states.jump * states.jumpMult;
+                } else {
+                    player.vec.y = 0;
+                    player.y = app.view.height;
                 }
+            }
+
+            // Player X position
+            player.x += player.vec.x;
+            if (player.x < player.width * 0.5) {
+                player.x = player.width * 0.5;
+                player.vec.x *= -phys.bounce;
+            } else if (player.x > app.view.width - player.width * 0.5) {
+                player.x = (app.view.width - player.width * 0.5);
+                player.vec.x *= -phys.bounce;
+            }
+            // Player Y position
+            player.y = Math.min(player.y + player.vec.y, app.view.height) ^ 0;
+
+            // Dangers
+            dangerSet.forEach((danger) => {
+                switch (danger.type) {
+                    case 0:
+                        danger.vec.y++;
+                        danger.y = (danger.y + danger.vec.y) ^ 0;
+                        if (danger.y >= app.view.height) {
+                            danger.y = app.view.height;
+                            danger.vec.y *= -phys.bounce;
+                            danger.vec.x = danger.vec.x * phys.bounce + (Math.random() - 0.5) * danger.vec.y;
+                            if (danger.vec.y < -2) {
+                                states.score += danger.facing;
+                                danger.facing = rand(1, 6);
+                                danger.texture = diceImg[danger.facing];
+                                danger.tint = dangerTint[danger.facing];
+                            }
+                        }
+                        danger.x = (danger.x + danger.vec.x) ^ 0;
+                        if (danger.x < danger.width * 0.5) {
+                            danger.x = danger.width * 0.5;
+                            danger.vec.x *= -phys.bounce;
+                        } else if (danger.x > app.view.width - danger.width * 0.5) {
+                            danger.x = app.view.width - danger.width * 0.5;
+                            danger.vec.x *= -phys.bounce;
+                        }
+                        break;
+                }
+                if (PIXI.collision.aabb(player, danger)) {
+                    if (player.y + player.height * 0.45 < danger.y) {
+                        // Jumped on top, score up AND heal AND bounce
+                        states.life = clamp(states.life + danger.facing, 1, 6)
+                        player.vec.y = -24 - states.jump * states.jumpMult;
+                        states.score += danger.facing * 3;
+                        states.dangerCount++;
+                    } else {
+                        // Hit by danger, lose life
+                        states.life -= danger.facing;
+                    }
+                    scene.removeChild(danger);
+                    dangerSet.delete(danger);
+                } else if (Math.abs(danger.vec.y) < 0.25 && danger.y == app.view.height) {
+                    states.score += danger.facing;
+                    states.dangerCount++;
+                    scene.removeChild(danger);
+                    dangerSet.delete(danger);
+                }
+            });
+
+            if (dangerSet.size < states.danger + states.level && Math.random() < states.dangerSpawnBoost) {
+                states.dangerSpawnBoost = 0;
+                let num = rand(1, 6);
+                let newDanger = PIXI.Sprite.from(diceImg[num]);
+                newDanger.type = 0;
+                newDanger.facing = num;
+                switch (newDanger.type) {
+                    case 0:
+                        newDanger.width = 64;
+                        newDanger.height = 64;
+                        newDanger.y = 0;
+                        newDanger.x = clamp(player.x + ((Math.random() - 0.5) * app.view.width), newDanger.width * 0.5, app.view.width - newDanger.width * 0.5) ^ 0;
+                        newDanger.vec = {
+                            x: 0,
+                            y: 0
+                        }
+                        newDanger.anchor = {
+                            x: 0.5,
+                            y: 1.0
+                        }
+                        newDanger.tint = dangerTint[num];
+                        break;
+                }
+                scene.addChild(newDanger);
+                dangerSet.add(newDanger);
+            } else {
+                states.dangerSpawnBoost += 0.00005 * (states.danger + states.level);
+            }
+
+            if (states.dangerCount >= 25 + states.level * 5) {
+                states.allocation = true;
             }
         }
 
