@@ -9,6 +9,7 @@ const diceImg = [null, PIXI.Texture.from("assets/one.png"), PIXI.Texture.from("a
 
 const img = {
     bg: PIXI.Texture.from("assets/background.png"),
+    edgeLight: PIXI.Texture.from("assets/edgeLight.png"),
 }
 
 const sound = {
@@ -28,29 +29,34 @@ const dangerTint = [
 ];
 
 const lifeTint = [
-    0xff2211,
-    0xff4433,
-    0xff6655,
     0xff8877,
+    0xff9988,
     0xffaa99,
+    0xffbbaa,
     0xffccbb,
+    0xffddcc,
     0xffeedd
 ];
 
 const bgTint = [
     0x100808,
-    0x775533,
-    0x557733,
-    0x553377,
-    0x335577,
-    0x337755,
+    0x34092D,
+    0x340926,
+    0x34091F,
+    0x340917,
+    0x340910,
+    0x340909
 ]
 
 const ladyLuck = [
-    "Ah, my favorite little die... WHAT?!? You don't want to work for me anymore? Let's see how lucky you are without me!",
-    "Look at that, a die being on a hot streak. I play by my own rules though, so let's change yours!",
-    "Enough chances, you keep on getting lucky breaks... Figures for a die.",
-    "Will you quit it? A dice without luck is just a cube, come back and I'll decide your fate... What do you mean that sounds unfair?"
+    "Lady Luck: Ah, my favorite little die... WHAT?!? You don't want to work for me anymore? Let's see how lucky you are without me!",
+    "Lady Luck: Look at that, a die on a hot streak. I play by my own rules though, so let's change yours!",
+    "Lady Luck: You keep on getting lucky breaks... Makes sense for a die.",
+    "Lady Luck: I don't have time for these games of chance... What? What do you mean that's all I do?!",
+    "Lady luck: Come back and I'll decide your fate... What do you mean that sounds unfair?",
+    "Lady Luck: Alright, you've had your fun, give me a second chance?",
+    "Lady Luck: Your luck's bound to run out soon, I'm not giving you any more!",
+    "YOU'VE BEAT LADY LUCK!\n\nKeep playing to see how far you can push your luck!"
 ]
 
 // USEFUL FUNCTIONS
@@ -79,16 +85,9 @@ app.stage.addChild(allocationScreen);
 const menuContainer = new PIXI.Container();
 app.stage.addChild(menuContainer);
 
-const particle = {
-    tex: PIXI.Texture.from("assets/particle.png"),
-    container: new PIXI.ParticleContainer(),
-    set: new Set()
-}
-
-app.stage.addChild(particle.container);
-
 const states = {
     start: false,
+    menu: true,
     requestAllocationRolls: false,
     allocation: false,
     life: 3,
@@ -130,9 +129,9 @@ const menu = {
         fillGradientType: 1,
         fontFamily: "Courier New",
         fontSize: 192,
-        letterSpacing: -7,
+        letterSpacing: -16,
     })),
-    options: new PIXI.Text("[A] Start\t\t\t\t[S] Controls\t\t\t\t[D] About", textStyle),
+    options: new PIXI.Text("Start [A]\t\t\t\tControls [S]\t\t\t\tAbout [D]", textStyle),
     info: new PIXI.Text("", textStyle)
 }
 
@@ -210,7 +209,7 @@ allocation.ladyLuck.y = app.view.height * 0.65;
 allocation.ladyLuck.anchor = { x: 0.5, y: 0.5 };
 allocationScreen.addChild(allocation.ladyLuck);
 
-const directions = new PIXI.Text("Press [W] try your luck in the next level...", textStyle)
+const directions = new PIXI.Text("Test your luck in the next round... [W]", textStyle)
 directions.x = app.view.width * 0.5;
 directions.y = app.view.height * 0.9;
 directions.anchor = { x: 0.5, y: 0.5 };
@@ -218,6 +217,22 @@ directions.visible = false;
 allocationScreen.addChild(directions);
 
 // Scene stuff
+const gameOver = new PIXI.Text("Looks like that's the end of your lucky break... [W]", new PIXI.TextStyle({
+    align: "center",
+    wordWrap: true,
+    wordWrapWidth: 1200,
+    fontFamily: "Courier New",
+    fontSize: 32,
+    fontWeight: 300,
+    fill: ["#D92B2B"]
+}));
+
+gameOver.x = app.view.width * 0.5;
+gameOver.y = app.view.height * 0.9;
+gameOver.anchor = { x: 0.5, y: 0.5 };
+gameOver.visible = false;
+scene.addChild(gameOver);
+
 const player = PIXI.Sprite.from(diceImg[6]);
 player.x = app.view.width * 0.5;
 player.y = app.view.height;
@@ -230,43 +245,35 @@ scene.addChild(player);
 const objectSet = new Set();
 const dangerSet = new Set();
 
-const pauseText = new PIXI.Text("Paused [Esc]", textStyle);
-pauseText.x = app.view.width * 0.5;
-pauseText.y = app.view.height * 0.5;
-pauseText.anchor = { x: 0.5, y: 0.5 };
-pauseText.visible = false;
-scene.addChild(pauseText);
-
 const score = new PIXI.Text(0, textStyle)
 score.x = app.view.width * 0.5;
 score.y = app.view.height * 0.1;
 score.anchor = { x: 0.5, y: 0.5 };
 scene.addChild(score);
 
+const edgeLight = PIXI.Sprite.from(img.edgeLight);
+edgeLight.anchor = { x: 0.5, y: 0 };
+edgeLight.x = 0.5 * app.view.width;
+edgeLight.y = 0;
+edgeLight.alpha = 0.25;
+app.stage.addChild(edgeLight);
+
 // PLAY GAME
 
 app.ticker.add((deltaTime) => {
 
-    if (PIXI.input.getKeyDown("f")) {
+    if (PIXI.input.getKeyFired("f")) {
         PIXI.utils.openFullScreen(app.view);
     }
 
-    // Shake screen return
+    // Shake screen and flare lights
     app.stage.x *= -0.75;
+    edgeLight.alpha -= (edgeLight.alpha > 0.25) * 0.01;
 
-    // Particle decay
-    particle.set.forEach((p) => {
-        if (--p.life <= 0) {
-            particle.container.removeChild(p);
-            particle.set.delete(p);
-        }
-    });
-
-    if (!states.start || states.life <= 0) {
+    if (!states.start || states.menu) {
         menuContainer.visible = true;
         scene.visible = false;
         allocationScreen.visible = false;
-        particle.container.visible = false;
         menu.score.text = "Previous Run: " + states.level + " round" + (states.level == 1 ? "" : "s") + ", " + states.score + " points";
 
         bg.tint = bgTint[0];
@@ -274,6 +281,7 @@ app.ticker.add((deltaTime) => {
         if (PIXI.input.getKeyFired("a")) {
             menu.info.text = "";
             states.start = true;
+            states.menu = false;
             states.allocation = true;
             states.requestAllocationRolls = false;
             states.life = 3;
@@ -295,9 +303,9 @@ app.ticker.add((deltaTime) => {
             player.vec = { x: 0, y: 0 };
             player.allowJump = true;
         } else if (PIXI.input.getKeyFired("s")) {
-            menu.info.text = "[F] Fullscreen\n\n[W] Jump\t[A] Left\t[S] Drop\t[D] Right\n\nDodge or destroy Lady Luck's falling dice. Getting hit by one will lower your health by the number shown, but jumping on top of it will destroy it and heal you by that same amount. Take a chance and roll the dice!";
+            menu.info.text = "Fullscreen [F]\n\nJump [W]\tLeft [A]\tDrop [S]\tRight [D]\n\nDodge or destroy Lady Luck's falling dice. Getting hit by one will lower your health by the number shown, but jumping on top of it will heal you by that same amount, and net you some extra points based on the risk! Take a chance and roll the dice!";
         } else if (PIXI.input.getKeyFired("d")) {
-            menu.info.text = 'This game was made for the GMTK Game Jam 2022, with the theme "Roll of the Dice". The role of artist, programmer, and game designer were all filled by Cooper Ott.\n\nYou are a die fed up with Lady Luck telling you what to do, but trying to break free is easier said than done';
+            menu.info.text = 'You play as a die, fed up with Lady Luck telling you what to do, but trying to break away is easier said than done.\n\nThis game was made for the GMTK Game Jam 2022, with the theme "Roll of the Dice." The role of artist, programmer, and game designer were all filled by Cooper Ott.';
         }
     } else {
 
@@ -307,9 +315,8 @@ app.ticker.add((deltaTime) => {
 
             scene.visible = false;
             allocationScreen.visible = true;
-            particle.container.visible = false;
 
-            allocation.ladyLuck.text = "Lady Luck: " + ladyLuck[clamp(states.level, 0, ladyLuck.length)];
+            allocation.ladyLuck.text = ladyLuck[clamp(states.level, 0, ladyLuck.length - 1)];
 
             bg.tint = bgTint[0];
 
@@ -380,10 +387,11 @@ app.ticker.add((deltaTime) => {
             });
 
             if (newRolls.length == 4) {
+                directions.text = "Test your luck in round " + (states.level + 1) + "... [W]"
                 directions.visible = true;
                 if (PIXI.input.getKeyFired("w")) {
                     states.level++;
-                    states.dangerCount = 15 + states.level * 5;
+                    states.dangerCount = states.level * 10 + 10;
                     states.allocation = false;
                     states.jump = newRolls[0];
                     states.speed = newRolls[1];
@@ -399,7 +407,7 @@ app.ticker.add((deltaTime) => {
                     newRolls = [];
                     directions.visible = false;
 
-                    bg.tint = dangerTint[rand(1, 6)];
+                    bg.tint = bgTint[rand(1, bgTint.length - 1)];
 
                     dangerSet.forEach((danger) => {
                         scene.removeChild(danger);
@@ -411,24 +419,30 @@ app.ticker.add((deltaTime) => {
         } else {
             allocationScreen.visible = false;
             scene.visible = true;
-            particle.container.visible = true;
 
-            let t = Math.max(states.life, 1);
-            player.texture = diceImg[t];
-            player.tint = lifeTint[t];
+            player.texture = diceImg[clamp(states.life, 0, 6)];
+            player.tint = lifeTint[clamp(states.life, 0, 6)];
 
             score.text = "Round " + states.level + ", " + states.score + " points, " + states.dangerCount + " remaining";
 
-            // X velocity
-            player.vec.x *= 1 - (0.2 * player.allowJump);
-            player.vec.x += (states.speedMult * states.speed * player.allowJump * (PIXI.input.getKeyDown("d") - PIXI.input.getKeyDown("a")));
-            player.vec.x = clamp(player.vec.x, (states.speed + 2) * -states.speedMult, (states.speed + 2) * states.speedMult);
+            if (states.life > 0) {            // X velocity
+                player.vec.x *= 1 - (0.2 * player.allowJump);
+                player.vec.x += (states.speedMult * states.speed * player.allowJump * (PIXI.input.getKeyDown("d") - PIXI.input.getKeyDown("a")));
+                player.vec.x = clamp(player.vec.x, (states.speed + 2) * -states.speedMult, (states.speed + 2) * states.speedMult);
 
-            // Y velocity
-            player.vec.y += (1 + (player.vec.y > 0) + 2 * PIXI.input.getKeyDown("s"));
-            if (player.allowJump && PIXI.input.getKeyFired("w")) {
-                player.allowJump = false;
-                player.vec.y = -14 - states.jump * states.jumpMult;
+                // Y velocity
+                player.vec.y += 2 * PIXI.input.getKeyDown("s");
+                if (player.allowJump && PIXI.input.getKeyFired("w")) {
+                    sound.bounce[rand(1, 2)].play();
+                    player.allowJump = false;
+                    player.vec.y = -14 - states.jump * states.jumpMult;
+                }
+            } else {
+                gameOver.visible = true;
+                if (PIXI.input.getKeyFired("w")) {
+                    states.menu = true;
+                    gameOver.visible = false;
+                }
             }
 
             // Player X position
@@ -442,11 +456,12 @@ app.ticker.add((deltaTime) => {
             }
             player.x = (player.x + 0.5) ^ 0;
             // Player Y position
+            player.vec.y += 1 + (player.vec.y > 0);
             player.y += player.vec.y * deltaTime;
             if (player.y >= app.view.height) {
+                if (!player.allowJump) sound.bounce[rand(0, 2)].play();
                 player.y = app.view.height;
                 player.allowJump = true;
-                player.vec.y *= -phys.bounce * 0.1;
             }
             player.y ^= 0;
 
@@ -459,7 +474,7 @@ app.ticker.add((deltaTime) => {
                     danger.vec.y *= -phys.bounce;
                     danger.vec.x = danger.vec.x * phys.bounce + (Math.random() - 0.5) * danger.vec.y;
                     if (danger.vec.y < -2) {
-                        states.score += danger.facing;
+                        states.score += danger.facing * (states.life > 0);
                         danger.facing = rand(1, 6);
                         danger.texture = diceImg[danger.facing];
                         danger.tint = dangerTint[danger.facing];
@@ -474,16 +489,17 @@ app.ticker.add((deltaTime) => {
                     danger.x = app.view.width - danger.width * 0.5;
                     danger.vec.x *= -phys.bounce;
                 }
-                if (PIXI.collision.aabb(player, danger)) {
-                    if (player.y - player.vec.y * 0.5 < danger.y) {
+                if (PIXI.collision.aabb(player, danger) && states.life > 0) {
+                    if (player.y + player.height * 0.5 < danger.y && player.vec.y != 0) {
                         // Jumped on top, score up AND heal AND bounce
                         states.life = clamp(states.life + danger.facing, 1, 6)
                         player.y -= player.height;
                         player.vec.y = -14 - states.jump * states.jumpMult;
-                        states.score += danger.facing * 4;
+                        states.score += danger.facing * 5;
                         states.dangerCount--;
                         scene.removeChild(danger);
                         dangerSet.delete(danger);
+                        edgeLight.alpha = 0.65;
                     } else {
                         // Hit by danger, lose life
                         states.life -= danger.facing;
@@ -491,20 +507,12 @@ app.ticker.add((deltaTime) => {
                         danger.vec = { x: rand(-16, 16), y: -16 };
                         danger.y -= player.height;
                     }
-                    let i = 6;
-                    while (--i >= 0) {
-                        let p = PIXI.Sprite.from(particle.tex);
-                        p.x = player.x + rand(-64, 64);
-                        p.y = player.y + rand(-64, 64);
-                        p.life = rand(15, 30);
-                        p.tint = player.tint;
-                        particle.set.add(p);
-                        particle.container.addChild(p);
-                    }
                     sound.hit[rand(0, 2)].play();
                 } else if (Math.abs(danger.vec.y) < 0.25 && danger.y == app.view.height) {
-                    states.score += danger.facing;
-                    states.dangerCount--;
+                    if (states.life > 0) {
+                        states.score += danger.facing;
+                        states.dangerCount--;
+                    }
                     scene.removeChild(danger);
                     dangerSet.delete(danger);
                 }
@@ -533,7 +541,7 @@ app.ticker.add((deltaTime) => {
                 scene.addChild(newDanger);
                 dangerSet.add(newDanger);
             } else {
-                states.dangerSpawnBoost += 0.00004 * (states.danger + states.level * 2);
+                states.dangerSpawnBoost += 0.00003 * (states.danger + states.level * 3);
             }
 
             if (states.dangerCount <= 0) {
