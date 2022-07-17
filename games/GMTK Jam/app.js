@@ -293,7 +293,7 @@ app.ticker.add((deltaTime) => {
         } else if (PIXI.input.getKeyFired("s")) {
             menu.info.text = "[F] Fullscreen\n\n[W] Jump\t[A] Left\t[S] Drop\t[D] Right\n\nDodge or destroy Lady Luck's falling dice. Getting hit by one will lower your health by the number shown, but jumping on top of it will destroy it and heal you by that same amount. Take a chance and roll the dice!";
         } else if (PIXI.input.getKeyFired("d")) {
-            menu.info.text = 'This game was made for the GMTK Game Jam 2022, with the theme "Roll of the Dice". The role of artist, programmer, and game designer were all filled by Cooper Ott.';
+            menu.info.text = 'This game was made for the GMTK Game Jam 2022, with the theme "Roll of the Dice". The role of artist, programmer, and game designer were all filled by Cooper Ott.\n\nYou are a die fed up with Lady Luck telling you what to do, but trying to break free is easier said than done';
         }
     } else {
 
@@ -305,7 +305,7 @@ app.ticker.add((deltaTime) => {
             allocationScreen.visible = true;
             particle.container.visible = false;
 
-            allocation.ladyLuck.text = "Lady Luck: " + ladyLuck[states.level];
+            allocation.ladyLuck.text = "Lady Luck: " + ladyLuck[clamp(states.level, 0, ladyLuck.length)];
 
             bg.tint = bgTint[0];
 
