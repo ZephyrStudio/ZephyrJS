@@ -89,8 +89,9 @@ app.stage.addChild(particle.container);
 
 const states = {
     start: false,
+    requestAllocationRolls: false,
     allocation: false,
-    life: 6,
+    life: 3,
     speed: 3,
     speedMult: 2,
     jump: 3,
@@ -238,7 +239,7 @@ scene.addChild(pauseText);
 
 const score = new PIXI.Text(0, textStyle)
 score.x = app.view.width * 0.5;
-score.y = app.view.height * 0.05;
+score.y = app.view.height * 0.1;
 score.anchor = { x: 0.5, y: 0.5 };
 scene.addChild(score);
 
@@ -266,7 +267,7 @@ app.ticker.add((deltaTime) => {
         scene.visible = false;
         allocationScreen.visible = false;
         particle.container.visible = false;
-        menu.score.text = "Level " + states.level + " | " + states.score + " points";
+        menu.score.text = "Previous Run: " + states.level + " round" + (states.level == 1 ? "" : "s") + ", " + states.score + " points";
 
         bg.tint = bgTint[0];
 
@@ -274,7 +275,8 @@ app.ticker.add((deltaTime) => {
             menu.info.text = "";
             states.start = true;
             states.allocation = true;
-            states.life = 6;
+            states.requestAllocationRolls = false;
+            states.life = 3;
             states.speed = 3;
             states.speedMult = 2;
             states.jump = 3;
@@ -284,6 +286,8 @@ app.ticker.add((deltaTime) => {
             states.level = 0;
             states.dangerCount = 0;
             states.score = 0;
+
+            newRolls = [3, 3, 3, 3];
 
             player.x = app.view.width * 0.5;
             player.y = app.view.height;
@@ -309,21 +313,37 @@ app.ticker.add((deltaTime) => {
 
             bg.tint = bgTint[0];
 
-            if (rollSprite.length == 0) {
+            if (states.requestAllocationRolls) {
+                if (rollSprite.length == 0) {
+                    for (let i = 0; i < 4; i++) {
+                        let num = rand(1, 6);
+                        rollSprite[i] = new PIXI.Sprite.from(diceImg[num]);
+                        rollSprite[i].x = app.view.width * (i + 1) * 0.2;
+                        rollSprite[i].y = 0.3 * app.view.height;
+                        rollSprite[i].anchor = { x: 0.5, y: 1 };
+                        rollSprite[i].facing = num;
+                        rollSprite[i].tint = dangerTint[7 - num];
+                        rollSprite[i].vec = { x: rand(-16, 16), y: rand(-16, 16) };
+                        rollSprite[i].roll = true;
+                        rollSprite[i].slot = i;
+                        allocationScreen.addChild(rollSprite[i]);
+                    }
+                }
+            } else if (rollSprite.length == 0) {
                 for (let i = 0; i < 4; i++) {
-                    let num = rand(1, 6);
-                    rollSprite[i] = new PIXI.Sprite.from(diceImg[num]);
+                    rollSprite[i] = new PIXI.Sprite.from(diceImg[newRolls[i]]);
                     rollSprite[i].x = app.view.width * (i + 1) * 0.2;
                     rollSprite[i].y = 0.3 * app.view.height;
                     rollSprite[i].anchor = { x: 0.5, y: 1 };
-                    rollSprite[i].facing = num;
-                    rollSprite[i].tint = dangerTint[7 - num];
-                    rollSprite[i].vec = { x: rand(-16, 16), y: rand(-16, 16) };
-                    rollSprite[i].roll = true;
+                    rollSprite[i].facing = newRolls[i];
+                    rollSprite[i].tint = dangerTint[7 - newRolls[i]];
+                    rollSprite[i].vec = { x: 0, y: 0 };
+                    rollSprite[i].roll = false;
                     rollSprite[i].slot = i;
                     allocationScreen.addChild(rollSprite[i]);
                 }
             }
+
 
             rollSprite.forEach((danger) => {
                 if (danger.roll) {
@@ -369,10 +389,13 @@ app.ticker.add((deltaTime) => {
                     states.speed = newRolls[1];
                     states.danger = newRolls[2];
                     states.life = newRolls[3];
-                    for (let i = 0; i < 4; i++) {
+
+                    for (let i = 0; i < rollSprite.length; i++) {
                         allocationScreen.removeChild(rollSprite[i]);
+                        rollSprite[i] = null;
                     }
                     rollSprite = [];
+
                     newRolls = [];
                     directions.visible = false;
 
@@ -394,7 +417,7 @@ app.ticker.add((deltaTime) => {
             player.texture = diceImg[t];
             player.tint = lifeTint[t];
 
-            score.text = "Level " + states.level + " | " + states.score + " points, " + states.dangerCount + " remaining";
+            score.text = "Round " + states.level + ", " + states.score + " points, " + states.dangerCount + " remaining";
 
             // X velocity
             player.vec.x *= 1 - (0.2 * player.allowJump);
@@ -515,6 +538,7 @@ app.ticker.add((deltaTime) => {
 
             if (states.dangerCount <= 0) {
                 states.allocation = true;
+                states.requestAllocationRolls = true;
             }
         }
 
