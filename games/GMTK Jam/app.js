@@ -427,8 +427,8 @@ app.ticker.add((deltaTime) => {
             score.text = "Round " + states.level + ", " + states.score + " points, " + states.dangerCount + " remaining";
 
             if (states.life > 0) {            // X velocity
-                player.vec.x *= 1 - (0.2 * player.allowJump);
-                player.vec.x += (states.speedMult * states.speed * player.allowJump * (PIXI.input.getKeyDown("arrowright") - PIXI.input.getKeyDown("arrowleft")));
+                player.vec.x *= 1 - (0.2 * player.allowJump * deltaTime);
+                player.vec.x += (states.speedMult * states.speed * player.allowJump * (PIXI.input.getKeyDown("arrowright") - PIXI.input.getKeyDown("arrowleft")) * deltaTime);
                 player.vec.x = clamp(player.vec.x, (states.speed + 2) * -states.speedMult, (states.speed + 2) * states.speedMult);
 
                 // Y velocity
