@@ -103,6 +103,7 @@ const states = {
 }
 
 const phys = {
+    bThresh: 2,
     bounce: 0.4,
     shake: 64
 }
@@ -131,7 +132,7 @@ const menu = {
         fontSize: 192,
         letterSpacing: -16,
     })),
-    options: new PIXI.Text("Start [A]\t\t\t\tControls [S]\t\t\t\tAbout [D]", textStyle),
+    options: new PIXI.Text("Start [←]\t\t\t\tControls [↓]\t\t\t\tAbout [→]", textStyle),
     info: new PIXI.Text("", textStyle)
 }
 
@@ -209,7 +210,7 @@ allocation.ladyLuck.y = app.view.height * 0.65;
 allocation.ladyLuck.anchor = { x: 0.5, y: 0.5 };
 allocationScreen.addChild(allocation.ladyLuck);
 
-const directions = new PIXI.Text("Test your luck in the next round... [W]", textStyle)
+const directions = new PIXI.Text("Test your luck in the next round... [↑]", textStyle)
 directions.x = app.view.width * 0.5;
 directions.y = app.view.height * 0.9;
 directions.anchor = { x: 0.5, y: 0.5 };
@@ -217,7 +218,7 @@ directions.visible = false;
 allocationScreen.addChild(directions);
 
 // Scene stuff
-const gameOver = new PIXI.Text("Looks like that's the end of your lucky break... [W]", new PIXI.TextStyle({
+const gameOver = new PIXI.Text("Looks like that's the end of your lucky break... [↑]", new PIXI.TextStyle({
     align: "center",
     wordWrap: true,
     wordWrapWidth: 1200,
@@ -278,7 +279,7 @@ app.ticker.add((deltaTime) => {
 
         bg.tint = bgTint[0];
 
-        if (PIXI.input.getKeyFired("a")) {
+        if (PIXI.input.getKeyFired("arrowleft")) {
             menu.info.text = "";
             states.start = true;
             states.menu = false;
@@ -296,15 +297,9 @@ app.ticker.add((deltaTime) => {
             states.score = 0;
 
             newRolls = [3, 3, 3, 3];
-
-            player.x = app.view.width * 0.5;
-            player.y = app.view.height;
-            player.anchor = { x: 0.5, y: 1.0 };
-            player.vec = { x: 0, y: 0 };
-            player.allowJump = true;
-        } else if (PIXI.input.getKeyFired("s")) {
-            menu.info.text = "Fullscreen [F]\n\nJump [W]\tLeft [A]\tDrop [S]\tRight [D]\n\nDodge or destroy Lady Luck's falling dice. Getting hit by one will lower your health by the number shown, but jumping on top of it will heal you by that same amount, and net you some extra points based on the risk! Take a chance and roll the dice!";
-        } else if (PIXI.input.getKeyFired("d")) {
+        } else if (PIXI.input.getKeyFired("arrowdown")) {
+            menu.info.text = "Fullscreen [F]\n\nJump [↑]\tLeft [←]\tDrop [↓]\tRight [→]\n\nDodge or destroy Lady Luck's falling dice. Getting hit by one will lower your health by the number shown, but jumping on top of it will heal you by that same amount, and net you some extra points based on the risk! Take a chance and roll the dice!";
+        } else if (PIXI.input.getKeyFired("arrowright")) {
             menu.info.text = 'You play as a die, fed up with Lady Luck telling you what to do, but trying to break away is easier said than done.\n\nThis game was made for the GMTK Game Jam 2022, with the theme "Roll of the Dice." The role of artist, programmer, and game designer were all filled by Cooper Ott.';
         }
     } else {
@@ -355,12 +350,12 @@ app.ticker.add((deltaTime) => {
             rollSprite.forEach((danger) => {
                 if (danger.roll) {
                     danger.vec.y += deltaTime;
-                    danger.y += danger.vec.y;
+                    danger.y += danger.vec.y * deltaTime;
                     if (danger.y >= app.view.height) {
                         danger.y = app.view.height;
                         danger.vec.y *= -phys.bounce;
                         danger.vec.x = danger.vec.x * phys.bounce + (Math.random() - 0.5) * danger.vec.y;
-                        if (danger.vec.y < -1) {
+                        if (danger.vec.y < -2) {
                             danger.facing = rand(1, 6);
                             danger.texture = diceImg[danger.facing];
                             danger.tint = dangerTint[7 - danger.facing];
@@ -375,7 +370,7 @@ app.ticker.add((deltaTime) => {
                         danger.x = app.view.width - danger.width * 0.5;
                         danger.vec.x *= -phys.bounce;
                     }
-                    if (Math.abs(danger.vec.y) < 0.25 && danger.y == app.view.height) {
+                    if (Math.abs(danger.vec.y) < phys.bThresh && danger.y == app.view.height) {
                         newRolls[danger.slot] = danger.facing;
                         danger.x = (danger.slot + 1) * 0.2 * app.view.width;
                         danger.y = 0.3 * app.view.height;
@@ -387,9 +382,9 @@ app.ticker.add((deltaTime) => {
             });
 
             if (newRolls.length == 4) {
-                directions.text = "Test your luck in round " + (states.level + 1) + "... [W]"
+                directions.text = "Test your luck in round " + (states.level + 1) + "... [↑]"
                 directions.visible = true;
-                if (PIXI.input.getKeyFired("w")) {
+                if (PIXI.input.getKeyFired("arrowup")) {
                     states.level++;
                     states.dangerCount = states.level * 10 + 10;
                     states.allocation = false;
@@ -413,6 +408,12 @@ app.ticker.add((deltaTime) => {
                         scene.removeChild(danger);
                         dangerSet.delete(danger);
                     });
+
+                    player.x = app.view.width * 0.5;
+                    player.y = app.view.height;
+                    player.anchor = { x: 0.5, y: 1.0 };
+                    player.vec = { x: 0, y: 0 };
+                    player.allowJump = true;
                 }
             }
 
@@ -427,19 +428,19 @@ app.ticker.add((deltaTime) => {
 
             if (states.life > 0) {            // X velocity
                 player.vec.x *= 1 - (0.2 * player.allowJump);
-                player.vec.x += (states.speedMult * states.speed * player.allowJump * (PIXI.input.getKeyDown("d") - PIXI.input.getKeyDown("a")));
+                player.vec.x += (states.speedMult * states.speed * player.allowJump * (PIXI.input.getKeyDown("arrowright") - PIXI.input.getKeyDown("arrowleft")));
                 player.vec.x = clamp(player.vec.x, (states.speed + 2) * -states.speedMult, (states.speed + 2) * states.speedMult);
 
                 // Y velocity
-                player.vec.y += 2 * PIXI.input.getKeyDown("s");
-                if (player.allowJump && PIXI.input.getKeyFired("w")) {
+                player.vec.y += (2 * PIXI.input.getKeyDown("arrowdown")) * deltaTime;
+                if (player.allowJump && PIXI.input.getKeyFired("arrowup")) {
                     sound.bounce[rand(1, 2)].play();
                     player.allowJump = false;
                     player.vec.y = -14 - states.jump * states.jumpMult;
                 }
             } else {
                 gameOver.visible = true;
-                if (PIXI.input.getKeyFired("w")) {
+                if (PIXI.input.getKeyFired("arrowup")) {
                     states.menu = true;
                     gameOver.visible = false;
                 }
@@ -456,7 +457,7 @@ app.ticker.add((deltaTime) => {
             }
             player.x = (player.x + 0.5) ^ 0;
             // Player Y position
-            player.vec.y += 1 + (player.vec.y > 0);
+            player.vec.y += (1 + (player.vec.y > 0)) * deltaTime;
             player.y += player.vec.y * deltaTime;
             if (player.y >= app.view.height) {
                 if (!player.allowJump) sound.bounce[rand(0, 2)].play();
@@ -467,7 +468,7 @@ app.ticker.add((deltaTime) => {
 
             // Dangers
             dangerSet.forEach((danger) => {
-                danger.vec.y++;
+                danger.vec.y += deltaTime;
                 danger.y += danger.vec.y * deltaTime;
                 if (danger.y >= app.view.height) {
                     danger.y = app.view.height;
@@ -508,7 +509,7 @@ app.ticker.add((deltaTime) => {
                         danger.y -= player.height;
                     }
                     sound.hit[rand(0, 2)].play();
-                } else if (Math.abs(danger.vec.y) < 0.25 && danger.y == app.view.height) {
+                } else if (Math.abs(danger.vec.y) < phys.bThresh && danger.y == app.view.height) {
                     if (states.life > 0) {
                         states.score += danger.facing;
                         states.dangerCount--;
@@ -541,7 +542,7 @@ app.ticker.add((deltaTime) => {
                 scene.addChild(newDanger);
                 dangerSet.add(newDanger);
             } else {
-                states.dangerSpawnBoost += 0.00003 * (states.danger + states.level * 3);
+                states.dangerSpawnBoost += 0.00003 * (states.danger + states.level * 3) * deltaTime;
             }
 
             if (states.dangerCount <= 0) {
