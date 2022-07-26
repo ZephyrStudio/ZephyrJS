@@ -1,1 +1,0 @@
-The games here are not used to develop and test Zephyr alongside the latest versions of PixiJS. These games are bundled with their own version of Zephyr and a downloaded production version of PixiJS.
