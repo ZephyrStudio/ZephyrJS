@@ -18,7 +18,7 @@
 
         body {
             width: calc(100% - 40px);
-            padding: 16px 20px;
+            padding: 0 20px;
         }
 
         h1,
@@ -26,8 +26,8 @@
         h3,
         h4,
         h5,
-        h6,
-        .b {
+        h6 {
+            margin-top: 32px;
             font-weight: 600;
         }
 
@@ -36,30 +36,46 @@
             line-height: 24px;
         }
 
+        code {
+            display: block;
+            text-decoration: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            background: #808080;
+            margin: 16px 0;
+        }
+
         a {
             text-decoration: none;
             border-radius: 4px;
-            margin-left: 12px;
             padding: 0px 4px;
-            border: 2px solid #ccc;
+            border: 2px solid #808080;
         }
 
         a:hover {
-            background: #ccc;
+            background: #808080;
         }
     </style>
 </head>
 
 <body>
     <h1>ZephyrJS</h1>
-    <p><b>Expands PixiJS for easy game development!</b></p>
-    <p>Links <a href="https://github.com/OttCS/zephyrjs"
-            title="Check out the github page for downloads, documentation, and more!">Github</a> <a
-            href="https://ottcs.netlify.app" title="Check out my portfolio!">OttCS</a></p>
-    <p>Demos <a href="https://github.com/OttCS/ZephyrJS/discussions/categories/show-and-tell"> Github Show and Tell</a>
-        <a href="dev/flappy-clone/index.html">FlappyClone</a> <a href="dev/mouse-tracking/index.html">MouseTesting</a>
-        <a href="dev/collisions/index.html">Collisions</a><a href="dev/save-downloads/index.html">SaveFile</a><a href="dev/collisions/index.html">Collisions</a>
-    </p>
+    <p><b>Expands PixiJS for easy interactive game/project development!</b><br/>I'm not part of the PixiJS team (though I wish I was), so any PixiJS questions should go to them :)</p>
+    <h2>Tell Me Why</h2>
+    <p>PixiJS on its own is very powerful, but a lot of work is needed to make it work for web-based games. PhaserIO is exclusively used to make games, and not all of the functionality is easily translatable back to Pixi. ZephyrJS directly ADDS to Pixi instead of wrapping it, letting you use the full functionality of Pixi so that what you've gotten used to can still be used outside of Zephyr.</p>
+    <h2>Getting Started</h2>
+    <p>Setup is super simple! Firstly, deliver Pixi through the CDN:</p>
+    <code>&lt;script src="https&#58;//pixijs.download/release/pixi.js"&gt;&lt;/script&gt;</code>
+    <p>You have two options for ZephyrJS: the stable build and the nightly build. For quick projects where long-term stability isn't a requirement, feel free to use the <strong>nightly</strong> build.</p>
+    <code>&lt;script src="https://ottcs.github.io/ZephyrJS/nightly/zepyhr.js"&gt;&lt;/script&gt;</code>
+    <p>If you're looking to develop your project over a couple days or weeks, and you for some reason don't want to download the latest release, use the <strong>stable</strong> build.</p>
+    <code>&lt;script src="https://ottcs.github.io/ZephyrJS/nightly/zepyhr.js"&gt;&lt;/script&gt;</code>
+    <p>If you're looking to release a stable version of your project, or if development is taking place over a longer span of time, using the CDNs aren't the best option (as specs and functionality can change). <strong>Download</strong> stable versions of both Zephyr and Pixi through the <a href="https://github.com/OttCS/ZephyrJS/releases">Github Releases</a>, then include the script tags above with the path to the files as the src attribute.</p>
+    <h2>More</h2>
+    <a href="https://github.com/OttCS/ZephyrJS/issues">Issues Page</a>
+    <a href="https://github.com/users/OttCS/projects/7">Project Board</a>
+    <a href="https://github.com/OttCS/ZephyrJS/discussions">Discussions Page</a>
+
 </body>
 
 </html>
