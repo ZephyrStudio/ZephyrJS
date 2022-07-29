@@ -1,5 +1,5 @@
 "use strict"
-PIXI.zephyr = "ZephyrJS version 22.7.27";
+PIXI.zephyr = "ZephyrJS 22.7.28";
 
 PIXI.input = {
     useKeyListener: () => {
@@ -95,4 +95,4 @@ window.addEventListener('contextmenu', (e) => {
     e.preventDefault();
 })
 
-console.log(PIXI.zephyr + " is extending Pixi!");
+console.log("%cUsing " + PIXI.zephyr + "! https://github.com/OttCS/ZephyrJS", "text-decoration: none;border-radius: 4px;margin: 4px 0;padding: 4px;color: #EF6F6C;border: 2px solid #EF6F6C;");
