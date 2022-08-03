@@ -1,5 +1,5 @@
 <h1>ZephyrJS</h1>
-<p><b>Expands PixiJS for easy interactive game/project development!</b><br/>I'm not part of the PixiJS team (though I wish I was), so any PixiJS questions should go to them :)</p>
+<p><b>Expands <a href="https://github.com/pixijs/pixijs">PixiJS</a> for easy interactive game/project development!</b><br/></p>
 <h2>Tell Me Why</h2>
 <p>PixiJS on its own is very powerful, but a lot of work is needed to make it work for web-based games. PhaserIO is exclusively used to make games, and not all of the functionality is easily translatable back to Pixi. ZephyrJS directly ADDS to Pixi instead of wrapping it, letting you use the full functionality of Pixi so that what you've gotten used to can still be used outside of Zephyr.</p>
 <h2>Getting Started</h2>
