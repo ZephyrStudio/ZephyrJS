@@ -1,48 +1,68 @@
 "use strict"
-// ZEPHYR.js directly builds on top of PixiJS for ease of use
-PIXI.zephyr = "ZephyrJS version 22.7.26";
+PIXI.zephyr = "ZephyrJS 22.8.3";
 
 PIXI.input = {
-    keyMap: new Map(),
-    // getKeyFired returns true the first time it is called for a key while the key is down
-    getKeyFired: (keyStr) => {
-        if (PIXI.input.keyMap.size > 0 && PIXI.input.keyMap.get(keyStr)) {
-            PIXI.input.keyMap.set(keyStr, false);
-            return true;
-        }
-        return false;
-    },
-    // getKeyDown returns true always if the key is down
-    getKeyDown: (keyStr) => {
-        if (PIXI.input.keyMap.size > 0 && PIXI.input.keyMap.has(keyStr)) {
-            PIXI.input.keyMap.set(keyStr, false);
-            return true;
-        }
-        return false;
-    },
+    useKeyListener: () => {
+        PIXI.input.keyMap = new Map();
+        PIXI.input.getKeyFired = (keyStr) => {
+            if (PIXI.input.keyMap.size > 0 && PIXI.input.keyMap.get(keyStr)) {
+                PIXI.input.keyMap.set(keyStr, false);
+                return true;
+            }
+            return false;
+        };
+        PIXI.input.getKeyDown = (keyStr) => {
+            if (PIXI.input.keyMap.size > 0 && PIXI.input.keyMap.has(keyStr)) {
+                PIXI.input.keyMap.set(keyStr, false);
+                return true;
+            }
+            return false;
+        };
 
-    mouseContainer: document.getElementsByTagName("html")[0],
-    mouseMap: new Map(),
-    getMouseFired: (btn) => {
-        if (PIXI.input.mouseMap.size > 0 && PIXI.input.mouseMap.get(btn)) {
-            PIXI.input.mouseMap.set(btn, false);
-            return true;
-        }
-        return false;
+        window.addEventListener('keydown', (e) => {
+            PIXI.input.keyMap.set(e.code, true);
+        });
+        
+        window.addEventListener('keyup', (e) => {
+            PIXI.input.keyMap.delete(e.code);
+        });
     },
-    getMouseDown: (btn) => {
-        if (PIXI.input.mouseMap.size > 0 && PIXI.input.mouseMap.has(btn)) {
-            PIXI.input.mouseMap.set(btn, false);
-            return true;
-        }
-        return false;
-    },
-    getMouseX: () => {
-        return PIXI.input.mouseMap.get('x');
-    },
-    getMouseY: () => {
-        return PIXI.input.mouseMap.get('y');
-    },
+    useMouseListener: () => {
+        PIXI.input.mouseContainer = document.getElementsByTagName("html")[0];
+        PIXI.input.mouseMap = new Map();
+        PIXI.input.getMouseFired = (btn) => {
+            if (PIXI.input.mouseMap.get(btn)) {
+                PIXI.input.mouseMap.set(btn, false);
+                return true;
+            }
+            return false;
+        };
+        PIXI.input.getMouseDown = (btn) => {
+            if (PIXI.input.mouseMap.has(btn)) {
+                PIXI.input.mouseMap.set(btn, false);
+                return true;
+            }
+            return false;
+        };
+        PIXI.input.getMouseX = () => {
+            return PIXI.input.mouseMap.get('x');
+        };
+        PIXI.input.getMouseY = () => {
+            return PIXI.input.mouseMap.get('y');
+        };
+
+        window.addEventListener('mousemove', (e) => {
+            let bounds = PIXI.input.mouseContainer.getBoundingClientRect();
+            PIXI.input.mouseMap.set('x', (e.x - bounds.left) / bounds.width);
+            PIXI.input.mouseMap.set('y', (e.y - bounds.top) / bounds.height);
+        });
+        window.addEventListener('mousedown', (e) => {
+            PIXI.input.mouseMap.set(e.button, true);
+        });
+        window.addEventListener('mouseup', (e) => {
+            PIXI.input.mouseMap.delete(e.button);
+        });
+    }
 }
 
 PIXI.collision = {
@@ -61,7 +81,6 @@ PIXI.collision = {
     }
 }
 
-// https://www.w3schools.com/jsref/met_element_requestfullscreen.asp
 PIXI.utils.openFullScreen = (view) => {
     if (view.requestFullscreen)
         view.requestFullscreen(); // Standard
@@ -71,31 +90,9 @@ PIXI.utils.openFullScreen = (view) => {
         view.msRequestFullscreen(); // IE11
 }
 
-// Keyboard
-window.addEventListener('keydown', (e) => {
-    PIXI.input.keyMap.set(e.key.toLowerCase(), true);
-});
-
-window.addEventListener('keyup', (e) => {
-    PIXI.input.keyMap.delete(e.key.toLowerCase());
-});
-
-// Mouse
-window.addEventListener('mousemove', (e) => {
-    let bounds = PIXI.input.mouseContainer.getBoundingClientRect();
-    PIXI.input.mouseMap.set('x', (e.x - bounds.left) / bounds.width);
-    PIXI.input.mouseMap.set('y', (e.y - bounds.top) / bounds.height);
-});
-window.addEventListener('mousedown', (e) => {
-    PIXI.input.mouseMap.set(e.button, true);
-});
-window.addEventListener('mouseup', (e) => {
-    PIXI.input.mouseMap.delete(e.button);
-});
-
-// Catches/Blocks right click
+// Stop rClick
 window.addEventListener('contextmenu', (e) => {
     e.preventDefault();
 })
 
-console.log(PIXI.zephyr + " is extending Pixi!");
+console.log("%cUsing " + PIXI.zephyr + "! https://github.com/OttCS/ZephyrJS", "text-decoration: none;border-radius: 4px;margin: 4px 0;padding: 4px;color: #EF6F6C;border: 2px solid #EF6F6C;");

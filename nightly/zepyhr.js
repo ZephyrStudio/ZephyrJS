@@ -1,5 +1,5 @@
 "use strict"
-PIXI.zephyr = "ZephyrJS 22.7.28";
+PIXI.zephyr = "ZephyrJS 22.8.3";
 
 PIXI.input = {
     useKeyListener: () => {
