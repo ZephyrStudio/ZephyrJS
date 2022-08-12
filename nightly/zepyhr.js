@@ -22,7 +22,7 @@ PIXI.input = {
         window.addEventListener('keydown', (e) => {
             PIXI.input.keyMap.set(e.code, true);
         });
-        
+
         window.addEventListener('keyup', (e) => {
             PIXI.input.keyMap.delete(e.code);
         });
@@ -81,14 +81,13 @@ PIXI.collision = {
     }
 }
 
-PIXI.function = {
-    clamp: (x, min, max) => {
-        return Math.min(Math.max(x, min), max);
-    },
-    random: (min, max) => {
-        return (Math.random() * (max - min + 1)) ^ 0 + min;
-    }
-}
+PIXI.clamp = (x, min, max) => {
+    return Math.min(Math.max(x, min), max);
+};
+
+PIXI.random = (min, max) => {
+    return (Math.random() * (max - min + 1)) ^ 0 + min;
+};
 
 PIXI.utils.openFullScreen = (view) => {
     if (view.requestFullscreen)
