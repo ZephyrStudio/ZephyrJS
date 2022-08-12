@@ -81,6 +81,15 @@ PIXI.collision = {
     }
 }
 
+PIXI.function = {
+    clamp: (x, min, max) => {
+        return Math.min(Math.max(x, min), max);
+    },
+    random: (min, max) => {
+        return (Math.random() * (max - min + 1)) ^ 0 + min;
+    }
+}
+
 PIXI.utils.openFullScreen = (view) => {
     if (view.requestFullscreen)
         view.requestFullscreen(); // Standard
