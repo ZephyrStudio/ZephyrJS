@@ -67,28 +67,52 @@ PIXI.input = {
 
 PIXI.collision = {
     aabb: (a, b) => { // Axis-Aligned Bounding Box method
+        let aFix = {
+            x: a.x - a.width * a.anchor.x,
+            y: a.y - a.height * a.anchor.y,
+        }
+        let bFix = {
+            x: b.x - b.width * b.anchor.x,
+            y: b.y - b.height * b.anchor.y,
+        }
         return !(
-            a.x + a.width < b.x ||
-            a.y + a.height < b.y ||
-            a.x > b.x + b.width ||
-            a.y > b.y + b.height
+            aFix.x + a.width < bFix.x ||
+            aFix.y + a.height < bFix.y ||
+            aFix.x > bFix.x + b.width ||
+            aFix.y > bFix.y + b.height
         );
     },
     radius: (a, b) => { // Circle collision
+        let aFix = {
+            x: a.x - a.width * a.anchor.x,
+            y: a.y - a.height * a.anchor.y,
+        }
+        let bFix = {
+            x: b.x - b.width * b.anchor.x,
+            y: b.y - b.height * b.anchor.y,
+        }
         return (
-            Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2)) <= a.r + b.r
+            Math.sqrt(Math.pow(aFix.x - bFix.x, 2) + Math.pow(aFix.y - bFix.y, 2)) <= a.r + b.r
         );
     }
 }
 
+// Returns the value of x if it is between the bounds of min and max, or the closest bound if x is outside
 PIXI.clamp = (x, min, max) => {
     return Math.min(Math.max(x, min), max);
 };
 
-PIXI.random = (min, max) => {
+// Linearly interpolate between values a and b
+PIXI.mix = (a, b, m) => {
+    return a * (1 - m) + b * (m);
+}
+
+// Generates a random integer between min and max, inclusive
+PIXI.rand = (min, max) => {
     return (Math.random() * (max - min + 1)) ^ 0 + min;
 };
 
+// Requests fullscreen for the provided element (view)
 PIXI.utils.openFullScreen = (view) => {
     if (view.requestFullscreen)
         view.requestFullscreen(); // Standard
