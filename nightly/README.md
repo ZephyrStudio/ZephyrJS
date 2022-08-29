@@ -1,18 +1,23 @@
 # Documentation of PIXI Expansion
 
-## PIXI.input
+## PIXI.zephyr
 
-PIXI.input.useKeyListener()
+PIXI.zephyr.useKeyInput()
 - Sets up the key tracking system for use
+
+PIXI.zephyr.useMouseInput()
+- Sets up the mouse tracking system for use
+
+PIXI.zephyr.useAudio()
+ - Sets up the WebAudio API for Pixi-style usage
+
+## PIXI.input
 
 PIXI.input.getKeyFired(keyString): Returns boolean
  - Returns true if this is the first time it has been called since the key has been pressed. **keyString** is e.code
 
 PIXI.input.getKeyDown(keyString): Returns boolean
  - Returns true if the key is actively pressed down. **keyString** is e.code
-
-PIXI.input.useMouseListener()
-- Sets up the mouse tracking system for use
 
 PIXI.input.mouseContainer: [DOM Element]
  - Is used to scale the mouse's coordinates to the desired element.

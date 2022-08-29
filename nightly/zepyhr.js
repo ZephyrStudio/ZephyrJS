@@ -1,18 +1,9 @@
 "use strict"
+PIXI.input = {};
+PIXI.Audio = {};
 PIXI.zephyr = {
     v: "ZephyrJS 22.8.29",
-    spriteFix: (s) => { // "Fixes" the provided sprite/object for use with the collision functions, adjusting for anchor positions
-        return {
-            x: -s.width * s.anchor.x + s.x,
-            y: -s.height * s.anchor.y + s.y,
-            width: s.width,
-            height: s.height
-        }
-    }
-}
-
-PIXI.input = {
-    useKeyListener: () => {
+    useKeyInput: () => {
         PIXI.input.keyMap = new Map();
         PIXI.input.getKeyFired = (keyStr) => {
             if (PIXI.input.keyMap.size > 0 && PIXI.input.keyMap.get(keyStr)) {
@@ -37,7 +28,7 @@ PIXI.input = {
             PIXI.input.keyMap.delete(e.code);
         });
     },
-    useMouseListener: () => {
+    useMouseInput: () => {
         PIXI.input.mouseContainer = document.getElementsByTagName("html")[0];
         PIXI.input.mouseMap = new Map();
         PIXI.input.getMouseFired = (btn) => {
@@ -72,6 +63,42 @@ PIXI.input = {
         window.addEventListener('mouseup', (e) => {
             PIXI.input.mouseMap.delete(e.button);
         });
+    },
+    useAudio: () => {
+        PIXI.Audio.ctx = new AudioContext();
+        PIXI.Audio.buffers = new Map();
+        PIXI.Audio.from = (src) => {
+            let r = new XMLHttpRequest();
+            r.open('GET', src, true);
+            r.responseType = 'arraybuffer';
+
+            // Decode asynchronously
+            r.onload = function () {
+                PIXI.Audio.ctx.decodeAudioData(r.response, function (buffer) {
+                    PIXI.Audio.buffers.set(src, buffer);
+                });
+            }
+            r.send();
+            return {
+                src: src,
+                play: () => {
+                    let aud = PIXI.Audio.ctx.createBufferSource();
+                    aud.buffer = PIXI.Audio.buffers.get(src);
+                    aud.connect(PIXI.Audio.ctx.destination);
+                    aud.start(0);
+                }
+            }
+        }
+    },
+    spriteFix: (s) => { // "Fixes" the provided sprite/object for use with the collision functions, adjusting for anchor positions
+        let anchor = (s.anchor ? s.anchor : { x: 0, y: 0 });
+        // let scale = (s.scale ? s.scale : { x: 1, y: 1 });
+        return {
+            x: -s.width * anchor.x + s.x,
+            y: -s.height * anchor.y + s.y,
+            width: s.width,
+            height: s.height
+        }
     }
 }
 
