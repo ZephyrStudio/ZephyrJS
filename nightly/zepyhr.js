@@ -1,5 +1,15 @@
 "use strict"
-PIXI.zephyr = "ZephyrJS 22.8.3";
+PIXI.zephyr = {
+    v: "ZephyrJS 22.8.29",
+    spriteFix: (s) => { // "Fixes" the provided sprite/object for use with the collision functions, adjusting for anchor positions
+        return {
+            x: -s.width * s.anchor.x + s.x,
+            y: -s.height * s.anchor.y + s.y,
+            width: s.width,
+            height: s.height
+        }
+    }
+}
 
 PIXI.input = {
     useKeyListener: () => {
@@ -67,14 +77,8 @@ PIXI.input = {
 
 PIXI.collision = {
     aabb: (a, b) => { // Axis-Aligned Bounding Box method
-        let aFix = {
-            x: a.x - a.width * a.anchor.x,
-            y: a.y - a.height * a.anchor.y,
-        }
-        let bFix = {
-            x: b.x - b.width * b.anchor.x,
-            y: b.y - b.height * b.anchor.y,
-        }
+        let aFix = PIXI.zephyr.spriteFix(a);
+        let bFix = PIXI.zephyr.spriteFix(b);
         return !(
             aFix.x + a.width < bFix.x ||
             aFix.y + a.height < bFix.y ||
@@ -82,15 +86,9 @@ PIXI.collision = {
             aFix.y > bFix.y + b.height
         );
     },
-    radius: (a, b) => { // Circle collision
-        let aFix = {
-            x: a.x - a.width * a.anchor.x,
-            y: a.y - a.height * a.anchor.y,
-        }
-        let bFix = {
-            x: b.x - b.width * b.anchor.x,
-            y: b.y - b.height * b.anchor.y,
-        }
+    radius: (a, b) => { // Circle collision, for objects a and b, provided they ha
+        let aFix = PIXI.zephyr.spriteFix(a);
+        let bFix = PIXI.zephyr.spriteFix(b);
         return (
             Math.sqrt(Math.pow(aFix.x - bFix.x, 2) + Math.pow(aFix.y - bFix.y, 2)) <= a.r + b.r
         );
@@ -127,4 +125,4 @@ window.addEventListener('contextmenu', (e) => {
     e.preventDefault();
 })
 
-console.log("%cUsing " + PIXI.zephyr + "! https://github.com/OttCS/ZephyrJS", "text-decoration: none;border-radius: 4px;margin: 4px 0;padding: 4px;color: #EF6F6C;border: 2px solid #EF6F6C;");
+console.log("%cUsing " + PIXI.zephyr.v + "! https://github.com/OttCS/ZephyrJS", "text-decoration: none;border-radius: 4px;margin: 4px 0;padding: 4px;color: #EF6F6C;border: 2px solid #EF6F6C;");

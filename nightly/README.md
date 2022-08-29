@@ -46,3 +46,10 @@ PIXI.collision.radius(a, b): Returns boolean
 
 PIXI.utils.openFullScreen(view)
  - The element passed in (typically use the Application view) will attempt to go fullscreen
+
+## PIXI Functions
+
+PIXI.clamp(x, min, max): Returns number
+ - Returns the value of x if it is between the bounds of min and max, or the closest bound if x is outside
+
+PIXI.mix(a, b, m): Returns number
