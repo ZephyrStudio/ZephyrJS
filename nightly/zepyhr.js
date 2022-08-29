@@ -149,11 +149,11 @@ PIXI.rand = (min, max) => {
 // Requests fullscreen for the provided element (view)
 PIXI.utils.openFullScreen = (view) => {
     if (view.requestFullscreen)
-        view.requestFullscreen(); // Standard
+        view.requestFullscreen();
     else if (view.webkitRequestFullscreen)
-        view.webkitRequestFullscreen(); // Safari
+        view.webkitRequestFullscreen();
     else if (view.msRequestFullscreen)
-        view.msRequestFullscreen(); // IE11
+        view.msRequestFullscreen();
 }
 
 // Stop rClick
