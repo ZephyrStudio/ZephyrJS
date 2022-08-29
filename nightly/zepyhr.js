@@ -29,7 +29,15 @@ PIXI.zephyr = {
         });
     },
     useMouseInput: () => {
+        PIXI.input.mouseBounds = document.getElementsByTagName("html")[0].getBoundingClientRect();
         PIXI.input.mouseContainer = document.getElementsByTagName("html")[0];
+        PIXI.input.setMouseContainer = (view) => {
+            PIXI.input.mouseContainer = view;
+            PIXI.input.mouseBounds = view.getBoundingClientRect();
+        }
+        window.onresize = () => {
+            PIXI.input.mouseBounds = PIXI.input.mouseContainer.getBoundingClientRect();
+        }
         PIXI.input.mouseMap = new Map();
         PIXI.input.getMouseFired = (btn) => {
             if (PIXI.input.mouseMap.get(btn)) {
@@ -53,9 +61,8 @@ PIXI.zephyr = {
         };
 
         window.addEventListener('mousemove', (e) => {
-            let bounds = PIXI.input.mouseContainer.getBoundingClientRect();
-            PIXI.input.mouseMap.set('x', (e.x - bounds.left) / bounds.width);
-            PIXI.input.mouseMap.set('y', (e.y - bounds.top) / bounds.height);
+            PIXI.input.mouseMap.set('x', (e.x - PIXI.input.mouseBounds.left) / PIXI.input.mouseBounds.width);
+            PIXI.input.mouseMap.set('y', (e.y - PIXI.input.mouseBounds.top) / PIXI.input.mouseBounds.height);
         });
         window.addEventListener('mousedown', (e) => {
             PIXI.input.mouseMap.set(e.button, true);
@@ -82,10 +89,12 @@ PIXI.zephyr = {
             return {
                 src: src,
                 play: () => {
-                    let aud = PIXI.Audio.ctx.createBufferSource();
-                    aud.buffer = PIXI.Audio.buffers.get(src);
-                    aud.connect(PIXI.Audio.ctx.destination);
-                    aud.start(0);
+                    if (PIXI.Audio.buffers.has(src)) {
+                        let aud = PIXI.Audio.ctx.createBufferSource();
+                        aud.buffer = PIXI.Audio.buffers.get(src);
+                        aud.connect(PIXI.Audio.ctx.destination);
+                        aud.start(0);
+                    }
                 }
             }
         }

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" style="background-color: #333;">
+
+<head>
+  <title>ZephyrJS | Home</title>
+  <link rel="preload" as="style" href="../style.css" onload="this.rel='stylesheet'">
+</head>
+
+<body>
+  <h1>Documentation of ZephyrJS</h1>
+  <p>Zephyr is designed to extend the functionality of PixiJS, rather than wrapping it so that you can always use Pixi without Zephyr.</p>
+  <p>The <span class="return">Return</span> line below the function indicates the object type that is returned.</p>
+  <h2>PIXI.zephyr</h2>
+  <dl>
+    <dt>PIXI.zephyr.useKeyInput()</dt>
+    <dd>Sets up the key tracking system for use</dd>
+    <dt>PIXI.zephyr.useMouseInput()</dt>
+    <dd>Sets up the mouse tracking system for
+      use</dd>
+    <dt>PIXI.zephyr.useAudio()</dt>
+    <dd>Sets up the WebAudio API for Pixi-style
+      usage</dd>
+  </dl>
+  <h2 id="pixi.input">PIXI.input</h2>
+  <dl>
+    <dt>PIXI.input.getKeyFired(keyboardEvent.code)</dt>
+    <dd>Returns true if
+      this is the first time it has been called since the key has been
+      pressed.</dd>
+    <dd class="return">Boolean</dd>
+    <dt>PIXI.input.getKeyDown(keyboardEvent.code)</dt>
+    <dd>Returns true if
+      the key is actively pressed down.</dd>
+    <dd class="return">Boolean</dd>
+    <dd></dd>
+    <dt></dt>
+    <dd></dd>
+    <dt></dt>
+    <dd></dd>
+    <dt></dt>
+    <dd></dd>
+    <dt></dt>
+    <dd></dd>
+    <dt></dt>
+    <dd></dd>
+    <dt></dt>
+    <dd></dd>
+    <dt></dt>
+    <dd></dd>
+    <dt></dt>
+    <dd></dd>
+    <dt></dt>
+    <dd></dd>
+    <dt></dt>
+    <dd></dd>
+    <dt></dt>
+    <dd></dd>
+    <dt></dt>
+    <dd></dd>
+    <dt></dt>
+    <dd></dd>
+  </dl>
+  <p>PIXI.input.mouseContainer: [DOM Element] - Is used to scale the
+    mouse’s coordinates to the desired element. - USAGE:
+    PIXI.input.mouseContainer = [DOM Element];</p>
+  <p>PIXI.getMouseFired(mouseButton): Returns boolean - Returns true if
+    this is the first time it has been called since the button has been
+    pressed. - NOTE: Mouse buttons are integers 0 (primary, typically left)
+    1 (middle), and 2 (secondary, typically right).</p>
+  <p>PIXI.getMouseDown(mouseButton): Returns boolean - Returns true if the
+    button is actively pressed down. - NOTE: Mouse buttons are integers 0
+    (primary, typically left) 1 (middle), and 2 (secondary, typically
+    right).</p>
+  <p>PIXI.getMouseX(): Returns number - Returns the last seen mouse X
+    coordinate, where 0.0-1.0 is within the mouseContainer horizontally from
+    left to right.</p>
+  <p>PIXI.getMouseY(): Returns number - Returns the last seen mouse Y
+    coordinate, where 0.0-1.0 is within the mouseContainer vertically from
+    top to bottom.</p>
+  <h2 id="pixi.collision">PIXI.collision</h2>
+  <p>PIXI.collision.aabb(a, b): Returns boolean - Checks if the two
+    provided objects are colliding with the aabb algorithm - NOTE: Both a
+    and b are formatted as a javascript object with x, y, width, and height
+    where (x,y) is the top-leftmost point.</p>
+  <p>PIXI.collision.radius(a, b): Returns boolean - Checks if the two
+    provided objects are colliding with the standard point-radius method of
+    circle collision - NOTE: Both a and b are formatted as a javascript
+    object with x, y, and r where (x,y) is the centermost point and r is the
+    radius.</p>
+  <h2 id="pixi.utils">PIXI.utils</h2>
+  <p>PIXI.utils.openFullScreen(view) - The element passed in (typically
+    use the Application view) will attempt to go fullscreen</p>
+  <h2 id="pixi-functions">PIXI Functions</h2>
+  <p>PIXI.clamp(x, min, max): Returns number - Returns the value of x if
+    it is between the bounds of min and max, or the closest bound if x is
+    outside</p>
+  <p>PIXI.mix(a, b, m): Returns number</p>
+</body>
+
+</html>

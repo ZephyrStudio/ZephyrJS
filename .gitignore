@@ -2,4 +2,4 @@
 *.zip
 stable/*/
 nightly/*/
-lowRezJam
+.obsidian/
