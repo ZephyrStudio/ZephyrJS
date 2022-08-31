@@ -101,7 +101,6 @@ PIXI.zephyr = {
     },
     spriteFix: (s) => { // "Fixes" the provided sprite/object for use with the collision functions, adjusting for anchor positions
         let anchor = (s.anchor ? s.anchor : { x: 0, y: 0 });
-        // let scale = (s.scale ? s.scale : { x: 1, y: 1 });
         return {
             x: -s.width * anchor.x + s.x,
             y: -s.height * anchor.y + s.y,
@@ -110,7 +109,7 @@ PIXI.zephyr = {
         }
     }
 }
-
+// Collision testing methods
 PIXI.collision = {
     aabb: (a, b) => { // Axis-Aligned Bounding Box method
         let aFix = PIXI.zephyr.spriteFix(a);
@@ -130,22 +129,18 @@ PIXI.collision = {
         );
     }
 }
-
 // Returns the value of x if it is between the bounds of min and max, or the closest bound if x is outside
 PIXI.clamp = (x, min, max) => {
     return Math.min(Math.max(x, min), max);
 };
-
 // Linearly interpolate between values a and b
 PIXI.mix = (a, b, m) => {
     return a * (1 - m) + b * (m);
 }
-
 // Generates a random integer between min and max, inclusive
 PIXI.rand = (min, max) => {
     return (Math.random() * (max - min + 1)) ^ 0 + min;
 };
-
 // Requests fullscreen for the provided element (view)
 PIXI.utils.requestFullScreen = (view) => {
     if (view.requestFullscreen)
@@ -155,10 +150,8 @@ PIXI.utils.requestFullScreen = (view) => {
     else if (view.msRequestFullscreen)
         view.msRequestFullscreen();
 }
-
 // Stop rClick
 window.addEventListener('contextmenu', (e) => {
     e.preventDefault();
 })
-
 console.log("%cUsing " + PIXI.zephyr.v + "! https://github.com/OttCS/ZephyrJS", "text-decoration: none;border-radius: 4px;margin: 4px 0;padding: 4px;color: #EF6F6C;border: 2px solid #EF6F6C;");

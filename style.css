@@ -40,6 +40,7 @@ h6 {
 p {
     font-size: calc(var(--scale) * 0.5);
     line-height: calc(var(--scale) * 0.75);
+    margin-top: calc(var(--scale) * 0.5);
 }
 
 code {
@@ -64,12 +65,12 @@ a:hover {
 }
 
 dt {
-    margin-top: 16px;
+    margin-top: calc(var(--scale) * 0.5);
 }
 
 dd {
-    margin: 0px 6px;
-    padding-left: 6px;
+    margin: 0px calc(var(--scale) * 0.25);
+    padding-left: calc(var(--scale) * 0.25);
     border-left: 2px solid var(--accent);
 }
 
