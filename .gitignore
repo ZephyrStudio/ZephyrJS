@@ -2,5 +2,4 @@
 *.zip
 stable/*/
 nightly/*/
-nightly/pixi.js*
 .obsidian/
