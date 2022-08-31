@@ -25,52 +25,38 @@
   <h2 id="pixi.input">PIXI.input</h2>
   <dl>
     <dt>PIXI.input.getKeyFired(keyboardEvent.code)</dt>
-    <dd>Returns true if
-      this is the first time it has been called since the key has been
-      pressed.</dd>
+    <dd>Returns true if this is the first time it has been called since the key has been pressed.</dd>
     <dd class="return">Boolean</dd>
     <dt>PIXI.input.getKeyDown(keyboardEvent.code)</dt>
-    <dd>Returns true if
-      the key is actively pressed down.</dd>
+    <dd>Returns true if the key is actively pressed down.</dd>
     <dd class="return">Boolean</dd>
     <dt>PIXI.input.setMouseContainer(domElement)</dt>
     <dd>Where the mouse’s coordinates should be scaled from.</dd>
     <dt>PIXI.getMouseFired(mouseEvent.button)</dt>
-    <dd>Returns true if this is the first time it has been called since the button has been
-      pressed. - NOTE: Mouse buttons are integers 0 (primary, typically left)
-      1 (middle), and 2 (secondary, typically right).</dd>
+    <dd>Returns true if this is the first time it has been called since the button has been pressed. - NOTE: Mouse buttons are integers 0 (primary, typically left) 1 (middle), and 2 (secondary, typically right).</dd>
     <dd class="return">Boolean</dd>
     <dt>PIXI.getMouseDown(mouseEvent.button)</dt>
-    <dd>Returns true if the
-      button is actively pressed down. - NOTE: Mouse buttons are integers 0
-      (primary, typically left) 1 (middle), and 2 (secondary, typically right).</dd>
+    <dd>Returns true if the button is actively pressed down. - NOTE: Mouse buttons are integers 0 (primary, typically left) 1 (middle), and 2 (secondary, typically right).</dd>
     <dd class="return">Boolean</dd>
     <dt>PIXI.getMouseX()</dt>
-    <dd>Returns the last seen mouse X
-      coordinate, where 0.0-1.0 is within the mouseContainer horizontally from
-      left to right.</dd>
+    <dd>Returns the last seen mouse X coordinate, where 0.0-1.0 is within the mouseContainer horizontally from left to right.</dd>
     <dd class="return">Number</dd>
     <dt>PIXI.getMouseY()</dt>
-    <dd>Returns the last seen mouse Y
-      coordinate, where 0.0-1.0 is within the mouseContainer vertically from
-      top to bottom.</dd>
+    <dd>Returns the last seen mouse Y coordinate, where 0.0-1.0 is within the mouseContainer vertically from top to bottom.</dd>
     <dd class="return">Number</dd>
   </dl>
   <h2>PIXI.collision</h2>
   <dl>
     <dt>PIXI.collision.aabb(Sprite, Sprite)</dt>
-    <dd>Checks if the two provided Sprites are colliding with the aabb algorithm - NOTE: Both a
-      and b are formatted as javascript objects with x, y, width, and height, and optionally anchor positions.</dd>
+    <dd>Checks if the two provided Sprites are colliding with the aabb algorithm - NOTE: Both a and b are formatted as javascript objects with x, y, width, and height, and optionally anchor positions.</dd>
     <dd class="return">Boolean</dd>
     <dt>PIXI.collision.radius(Sprite, Sprite)</dt>
-    <dd>Checks if the two provided Sprites are colliding with the standard point-radius method of
-      circle collision - NOTE: Both a and b are formatted as javascript objects with x, y, and r, and optionally anchor
-      positions.</dd>
+    <dd>Checks if the two provided Sprites are colliding with the standard point-radius method of circle collision - NOTE: Both a and b are formatted as javascript objects with x, y, and r, and optionally anchor positions.</dd>
     <dd class="return">Boolean</dd>
   </dl>
   <h2>PIXI.utils</h2>
   <dl>
-    <dt>PIXI.utils.openFullScreen(domElement)</dt>
+    <dt>PIXI.utils.requestFullScreen(domElement)</dt>
     <dd>The element passed in (typically use the Application view) will attempt to go fullscreen</dd>
   </dl>
 

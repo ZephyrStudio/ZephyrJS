@@ -147,7 +147,7 @@ PIXI.rand = (min, max) => {
 };
 
 // Requests fullscreen for the provided element (view)
-PIXI.utils.openFullScreen = (view) => {
+PIXI.utils.requestFullScreen = (view) => {
     if (view.requestFullscreen)
         view.requestFullscreen();
     else if (view.webkitRequestFullscreen)
