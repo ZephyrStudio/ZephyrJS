@@ -1,33 +1,30 @@
 <h1>ZephyrJS</h1>
-<p><b>Expands <a href="https://github.com/pixijs/pixijs">PixiJS</a> for easy interactive game/project development!</b><br /></p>
+    <p><strong>Expands <a href="https://github.com/pixijs/pixijs">PixiJS</a> for easy interactive game/project development!</strong><br /></p>
     <h2>Tell Me Why</h2>
-    <p>PixiJS on its own is very powerful, but a lot of work is needed to make it work for web-based games. PhaserIO is
-        exclusively used to make games, and not all of the functionality is easily translatable back to Pixi. ZephyrJS
-        directly ADDS to Pixi instead of wrapping it, letting you use the full functionality of Pixi so that what you've
-        gotten used to can still be used outside of Zephyr.</p>
-    <p>Check out <a href="https://ottcs.github.io/ZephyrJS/doc">the documentation</a> as well!</p>
-    <h2>Getting Started</h2>
-    <p>Setup is super simple! Firstly, deliver Pixi through the CDN:<br>
-        <code>&lt;script src="https&#58;//pixijs.download/release/pixi.js"&gt;&lt;/script&gt;</code>
-    </p>
-    <p>You have two options for ZephyrJS: the stable build and the nightly build. For quick projects where long-term
-        stability isn't a requirement, feel free to use the <strong>nightly</strong> build:<br>
-        <code>&lt;script src="https://ottcs.github.io/ZephyrJS/nightly/zepyhr.js"&gt;&lt;/script&gt;</code>
-    </p>
-    <p>If you're looking to develop your project over a couple days or weeks, and you for some reason don't want to
-        download the latest release, use the <strong>stable</strong> build:<br>
-        <code>&lt;script src="https://ottcs.github.io/ZephyrJS/stable/zepyhr.js"&gt;&lt;/script&gt;</code>
-    </p>
-    <p>If you're looking to release a stable version of your project, or if development is taking place over a longer
-        span of time, using the CDNs aren't the best option (as specs and functionality can change).
-        <strong>Download</strong> stable versions of both Zephyr and Pixi through the <a
-            href="https://github.com/OttCS/ZephyrJS/releases">Github Releases</a>, then include the script tags above
-        with the path to the files as the src attribute.</p>
-    <h2>More</h2>
+    <p>PixiJS on its own is very powerful, but a lot of work is needed to make it work for web-based interactive content. PhaserIO is exclusively used to make games, and not all of the functionality is easily translatable back to Pixi. ZephyrJS directly ADDS to Pixi instead of wrapping it, letting you use the full functionality of Pixi so that what you've gotten used to can still be used outside of Zephyr.</p>
+    <p>Check out <a href="https://ottcs.github.io/ZephyrJS/documentation.html">the documentation</a> as well!</p>
+
+<h2>Getting Started</h2>
+
+<p>Please note that it is REQUIRED that you include the script tag for PixiJS before the script tag for ZephyrJS.</p>
+
+<p>Most projects should just use the monthly <a href="https://github.com/OttCS/ZephyrJS/releases">Github Releases</a>, as the latest tested-compatible version of PixiJS is included with each one.</p>
+
+<p>If you don't want to download Pixi/Zephyr, use the following code to use the hosted <strong>stable release</strong>. Please note that some specs WILL change at the start of every month when a new version is released, but this is a great way to test out Zephyr for projects without committing to using it.</p>
+    <p><code>&lt;script src="https://ottcs.github.io/ZephyrJS/stable/pixi.js"&gt;&lt;/script&gt;</code></p>
+    <p><code>&lt;script src="https://ottcs.github.io/ZephyrJS/stable/zepyhr.js"&gt;&lt;/script&gt;</code></p>
+    <p>This will always use the latest stable-tested version of (minified, speed matters) Pixi/Zephyr.</p>
+
+<p>If you're willing to help out development by reporting bugs and issues, consider using the <strong>nightly release</strong>!</p>
+    <p><code>&lt;script src="https://ottcs.github.io/ZephyrJS/nightly/pixi.js"&gt;&lt;/script&gt;</code></p>
+    <p><code>&lt;script src="https://ottcs.github.io/ZephyrJS/nightly/zepyhr.js"&gt;&lt;/script&gt;</code></p>
+    <p>Please do bear in mind that things ARE likely to break in functionality, especially right after a new release of Pixi.</p>
+
+<h2>More</h2>
     <p><a href="https://github.com/OttCS/ZephyrJS/">ZephyrJS Github</a>
-        <a href="https://ottcs.github.io/ZephyrJS/doc">Documentation</a>
         <a href="https://github.com/OttCS/ZephyrJS/issues">Issues Page</a>
         <a href="https://github.com/users/OttCS/projects/7">Project Board</a>
         <a href="https://github.com/OttCS/ZephyrJS/discussions">Discussions Page</a>
     </p>
-    <p>Thanks for using ZephyrJS &lt;3</p>
+
+<p>Thanks for using ZephyrJS &lt;3</p>
