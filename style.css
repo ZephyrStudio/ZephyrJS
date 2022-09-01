@@ -74,6 +74,10 @@ dd {
     border-left: 2px solid var(--accent);
 }
 
+strong {
+    color: var(--accent);
+}
+
 .return {
     color: var(--highlight);
 }
