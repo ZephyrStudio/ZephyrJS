@@ -2,7 +2,7 @@
 PIXI.input = {};
 PIXI.Audio = {};
 PIXI.zephyr = {
-    v: "ZephyrJS 22.8.29",
+    v: "ZephyrJS 22.9.1",
     useKeyInput: () => {
         PIXI.input.keyMap = new Map();
         PIXI.input.getKeyFired = (keyStr) => {
