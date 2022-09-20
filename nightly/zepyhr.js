@@ -1,8 +1,9 @@
 "use strict"
 PIXI.input = {};
 PIXI.Audio = {};
+
 PIXI.zephyr = {
-    v: "ZephyrJS 22.9.1",
+    v: "ZephyrJS 22.9.20",
     useKeyInput: () => {
         PIXI.input.keyMap = new Map();
         PIXI.input.getKeyFired = (keyStr) => {
