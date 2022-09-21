@@ -11,16 +11,17 @@
   <p>Zephyr is designed to extend the functionality of PixiJS, rather than wrapping it so that you can always use Pixi
     without Zephyr.</p>
   <p>The <span class="return">Return</span> line below the function indicates the object type that is returned.</p>
+  <p>The <span class="headsUp">Nightly Exclusive</span> features can only be found in the current nightly branch of Zephyr. Consider trying it out, and letting us know of any bugs you find!</p>
   <h2>PIXI.zephyr</h2>
   <dl>
     <dt>PIXI.zephyr.useKeyInput()</dt>
     <dd>Sets up the key tracking system for use</dd>
     <dt>PIXI.zephyr.useMouseInput()</dt>
-    <dd>Sets up the mouse tracking system for
-      use</dd>
+    <dd>Sets up the mouse tracking system for use</dd>
     <dt>PIXI.zephyr.useAudio()</dt>
-    <dd>Sets up the WebAudio API for Pixi-style
-      usage</dd>
+    <dd>Sets up the WebAudio API for Pixi-style usage</dd>
+    <dt class="headsUp">PIXI.zephyr.useFileIO()</dt>
+    <dd>Sets up the File reading/writing system</dd>
   </dl>
   <h2>PIXI.input</h2>
   <dl>
@@ -44,6 +45,20 @@
     <dt>PIXI.getMouseY()</dt>
     <dd>Returns the last seen mouse Y coordinate, where 0.0-1.0 is within the mouseContainer vertically from top to bottom.</dd>
     <dd class="return">Number</dd>
+  </dl>
+  <h2>PIXI.Audio</h2>
+  <dl>
+    <dt>PIXI.Audio.from(src)</dt>
+    <dd>Returns a "Pixi Audio" object. These can have .play() called on them to play their sound.</dd>
+    <dd class="return">Pixi Audio object</dd>
+  </dl>
+  <h2 class="headsUp">PIXI.FileIO</h2>
+  <dl>
+    <dt class="headsUp">PIXI.FileIO.writeObject(object, fileName)</dt>
+    <dd>Converts the passed object into JSON and prompting the user to download the resulting fileName.json</dd>
+    <dt class="headsUp">PIXI.FileIO.readObject()</dt>
+    <dd>Prompts the user to select a file, which it then attempts to parse as JSON and return</dd>
+    <dd class="return">Object</dd>
   </dl>
   <h2>PIXI.collision</h2>
   <dl>

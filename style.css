@@ -1,5 +1,6 @@
 :root {
     --accent: #EF6F6C;
+    --headsUp: #f0cf6b;
     --highlight: #6C6FEF;
     --anim-list: border-color 0.2s, color 0.2s;
     --scale: 32px;
@@ -80,4 +81,8 @@ strong {
 
 .return {
     color: var(--highlight);
+}
+
+.headsUp {
+    color: var(--headsUp);
 }

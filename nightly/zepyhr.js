@@ -1,6 +1,7 @@
 "use strict"
 PIXI.input = {};
 PIXI.Audio = {};
+PIXI.FileIO = {};
 
 PIXI.zephyr = {
     v: "ZephyrJS 22.9.20",
@@ -99,6 +100,27 @@ PIXI.zephyr = {
                 }
             }
         }
+    },
+    useFileIO: () => {
+        PIXI.FileIO.writeObject = async (object, fName) => {
+            let file = new Blob([JSON.stringify(object)], { type: JSON });
+            var a = document.createElement("a"),
+                url = URL.createObjectURL(file);
+            a.href = url;
+            a.download = fName + ".json";
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }, 0);
+        };
+        PIXI.FileIO.readObject = async () => {
+            [fileHandle] = await window.showOpenFilePicker();
+            let file = await fileHandle.getFile();
+            let contents = await file.text();
+            return JSON.parse(contents);
+        };
     },
     spriteFix: (s) => { // "Fixes" the provided sprite/object for use with the collision functions, adjusting for anchor positions
         let anchor = (s.anchor ? s.anchor : { x: 0, y: 0 });
