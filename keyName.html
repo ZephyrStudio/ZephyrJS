@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" style="background-color: #333;">
+
+<head>
+  <title>ZephyrJS | Documentation</title>
+  <link rel="preload" as="style" href="style.css" onload="this.rel='stylesheet'">
+</head>
+
+<body>
+  <h1 class="nightly">ZephyrJS keyNames</h1>
+  <p>Zephyr adds the functionality of key fire/press tracking, through PIXI.Keys. The two functions, down(keyName) and fired(keyName) are explained in the documentation, but their keyName parameters need explanation.</p>
+  <p><strong>The Basis for keyName</strong> Zephyr needs to store keys in an efficient way that is easily usable. For some reason, none of the default keyboardEvent properties do this. Blame Javascript.</p>
+  <p><strong>The Solution</strong> Zephyr does a little bit of string shortening to keep the actual useful, identifying parts of keyboardEvent.code and combining similar keys (ControlLeft and ControlRight, for example)</p>
+  <p><strong>The Code</strong> keyboardEvent.code.replace(/(Key)|(Left)|(Right)|(Digit)|(Numpad)/g, '');</p>
+  <dl>
+    <dt>Alphabet Characters</dt>
+    <dd>Represented by a single uppercase letter A through Z</dd>
+    <dt>Numeric Characters</dt>
+    <dd>Represented with a single numeric digit 0 through 9</dd>
+    <dt>Miscellaneous</dt>
+    <dd>Function keys are F1 through F12</dd>
+    <dd>Esc key is Escape</dd>
+    <dd>` is Backquote</dd>
+    <dd></dd>
+  </dl>
+  
+</body>
+
+</html>

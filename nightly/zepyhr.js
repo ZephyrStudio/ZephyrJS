@@ -1,76 +1,75 @@
 "use strict"
-PIXI.input = {};
+PIXI.Keys = {};
+PIXI.Mouse = {};
 PIXI.Audio = {};
 PIXI.FileIO = {};
 
-PIXI.zephyr = {
-    v: "ZephyrJS 22.9.20",
-    useKeyInput: () => {
-        PIXI.input.keyMap = new Map();
-        PIXI.input.getKeyFired = (keyStr) => {
-            if (PIXI.input.keyMap.size > 0 && PIXI.input.keyMap.get(keyStr)) {
-                PIXI.input.keyMap.set(keyStr, false);
+PIXI.Zephyr = {
+    version: "ZephyrJS 22.9.29",
+    useKeys: () => {
+        PIXI.Keys.map = new Map();
+        PIXI.Keys.down = (key) => {
+            if (PIXI.Keys.map.size > 0 && PIXI.Keys.map.has(key)) {
+                PIXI.Keys.map.set(key, false);
                 return true;
             }
             return false;
         };
-        PIXI.input.getKeyDown = (keyStr) => {
-            if (PIXI.input.keyMap.size > 0 && PIXI.input.keyMap.has(keyStr)) {
-                PIXI.input.keyMap.set(keyStr, false);
+        PIXI.Keys.fired = (key) => {
+            if (PIXI.Keys.map.size > 0 && PIXI.Keys.map.get(key)) {
+                PIXI.Keys.map.set(key, false);
                 return true;
             }
             return false;
         };
 
         window.addEventListener('keydown', (e) => {
-            PIXI.input.keyMap.set(e.code, true);
+            e.preventDefault();
+            PIXI.Keys.map.set(e.code, true);
         });
-
         window.addEventListener('keyup', (e) => {
-            PIXI.input.keyMap.delete(e.code);
+            PIXI.Keys.map.delete(e.code);
         });
     },
-    useMouseInput: () => {
-        PIXI.input.mouseBounds = document.getElementsByTagName("html")[0].getBoundingClientRect();
-        PIXI.input.mouseContainer = document.getElementsByTagName("html")[0];
-        PIXI.input.setMouseContainer = (view) => {
-            PIXI.input.mouseContainer = view;
-            PIXI.input.mouseBounds = view.getBoundingClientRect();
+    useMouse: () => {
+        PIXI.Mouse.bounds = document.getElementsByTagName("html")[0].getBoundingClientRect();
+        PIXI.Mouse.container = document.getElementsByTagName("html")[0];
+        PIXI.Mouse.setContainer = (view) => {
+            PIXI.Mouse.container = view;
+            PIXI.Mouse.bounds = view.getBoundingClientRect();
         }
         window.onresize = () => {
-            PIXI.input.mouseBounds = PIXI.input.mouseContainer.getBoundingClientRect();
+            PIXI.Mouse.bounds = PIXI.Mouse.container.getBoundingClientRect();
         }
-        PIXI.input.mouseMap = new Map();
-        PIXI.input.getMouseFired = (btn) => {
-            if (PIXI.input.mouseMap.get(btn)) {
-                PIXI.input.mouseMap.set(btn, false);
-                return true;
-            }
-            return false;
-        };
-        PIXI.input.getMouseDown = (btn) => {
-            if (PIXI.input.mouseMap.has(btn)) {
-                PIXI.input.mouseMap.set(btn, false);
-                return true;
-            }
-            return false;
-        };
-        PIXI.input.getMouseX = () => {
-            return PIXI.input.mouseMap.get('x');
-        };
-        PIXI.input.getMouseY = () => {
-            return PIXI.input.mouseMap.get('y');
-        };
 
-        window.addEventListener('mousemove', (e) => {
-            PIXI.input.mouseMap.set('x', (e.x - PIXI.input.mouseBounds.left) / PIXI.input.mouseBounds.width);
-            PIXI.input.mouseMap.set('y', (e.y - PIXI.input.mouseBounds.top) / PIXI.input.mouseBounds.height);
+        PIXI.Mouse.alias = ["Primary", "Middle", "Secondary"];
+
+        PIXI.Mouse.map = new Map();
+        PIXI.Mouse.down = (btn) => {
+            if (PIXI.Mouse.map.size > 0 && PIXI.Mouse.map.has(btn)) {
+                PIXI.Mouse.map.set(btn, false);
+                return true;
+            }
+            return false;
+        }
+
+        PIXI.Mouse.fired = (btn) => {
+            if (PIXI.Mouse.map.size > 0 && PIXI.Mouse.map.get(btn)) {
+                PIXI.Mouse.map.set(btn, false);
+                return true;
+            }
+            return false;
+        }
+
+        window.addEventListener('mouseup', (e) => {
+            PIXI.Mouse.map.delete(PIXI.Mouse.alias[e.button]);
         });
         window.addEventListener('mousedown', (e) => {
-            PIXI.input.mouseMap.set(e.button, true);
+            PIXI.Mouse.map.set(PIXI.Mouse.alias[e.button], true);
         });
-        window.addEventListener('mouseup', (e) => {
-            PIXI.input.mouseMap.delete(e.button);
+        window.addEventListener('mousemove', (e) => {
+            PIXI.Mouse.x = (e.x - PIXI.Mouse.bounds.left) / PIXI.Mouse.bounds.width;
+            PIXI.Mouse.y = (e.y - PIXI.Mouse.bounds.top) / PIXI.Mouse.bounds.height;
         });
     },
     useAudio: () => {
@@ -82,7 +81,7 @@ PIXI.zephyr = {
             r.responseType = 'arraybuffer';
 
             // Decode asynchronously
-            r.onload = function () {
+            r.onload = () => {
                 PIXI.Audio.ctx.decodeAudioData(r.response, function (buffer) {
                     PIXI.Audio.buffers.set(src, buffer);
                 });
@@ -101,8 +100,8 @@ PIXI.zephyr = {
             }
         }
     },
-    useFileIO: () => {
-        PIXI.FileIO.writeObject = async (object, fName) => {
+    useFile: () => {
+        PIXI.File.write = async (object, fName) => {
             let file = new Blob([JSON.stringify(object)], { type: JSON });
             var a = document.createElement("a"),
                 url = URL.createObjectURL(file);
@@ -115,7 +114,7 @@ PIXI.zephyr = {
                 window.URL.revokeObjectURL(url);
             }, 0);
         };
-        PIXI.FileIO.readObject = async () => {
+        PIXI.File.open = async () => {
             [fileHandle] = await window.showOpenFilePicker();
             let file = await fileHandle.getFile();
             let contents = await file.text();
@@ -135,8 +134,8 @@ PIXI.zephyr = {
 // Collision testing methods
 PIXI.collision = {
     aabb: (a, b) => { // Axis-Aligned Bounding Box method
-        let aFix = PIXI.zephyr.spriteFix(a);
-        let bFix = PIXI.zephyr.spriteFix(b);
+        let aFix = PIXI.Zephyr.spriteFix(a);
+        let bFix = PIXI.Zephyr.spriteFix(b);
         return !(
             aFix.x + a.width < bFix.x ||
             aFix.y + a.height < bFix.y ||
@@ -145,8 +144,8 @@ PIXI.collision = {
         );
     },
     radius: (a, b) => { // Circle collision, for objects a and b, provided they ha
-        let aFix = PIXI.zephyr.spriteFix(a);
-        let bFix = PIXI.zephyr.spriteFix(b);
+        let aFix = PIXI.Zephyr.spriteFix(a);
+        let bFix = PIXI.Zephyr.spriteFix(b);
         return (
             Math.sqrt(Math.pow(aFix.x - bFix.x, 2) + Math.pow(aFix.y - bFix.y, 2)) <= a.r + b.r
         );
@@ -177,4 +176,4 @@ PIXI.utils.requestFullScreen = (view) => {
 window.addEventListener('contextmenu', (e) => {
     e.preventDefault();
 })
-console.log("%cUsing " + PIXI.zephyr.v + "! https://github.com/OttCS/ZephyrJS", "text-decoration: none;border-radius: 4px;margin: 4px 0;padding: 4px;color: #EF6F6C;border: 2px solid #EF6F6C;");
+console.log("%cUsing " + PIXI.Zephyr.version + "! https://github.com/OttCS/ZephyrJS", "text-decoration: none;border-radius: 4px;margin: 4px 0;padding: 4px;color: #EF6F6C;border: 2px solid #EF6F6C;");

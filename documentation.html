@@ -11,39 +11,49 @@
   <p>Zephyr is designed to extend the functionality of PixiJS, rather than wrapping it so that you can always use Pixi
     without Zephyr.</p>
   <p>The <span class="return">Return</span> line below the function indicates the object type that is returned.</p>
-  <p>The <span class="headsUp">Nightly Exclusive</span> features can only be found in the current nightly branch of Zephyr. Consider trying it out, and letting us know of any bugs you find!</p>
-  <h2>PIXI.zephyr</h2>
+  <p>The <span class="nightly">Nightly Exclusive</span> features can only be found in the current nightly branch of Zephyr. Consider trying it out, and letting us know of any bugs you find!</p>
+  <h2>PIXI.Zephyr</h2>
+  <p>Changed from <span class="deprecated">PIXI.zephyr</span> to <span class="nightly">PIXI.Zephyr</span></p>
   <dl>
-    <dt>PIXI.zephyr.useKeyInput()</dt>
+    <dt class="nightly">PIXI.Zephyr.useKeys()</dt>
     <dd>Sets up the key tracking system for use</dd>
-    <dt>PIXI.zephyr.useMouseInput()</dt>
+    <dt class="nightly">PIXI.Zephyr.useMouse()</dt>
     <dd>Sets up the mouse tracking system for use</dd>
-    <dt>PIXI.zephyr.useAudio()</dt>
+    <dt>PIXI.Zephyr.useAudio()</dt>
     <dd>Sets up the WebAudio API for Pixi-style usage</dd>
-    <dt class="headsUp">PIXI.zephyr.useFileIO()</dt>
+    <dt class="nightly">PIXI.Zephyr.useFile()</dt>
     <dd>Sets up the File reading/writing system</dd>
+    <dt class="deprecated">PIXI.zephyr.useKeyInput()</dt>
+    <dd>Being replaced with the simpler PIXI.Zephyr.useKeys()</dd>
+    <dt class="deprecated">PIXI.zephyr.useMouseInput()</dt>
+    <dd>Being replaced with the simpler PIXI.Zephyr.useMouse()</dd>
   </dl>
-  <h2>PIXI.input</h2>
+  <h2 class="nightly">PIXI.Keys</h2>
+  <p>Please refer to the <a href="keyName.html">keyName documentation</a> for how to use the Keys feature properly.</p>
   <dl>
-    <dt>PIXI.input.getKeyFired(keyboardEvent.code)</dt>
-    <dd>Returns true if this is the first time it has been called since the key has been pressed.</dd>
-    <dd class="return">Boolean</dd>
-    <dt>PIXI.input.getKeyDown(keyboardEvent.code)</dt>
+    <dt class="nightly">PIXI.Keys.down(keyName)</dt>
     <dd>Returns true if the key is actively pressed down.</dd>
     <dd class="return">Boolean</dd>
-    <dt>PIXI.input.setMouseContainer(domElement)</dt>
+    <dt class="nightly">PIXI.Keys.fired(keyName)</dt>
+    <dd>Returns true if this is the first time the key value has been accessed since the key has been pressed.</dd>
+    <dd class="return">Boolean</dd>
+  </dl>
+  <h2 class="nightly">PIXI.Mouse</h2>
+  <dl>
+    <dt class="nightly">PIXI.Mouse.setContainer(domElement)</dt>
     <dd>Where the mouse’s coordinates should be scaled from.</dd>
-    <dt>PIXI.getMouseFired(mouseEvent.button)</dt>
-    <dd>Returns true if this is the first time it has been called since the button has been pressed. - NOTE: Mouse buttons are integers 0 (primary, typically left) 1 (middle), and 2 (secondary, typically right).</dd>
+    <dt class="nightly">PIXI.Mouse.down([mouse button])</dt>
+    <dd>Returns true if the button is actively pressed down. - NOTE: Mouse buttons are Primary, Middle, and Secondary.</dd>
     <dd class="return">Boolean</dd>
-    <dt>PIXI.getMouseDown(mouseEvent.button)</dt>
-    <dd>Returns true if the button is actively pressed down. - NOTE: Mouse buttons are integers 0 (primary, typically left) 1 (middle), and 2 (secondary, typically right).</dd>
+    <dt class="nightly">PIXI.Mouse.fired(mouseEvent.button)</dt>
+    <dd>Returns true if this is the first time the button value has been accessed since the button has been pressed. - NOTE: Mouse buttons are Primary, Middle, and Secondary.</dd>
     <dd class="return">Boolean</dd>
-    <dt>PIXI.getMouseX()</dt>
-    <dd>Returns the last seen mouse X coordinate, where 0.0-1.0 is within the mouseContainer horizontally from left to right.</dd>
+
+    <dt class="nightly">PIXI.Mouse.x</dt>
+    <dd>The last seen mouse X coordinate, where 0.0-1.0 is within the mouseContainer horizontally from left to right.</dd>
     <dd class="return">Number</dd>
-    <dt>PIXI.getMouseY()</dt>
-    <dd>Returns the last seen mouse Y coordinate, where 0.0-1.0 is within the mouseContainer vertically from top to bottom.</dd>
+    <dt class="nightly">PIXI.Mouse.y</dt>
+    <dd>The last seen mouse Y coordinate, where 0.0-1.0 is within the mouseContainer vertically from top to bottom.</dd>
     <dd class="return">Number</dd>
   </dl>
   <h2>PIXI.Audio</h2>
@@ -52,11 +62,11 @@
     <dd>Returns a "Pixi Audio" object. These can have .play() called on them to play their sound.</dd>
     <dd class="return">Pixi Audio object</dd>
   </dl>
-  <h2 class="headsUp">PIXI.FileIO</h2>
+  <h2 class="nightly">PIXI.File</h2>
   <dl>
-    <dt class="headsUp">PIXI.FileIO.writeObject(object, fileName)</dt>
+    <dt class="nightly">PIXI.File.write(object, fileName)</dt>
     <dd>Converts the passed object into JSON and prompting the user to download the resulting fileName.json</dd>
-    <dt class="headsUp">PIXI.FileIO.readObject()</dt>
+    <dt class="nightly">PIXI.File.open()</dt>
     <dd>Prompts the user to select a file, which it then attempts to parse as JSON and return</dd>
     <dd class="return">Object</dd>
   </dl>
@@ -74,8 +84,7 @@
     <dt>PIXI.utils.requestFullScreen(domElement)</dt>
     <dd>The element passed in (typically use the Application view) will attempt to go fullscreen</dd>
   </dl>
-
-  <h2>PIXI Functions</h2>
+  <h2>Added Functions</h2>
   <dl>
     <dt>PIXI.clamp(x, min, max)</dt>
     <dd>Returns the value of x if it is between the bounds of min and max, or the closest bound if x is outside</dd>
@@ -86,6 +95,39 @@
     <dt>PIXI.rand(min, max)</dt>
     <dd>Generates a random integer between min and max, inclusive</dd>
     <dd class="return">Number</dd>
+  </dl>
+  <h2 class="deprecated">PIXI.input</h2>
+  <p>PIXI.input is being removed in favor of PIXI.Mouse and PIXI.Keys</p>
+  <dl>
+    <dt class="deprecated">PIXI.input.getKeyFired(keyboardEvent.code)</dt>
+    <dd>Returns true if this is the first time it has been called since the key has been pressed.</dd>
+    <dd class="return">Boolean</dd>
+    <dt class="deprecated">PIXI.input.getKeyDown(keyboardEvent.code)</dt>
+    <dd>Returns true if the key is actively pressed down.</dd>
+    <dd class="return">Boolean</dd>
+    <dt class="deprecated">PIXI.input.setMouseContainer(domElement)</dt>
+    <dd>Where the mouse’s coordinates should be scaled from.</dd>
+    <dt class="deprecated">PIXI.getMouseFired(mouseEvent.button)</dt>
+    <dd>Returns true if this is the first time it has been called since the button has been pressed. - NOTE: Mouse buttons are integers 0 (primary, typically left) 1 (middle), and 2 (secondary, typically right).</dd>
+    <dd class="return">Boolean</dd>
+    <dt class="deprecated">PIXI.getMouseDown(mouseEvent.button)</dt>
+    <dd>Returns true if the button is actively pressed down. - NOTE: Mouse buttons are integers 0 (primary, typically left) 1 (middle), and 2 (secondary, typically right).</dd>
+    <dd class="return">Boolean</dd>
+    <dt class="deprecated">PIXI.getMouseX()</dt>
+    <dd>Returns the last seen mouse X coordinate, where 0.0-1.0 is within the mouseContainer horizontally from left to right.</dd>
+    <dd class="return">Number</dd>
+    <dt class="deprecated">PIXI.getMouseY()</dt>
+    <dd>Returns the last seen mouse Y coordinate, where 0.0-1.0 is within the mouseContainer vertically from top to bottom.</dd>
+    <dd class="return">Number</dd>
+  </dl>
+  <h2 class="deprecated">PIXI.FileIO</h2>
+  <p>Removed in favor of PIXI.File</p>
+  <dl>
+    <dt class="deprecated">PIXI.FileIO.writeObject(object, fileName)</dt>
+    <dd>Converts the passed object into JSON and prompting the user to download the resulting fileName.json</dd>
+    <dt class="deprecated">PIXI.FileIO.readObject()</dt>
+    <dd>Prompts the user to select a file, which it then attempts to parse as JSON and return</dd>
+    <dd class="deprecated">Object</dd>
   </dl>
 </body>
 

@@ -1,7 +1,8 @@
 :root {
     --accent: #EF6F6C;
-    --headsUp: #f0cf6b;
+    --deprecated: #f0cf6b;
     --highlight: #6C6FEF;
+    --nightly: 	#a36cef;
     --anim-list: border-color 0.2s, color 0.2s;
     --scale: 32px;
 }
@@ -23,7 +24,10 @@ html {
 }
 
 body {
-    width: calc(100% - var(--scale) * 2);
+    display: block;
+    margin: auto;
+    width: 90vw;
+    max-width: 1200px;
     padding: 0 var(--scale);
 }
 
@@ -72,7 +76,8 @@ dt {
 dd {
     margin: 0px calc(var(--scale) * 0.25);
     padding-left: calc(var(--scale) * 0.25);
-    border-left: 2px solid var(--accent);
+    border-left: 2px solid #888;
+    color: #888;
 }
 
 strong {
@@ -83,6 +88,11 @@ strong {
     color: var(--highlight);
 }
 
-.headsUp {
-    color: var(--headsUp);
+.deprecated {
+    color: var(--deprecated);
+    text-decoration: line-through;
+}
+
+.nightly {
+    color: var(--nightly);
 }
