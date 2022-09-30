@@ -1,4 +1,4 @@
-<h1>ZephyrJS</h1>
+<h1>ZephyrJS v22.10</h1>
 <p><strong>Expands <a href="https://github.com/pixijs/pixijs">PixiJS</a> for easy interactive projects!</strong></p>
 
 <p class="pixi">Compatible with PixiJS v6.5.5!</p>

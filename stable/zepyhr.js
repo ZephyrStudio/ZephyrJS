@@ -1,1 +1,179 @@
-"use strict";PIXI.input={},PIXI.Audio={},PIXI.zephyr={v:"ZephyrJS 22.9",useKeyInput(){PIXI.input.keyMap=new Map,PIXI.input.getKeyFired=a=>!!(PIXI.input.keyMap.size>0&&PIXI.input.keyMap.get(a))&&(PIXI.input.keyMap.set(a,!1),!0),PIXI.input.getKeyDown=a=>!!(PIXI.input.keyMap.size>0&&PIXI.input.keyMap.has(a))&&(PIXI.input.keyMap.set(a,!1),!0),window.addEventListener("keydown",a=>{PIXI.input.keyMap.set(a.code,!0)}),window.addEventListener("keyup",a=>{PIXI.input.keyMap.delete(a.code)})},useMouseInput(){PIXI.input.mouseBounds=document.getElementsByTagName("html")[0].getBoundingClientRect(),PIXI.input.mouseContainer=document.getElementsByTagName("html")[0],PIXI.input.setMouseContainer=a=>{PIXI.input.mouseContainer=a,PIXI.input.mouseBounds=a.getBoundingClientRect()},window.onresize=()=>{PIXI.input.mouseBounds=PIXI.input.mouseContainer.getBoundingClientRect()},PIXI.input.mouseMap=new Map,PIXI.input.getMouseFired=a=>!!PIXI.input.mouseMap.get(a)&&(PIXI.input.mouseMap.set(a,!1),!0),PIXI.input.getMouseDown=a=>!!PIXI.input.mouseMap.has(a)&&(PIXI.input.mouseMap.set(a,!1),!0),PIXI.input.getMouseX=()=>PIXI.input.mouseMap.get("x"),PIXI.input.getMouseY=()=>PIXI.input.mouseMap.get("y"),window.addEventListener("mousemove",a=>{PIXI.input.mouseMap.set("x",(a.x-PIXI.input.mouseBounds.left)/PIXI.input.mouseBounds.width),PIXI.input.mouseMap.set("y",(a.y-PIXI.input.mouseBounds.top)/PIXI.input.mouseBounds.height)}),window.addEventListener("mousedown",a=>{PIXI.input.mouseMap.set(a.button,!0)}),window.addEventListener("mouseup",a=>{PIXI.input.mouseMap.delete(a.button)})},useAudio(){PIXI.Audio.ctx=new AudioContext,PIXI.Audio.buffers=new Map,PIXI.Audio.from=b=>{let a=new XMLHttpRequest;return a.open("GET",b,!0),a.responseType="arraybuffer",a.onload=function(){PIXI.Audio.ctx.decodeAudioData(a.response,function(a){PIXI.Audio.buffers.set(b,a)})},a.send(),{src:b,play(){if(PIXI.Audio.buffers.has(b)){let a=PIXI.Audio.ctx.createBufferSource();a.buffer=PIXI.Audio.buffers.get(b),a.connect(PIXI.Audio.ctx.destination),a.start(0)}}}}},spriteFix(a){let b=a.anchor?a.anchor:{x:0,y:0};return{x:-a.width*b.x+a.x,y:-a.height*b.y+a.y,width:a.width,height:a.height}}},PIXI.collision={aabb(c,d){let a=PIXI.zephyr.spriteFix(c),b=PIXI.zephyr.spriteFix(d);return!(a.x+c.width<b.x||a.y+c.height<b.y||a.x>b.x+d.width||a.y>b.y+d.height)},radius(a,b){let c=PIXI.zephyr.spriteFix(a),d=PIXI.zephyr.spriteFix(b);return Math.sqrt(Math.pow(c.x-d.x,2)+Math.pow(c.y-d.y,2))<=a.r+b.r}},PIXI.clamp=(a,b,c)=>Math.min(Math.max(a,b),c),PIXI.mix=(b,c,a)=>b*(1-a)+c*a,PIXI.rand=(a,b)=>Math.random()*(b-a+1)^0+a,PIXI.utils.requestFullScreen=a=>{a.requestFullscreen?a.requestFullscreen():a.webkitRequestFullscreen?a.webkitRequestFullscreen():a.msRequestFullscreen&&a.msRequestFullscreen()},window.addEventListener("contextmenu",a=>{a.preventDefault()}),console.log("%cUsing "+PIXI.zephyr.v+"! https://github.com/OttCS/ZephyrJS","text-decoration: none;border-radius: 4px;margin: 4px 0;padding: 4px;color: #EF6F6C;border: 2px solid #EF6F6C;")
+"use strict"
+PIXI.Keys = {};
+PIXI.Mouse = {};
+PIXI.Audio = {};
+PIXI.FileIO = {};
+
+PIXI.Zephyr = {
+    version: "ZephyrJS 22.10",
+    useKeys: () => {
+        PIXI.Keys.map = new Map();
+        PIXI.Keys.down = (key) => {
+            if (PIXI.Keys.map.size > 0 && PIXI.Keys.map.has(key)) {
+                PIXI.Keys.map.set(key, false);
+                return true;
+            }
+            return false;
+        };
+        PIXI.Keys.fired = (key) => {
+            if (PIXI.Keys.map.size > 0 && PIXI.Keys.map.get(key)) {
+                PIXI.Keys.map.set(key, false);
+                return true;
+            }
+            return false;
+        };
+
+        window.addEventListener('keydown', (e) => {
+            e.preventDefault();
+            PIXI.Keys.map.set(e.code, true);
+        });
+        window.addEventListener('keyup', (e) => {
+            PIXI.Keys.map.delete(e.code);
+        });
+    },
+    useMouse: () => {
+        PIXI.Mouse.bounds = document.getElementsByTagName("html")[0].getBoundingClientRect();
+        PIXI.Mouse.container = document.getElementsByTagName("html")[0];
+        PIXI.Mouse.setContainer = (view) => {
+            PIXI.Mouse.container = view;
+            PIXI.Mouse.bounds = view.getBoundingClientRect();
+        }
+        window.onresize = () => {
+            PIXI.Mouse.bounds = PIXI.Mouse.container.getBoundingClientRect();
+        }
+
+        PIXI.Mouse.alias = ["Primary", "Middle", "Secondary"];
+
+        PIXI.Mouse.map = new Map();
+        PIXI.Mouse.down = (btn) => {
+            if (PIXI.Mouse.map.size > 0 && PIXI.Mouse.map.has(btn)) {
+                PIXI.Mouse.map.set(btn, false);
+                return true;
+            }
+            return false;
+        }
+
+        PIXI.Mouse.fired = (btn) => {
+            if (PIXI.Mouse.map.size > 0 && PIXI.Mouse.map.get(btn)) {
+                PIXI.Mouse.map.set(btn, false);
+                return true;
+            }
+            return false;
+        }
+
+        window.addEventListener('mouseup', (e) => {
+            PIXI.Mouse.map.delete(PIXI.Mouse.alias[e.button]);
+        });
+        window.addEventListener('mousedown', (e) => {
+            PIXI.Mouse.map.set(PIXI.Mouse.alias[e.button], true);
+        });
+        window.addEventListener('mousemove', (e) => {
+            PIXI.Mouse.x = (e.x - PIXI.Mouse.bounds.left) / PIXI.Mouse.bounds.width;
+            PIXI.Mouse.y = (e.y - PIXI.Mouse.bounds.top) / PIXI.Mouse.bounds.height;
+        });
+    },
+    useAudio: () => {
+        PIXI.Audio.ctx = new AudioContext();
+        PIXI.Audio.buffers = new Map();
+        PIXI.Audio.from = (src) => {
+            let r = new XMLHttpRequest();
+            r.open('GET', src, true);
+            r.responseType = 'arraybuffer';
+
+            // Decode asynchronously
+            r.onload = () => {
+                PIXI.Audio.ctx.decodeAudioData(r.response, function (buffer) {
+                    PIXI.Audio.buffers.set(src, buffer);
+                });
+            }
+            r.send();
+            return {
+                src: src,
+                play: () => {
+                    if (PIXI.Audio.buffers.has(src)) {
+                        let aud = PIXI.Audio.ctx.createBufferSource();
+                        aud.buffer = PIXI.Audio.buffers.get(src);
+                        aud.connect(PIXI.Audio.ctx.destination);
+                        aud.start(0);
+                    }
+                }
+            }
+        }
+    },
+    useFile: () => {
+        PIXI.File.write = async (object, fName) => {
+            let file = new Blob([JSON.stringify(object)], { type: JSON });
+            var a = document.createElement("a"),
+                url = URL.createObjectURL(file);
+            a.href = url;
+            a.download = fName + ".json";
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }, 0);
+        };
+        PIXI.File.open = async () => {
+            [fileHandle] = await window.showOpenFilePicker();
+            let file = await fileHandle.getFile();
+            let contents = await file.text();
+            return JSON.parse(contents);
+        };
+    },
+    spriteFix: (s) => { // "Fixes" the provided sprite/object for use with the collision functions, adjusting for anchor positions
+        let anchor = (s.anchor ? s.anchor : { x: 0, y: 0 });
+        return {
+            x: -s.width * anchor.x + s.x,
+            y: -s.height * anchor.y + s.y,
+            width: s.width,
+            height: s.height
+        }
+    }
+}
+// Collision testing methods
+PIXI.collision = {
+    aabb: (a, b) => { // Axis-Aligned Bounding Box method
+        let aFix = PIXI.Zephyr.spriteFix(a);
+        let bFix = PIXI.Zephyr.spriteFix(b);
+        return !(
+            aFix.x + a.width < bFix.x ||
+            aFix.y + a.height < bFix.y ||
+            aFix.x > bFix.x + b.width ||
+            aFix.y > bFix.y + b.height
+        );
+    },
+    radius: (a, b) => { // Circle collision, for objects a and b, provided they ha
+        let aFix = PIXI.Zephyr.spriteFix(a);
+        let bFix = PIXI.Zephyr.spriteFix(b);
+        return (
+            Math.sqrt(Math.pow(aFix.x - bFix.x, 2) + Math.pow(aFix.y - bFix.y, 2)) <= a.r + b.r
+        );
+    }
+}
+// Returns the value of x if it is between the bounds of min and max, or the closest bound if x is outside
+PIXI.clamp = (x, min, max) => {
+    return Math.min(Math.max(x, min), max);
+};
+// Linearly interpolate between values a and b
+PIXI.mix = (a, b, m) => {
+    return a * (1 - m) + b * (m);
+}
+// Generates a random integer between min and max, inclusive
+PIXI.rand = (min, max) => {
+    return (Math.random() * (max - min + 1)) ^ 0 + min;
+};
+// Requests fullscreen for the provided element (view)
+PIXI.utils.requestFullScreen = (view) => {
+    if (view.requestFullscreen)
+        view.requestFullscreen();
+    else if (view.webkitRequestFullscreen)
+        view.webkitRequestFullscreen();
+    else if (view.msRequestFullscreen)
+        view.msRequestFullscreen();
+}
+// Stop rClick
+window.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+})
+console.log("%cUsing " + PIXI.Zephyr.version + "! https://github.com/OttCS/ZephyrJS", "text-decoration: none;border-radius: 4px;margin: 4px 0;padding: 4px;color: #EF6F6C;border: 2px solid #EF6F6C;");
