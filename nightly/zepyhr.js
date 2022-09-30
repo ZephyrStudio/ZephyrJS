@@ -2,7 +2,7 @@
 PIXI.Keys = {};
 PIXI.Mouse = {};
 PIXI.Audio = {};
-PIXI.FileIO = {};
+PIXI.File = {};
 
 PIXI.Zephyr = {
     version: "ZephyrJS 22.10.1",
