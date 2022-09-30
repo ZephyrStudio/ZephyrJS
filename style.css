@@ -96,3 +96,8 @@ strong {
 .nightly {
     color: var(--nightly);
 }
+
+.pixi {
+    color: #ea1e63;
+    border-color: #ea1e63;
+}
