@@ -8,22 +8,22 @@
 <p>Next, include your script to run the project:</p>
 <p><code>&lt;script src="app.js"&gt;&lt;/script&gt;</code></p>
 <p>The full code of your HTML file should be as follows:</p>
-<pre><code>
-<!DOCTYPE html>
-<html lang="en">
+<code>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
 
-<head>
-    <title>Physics</title>
-    <link rel="preload" as="style" href="default.css" onload="this.rel='stylesheet'">
-    <script src="https://ottcs.github.io/ZephyrJS/nightly/pixi.js"></script>
-    <script src="https://ottcs.github.io/ZephyrJS/nightly/zepyhr.js"></script>
-</head>
+&lt;head&gt;
+    &lt;title&gt;Physics&lt;/title&gt;
+    &lt;link rel="preload" as="style" href="default.css" onload="this.rel='stylesheet'"&gt;
+    &lt;script src="https://ottcs.github.io/ZephyrJS/nightly/pixi.js"&gt;&lt;/script&gt;
+    &lt;script src="https://ottcs.github.io/ZephyrJS/nightly/zepyhr.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
 
-<body>
-    <script src="app.js"></script> <!-- Testing -->
-</body>
+&lt;body&gt;
+    &lt;script src="app.js"&gt;&lt;/script&gt; &lt;!-- Testing --&gt;
+&lt;/body&gt;
 
-</html>
-</code></pre>
+&lt;/html&gt;
+</code>
 </li>
 </ol>
