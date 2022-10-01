@@ -37,7 +37,7 @@
   <h2>PIXI.Mouse</h2>
   <dl>
     <dt>PIXI.Mouse.setContainer(domElement)</dt>
-    <dd>Where the mouse’s coordinates should be scaled from.</dd>
+    <dd>What the mouse’s coordinates should be scaled according to (Generally, this should be your Pixi app.view).</dd>
     <dt>PIXI.Mouse.down([mouse button])</dt>
     <dd>Returns true if the button is actively pressed down. - NOTE: Mouse buttons are Primary, Middle, and Secondary.</dd>
     <dd class="return">Boolean</dd>
@@ -46,10 +46,10 @@
     <dd class="return">Boolean</dd>
 
     <dt>PIXI.Mouse.x</dt>
-    <dd>The last seen mouse X coordinate, where 0.0-1.0 is within the mouseContainer horizontally from left to right.</dd>
+    <dd>The last seen mouse X coordinate, scaled to the mouseContainer horizontally from left to right.</dd>
     <dd class="return">Number</dd>
     <dt>PIXI.Mouse.y</dt>
-    <dd>The last seen mouse Y coordinate, where 0.0-1.0 is within the mouseContainer vertically from top to bottom.</dd>
+    <dd>The last seen mouse Y coordinate, scaled to the mouseContainer vertically from top to bottom.</dd>
     <dd class="return">Number</dd>
   </dl>
   <h2>PIXI.Audio</h2>
