@@ -36,7 +36,7 @@ PIXI.Zephyr = {
         PIXI.Mouse.container = document.getElementsByTagName("html")[0];
         PIXI.Mouse.setContainer = (view) => {
             PIXI.Mouse.container = view;
-            PIXI.Mouse.bounds = view.getBoundingClientRect();
+            PIXI.Mouse.bounds = PIXI.Mouse.container.getBoundingClientRect();
         }
         window.onresize = () => {
             PIXI.Mouse.bounds = PIXI.Mouse.container.getBoundingClientRect();
@@ -68,8 +68,8 @@ PIXI.Zephyr = {
             PIXI.Mouse.map.set(PIXI.Mouse.alias[e.button], true);
         });
         window.addEventListener('mousemove', (e) => {
-            PIXI.Mouse.x = (e.x - PIXI.Mouse.bounds.left) / PIXI.Mouse.bounds.width;
-            PIXI.Mouse.y = (e.y - PIXI.Mouse.bounds.top) / PIXI.Mouse.bounds.height;
+            PIXI.Mouse.x = (e.x - PIXI.Mouse.bounds.left) / PIXI.Mouse.bounds.width * PIXI.Mouse.container.width;
+            PIXI.Mouse.y = (e.y - PIXI.Mouse.bounds.top) / PIXI.Mouse.bounds.height * PIXI.Mouse.container.height;
         });
     },
     useAudio: () => {
