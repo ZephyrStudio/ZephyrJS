@@ -8,7 +8,7 @@
 <p>Next, include your script to run the project:</p>
 <p><code>&lt;script src="app.js"&gt;&lt;/script&gt;</code></p>
 <p>The full code of your HTML file should be as follows:</p>
-<pre>
+<pre><code>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -24,6 +24,6 @@
 </body>
 
 </html>
-</pre>
+</code</pre>
 </li>
 </ol>
