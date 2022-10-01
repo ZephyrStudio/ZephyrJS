@@ -17,7 +17,7 @@
     &lt;script src="https://ottcs.github.io/ZephyrJS/nightly/zepyhr.js"&gt;&lt;/script&gt;
 &lt;/head&gt;
 &lt;body&gt;
-    &lt;script src="app.js"&gt;&lt;/script&gt; &lt;!-- Testing --&gt;
+    &lt;script src="app.js"&gt;&lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;</pre>
 </li>
