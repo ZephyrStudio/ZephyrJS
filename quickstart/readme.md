@@ -24,6 +24,6 @@
 </body>
 
 </html>
-</code</pre>
+</code></pre>
 </li>
 </ol>
