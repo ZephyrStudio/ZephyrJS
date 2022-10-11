@@ -3,4 +3,4 @@
 stable/*/
 nightly/*/
 .obsidian/
-logo/logo.html
+logo/*

@@ -1,8 +1,13 @@
 :root {
-    --accent: #EF6F6C;
-    --deprecated: #f0cf6b;
-    --highlight: #6C6FEF;
-    --nightly: 	#a36cef;
+    /* Main Colors*/
+    --primary: #ef6f6c;
+    --warning: #f0cf6b;
+    --success: #6bf097;
+    --message: #6c6fef;
+    --advance: #a36cef;
+    /* Specific Colors*/
+    --pixi: #ea1e63;
+    /* FORMAT */
     --anim-list: border-color 0.2s, color 0.2s;
     --scale: 32px;
 }
@@ -39,7 +44,7 @@ h5,
 h6 {
     margin-top: var(--scale);
     font-weight: 600;
-    color: var(--accent);
+    color: var(--primary);
 }
 
 p {
@@ -65,8 +70,8 @@ a {
 }
 
 a:hover {
-    border-color: var(--accent);
-    color: var(--accent);
+    border-color: var(--primary);
+    color: var(--primary);
 }
 
 dt {
@@ -81,23 +86,22 @@ dd {
 }
 
 strong {
-    color: var(--accent);
+    color: var(--primary);
 }
 
 .return {
-    color: var(--highlight);
+    color: var(--message);
 }
 
 .deprecated {
-    color: var(--deprecated);
+    color: var(--warning);
     text-decoration: line-through;
 }
 
 .nightly {
-    color: var(--nightly);
+    color: var(--advance);
 }
 
 .pixi {
-    color: #ea1e63;
-    border-color: #ea1e63;
+    color: var(--pixi);
 }
