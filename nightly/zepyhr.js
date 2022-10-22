@@ -5,7 +5,16 @@ PIXI.Audio = {};
 PIXI.File = {};
 
 PIXI.Zephyr = {
-    version: "ZephyrJS 22.10.1",
+    color: {
+        PRIMARY: "#ef6f6c",
+        WARNING: "#f0cf6b",
+        SUCCESS: "#6bf097",
+        MESSAGE: "#6c6fef",
+        ADVANCE: "#a36cef",
+        PIXIJS: "#ea1e63",
+    },
+    version: "ZephyrJS 22.10.22",
+    compatible: "PixiJS v6.5.7",
     useKeys: () => {
         PIXI.Keys.map = new Map();
         PIXI.Keys.down = (key) => {
@@ -177,4 +186,6 @@ PIXI.utils.requestFullScreen = (view) => {
 window.addEventListener('contextmenu', (e) => {
     e.preventDefault();
 })
-console.log("%cUsing " + PIXI.Zephyr.version + "! https://github.com/OttCS/ZephyrJS", "color: #EF6F6C;");
+
+console.log("%cUsing " + PIXI.Zephyr.version + "! https://github.com/OttCS/ZephyrJS", "color:" + PIXI.Zephyr.color.PRIMARY);
+console.log("%cCompatible with " + PIXI.Zephyr.compatible, "color:" + PIXI.Zephyr.color.PIXIJS)
