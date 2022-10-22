@@ -75,6 +75,14 @@ PIXI.Zephyr = {
     useAudio: () => {
         PIXI.Audio.ctx = new AudioContext();
         PIXI.Audio.buffers = new Map();
+        PIXI.Audio.player = function () {
+            if (PIXI.Audio.buffers.has(this.src)) {
+                let aud = PIXI.Audio.ctx.createBufferSource();
+                aud.buffer = PIXI.Audio.buffers.get(this.src);
+                aud.connect(PIXI.Audio.ctx.destination);
+                aud.start(0);
+            }
+        }
         PIXI.Audio.from = (src) => {
             let r = new XMLHttpRequest();
             r.open('GET', src, true);
@@ -89,14 +97,7 @@ PIXI.Zephyr = {
             r.send();
             return {
                 src: src,
-                play: () => {
-                    if (PIXI.Audio.buffers.has(src)) {
-                        let aud = PIXI.Audio.ctx.createBufferSource();
-                        aud.buffer = PIXI.Audio.buffers.get(src);
-                        aud.connect(PIXI.Audio.ctx.destination);
-                        aud.start(0);
-                    }
-                }
+                play: PIXI.Audio.player
             }
         }
     },
@@ -176,4 +177,4 @@ PIXI.utils.requestFullScreen = (view) => {
 window.addEventListener('contextmenu', (e) => {
     e.preventDefault();
 })
-console.log("%cUsing " + PIXI.Zephyr.version + "! https://github.com/OttCS/ZephyrJS", "text-decoration: none;border-radius: 4px;margin: 4px 0;padding: 4px;color: #EF6F6C;border: 2px solid #EF6F6C;");
+console.log("%cUsing " + PIXI.Zephyr.version + "! https://github.com/OttCS/ZephyrJS", "color: #EF6F6C;");
