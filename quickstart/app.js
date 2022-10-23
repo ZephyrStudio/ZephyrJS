@@ -13,6 +13,8 @@ PIXI.Mouse.setContainer(app.view);
 
 PIXI.utils.TextureCache['assets/character.png'];
 
+const soundEffect = PIXI.Audio.from("assets/hitL.wav");
+
 const character = PIXI.Sprite.from('assets/character.png');
 character.anchor = { x: 0.5, y: 0.5 };
 character.vector = { x: 0, y: 0 };
@@ -48,6 +50,8 @@ app.ticker.add((deltaTime) => {
         character.x = PIXI.clamp(character.x, 0, app.view.width);
         character.vector.x *= -character.bounce;
         character.vector.y *= character.bounce;
+        if (Math.abs(character.vector.x) > 5)
+        soundEffect.play();
     }
 
     // Check if player is within vertical bounds
@@ -57,6 +61,8 @@ app.ticker.add((deltaTime) => {
         character.y = PIXI.clamp(character.y, 0, app.view.height);
         character.vector.x *= character.bounce;
         character.vector.y *= -character.bounce;
+        if (Math.abs(character.vector.y) > 5)
+            soundEffect.play();
     }
 
     // Adjust character position by the vector
