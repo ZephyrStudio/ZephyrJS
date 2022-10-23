@@ -1,5 +1,5 @@
 *.*~
-*.zip
+stable/*.zip
 stable/*/
 nightly/*/
 .obsidian/
