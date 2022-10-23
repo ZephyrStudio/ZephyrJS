@@ -15,12 +15,12 @@
 
 <p>If you don't want to download Pixi/Zephyr, use the following code to use the hosted <strong>stable release</strong>. Please note that some specs WILL change at the start of every month when a new version is released, but this is a great way to test out Zephyr for projects without committing to using it.</p>
 <p><code>&lt;script src="https://ottcs.github.io/ZephyrJS/stable/pixi.js"&gt;&lt;/script&gt;</code></p>
-<p><code>&lt;script src="https://ottcs.github.io/ZephyrJS/stable/zepyhr.js"&gt;&lt;/script&gt;</code></p>
+<p><code>&lt;script src="https://ottcs.github.io/ZephyrJS/stable/zephyr.js"&gt;&lt;/script&gt;</code></p>
 <p>This will always use the latest stable-tested version of (minified, speed matters) Pixi/Zephyr.</p>
 
 <p>If you're willing to help out development by reporting bugs and issues, consider using the <strong>nightly release</strong>!</p>
 <p><code>&lt;script src="https://ottcs.github.io/ZephyrJS/nightly/pixi.js"&gt;&lt;/script&gt;</code></p>
-<p><code>&lt;script src="https://ottcs.github.io/ZephyrJS/nightly/zepyhr.js"&gt;&lt;/script&gt;</code></p>
+<p><code>&lt;script src="https://ottcs.github.io/ZephyrJS/nightly/zepyhyr.js"&gt;&lt;/script&gt;</code></p>
 <p>Please do bear in mind that things ARE likely to break in functionality, especially right after a new release of Pixi.</p>
 
 <h2>More</h2>
