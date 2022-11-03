@@ -1,7 +1,7 @@
-<h1>ZephyrJS v22.10</h1>
+<h1>ZephyrJS v22.11.02</h1>
 <p><strong>Expands <a href="https://github.com/pixijs/pixijs">PixiJS</a> for easy interactive projects!</strong></p>
 
-<p class="pixi">Compatible with PixiJS v6.5.7!</p>
+<p class="pixi">Compatible with PixiJS v7.0.2!</p>
 
 <h2>Tell Me Why</h2>
 <p>PixiJS on its own is very powerful, but a lot of work is needed to make it work for web-based interactive content. PhaserIO is exclusively used to make games, and not all of the functionality is translatable back to Pixi. ZephyrJS is for more than just games, made to be usable with user-interactive projects of any sort. It also directly ADDS to PixiJS instead of wrapping it, letting you use the full functionality of Pixi so that what you've gotten used to can still be used outside of Zephyr.</p>

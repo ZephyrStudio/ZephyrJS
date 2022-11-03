@@ -13,8 +13,8 @@ PIXI.Zephyr = {
         ADVANCE: "#a36cef",
         PIXIJS: "#ea1e63",
     },
-    version: "ZephyrJS 22.10.22",
-    compatible: "PixiJS v6.5.7",
+    version: "ZephyrJS 22.11.02",
+    compatible: "PixiJS v7.0.2",
     useKeys: () => {
         PIXI.Keys.map = new Map();
         PIXI.Keys.down = (key) => {
@@ -43,8 +43,8 @@ PIXI.Zephyr = {
     useMouse: () => {
         PIXI.Mouse.bounds = document.getElementsByTagName("html")[0].getBoundingClientRect();
         PIXI.Mouse.container = document.getElementsByTagName("html")[0];
-        PIXI.Mouse.x = screen.width / 2;
-        PIXI.Mouse.y = screen.height / 2;
+        PIXI.Mouse.x = 0;
+        PIXI.Mouse.y = 0;
         PIXI.Mouse.setContainer = (view) => {
             PIXI.Mouse.container = view;
             PIXI.Mouse.bounds = PIXI.Mouse.container.getBoundingClientRect();
