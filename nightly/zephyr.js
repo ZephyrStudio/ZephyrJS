@@ -13,8 +13,8 @@ PIXI.Zephyr = {
         ADVANCE: "#a36cef",
         PIXIJS: "#ea1e63",
     },
-    version: "ZephyrJS 22.11.02",
-    compatible: "PixiJS v7.0.2",
+    version: "ZephyrJS 22.12.06",
+    compatible: "PixiJS v7.0.4",
     useKeys: () => {
         PIXI.Keys.map = new Map();
         PIXI.Keys.down = (key) => {
