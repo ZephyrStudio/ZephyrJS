@@ -1,4 +1,4 @@
-<h1 class="zephyr">ZephyrJS</h1>
+<h1 class="zephyr">ZephyrJS | Welcome!</h1>
 <p><strong>Expands <a href="https://github.com/pixijs/pixijs">PixiJS</a> for easy interactive projects!</strong></p>
 
 <p class="pixi" id="compatibility"></p>
