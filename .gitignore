@@ -4,3 +4,4 @@ stable/*/
 nightly/*/
 .obsidian/
 checklist.md
+.vscode
