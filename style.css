@@ -8,6 +8,10 @@ h1,h2,h3,h4,h5,h6,strong {
     color: var(--zephyr);
 }
 
+* {
+    margin-bottom: calc(var(--unit) * .25);;
+}
+
 p {
     margin-bottom: var(--unit);
 }
@@ -18,8 +22,11 @@ h2 {
 
 code {
     font-family: Consolas, monospace;
-    color: var(--light);
-    background: var(--black);
+    display: inline-block;
+    padding: 0px var(--corner);
+    border-radius: var(--corner);
+    color: var(--white);
+    background: var(--mid);
 }
 
 dt {
