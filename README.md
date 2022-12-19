@@ -6,7 +6,7 @@
 <h2>Tell Me Why</h2>
 <p>PixiJS on its own is very powerful, but a lot of work is needed to make it work for web-based interactive content. PhaserIO is exclusively used to make games, and not all of the functionality is translatable back to Pixi. ZephyrJS is for more than just games, made to be usable with user-interactive projects of any sort. It also directly ADDS to PixiJS instead of wrapping it, letting you use the full functionality of Pixi so that what you've gotten used to can still be used outside of Zephyr.</p>
 
-<p><a id="documentation-for-web"></a></p>
+<p><a id="documentation-for-web" href="/documentation">Check out the documentation!</a></p>
 
 <h2>Getting Started</h2>
 
