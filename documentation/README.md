@@ -1,6 +1,5 @@
-<h1></h1>
-  <p>Zephyr is designed to extend the functionality of <span id="compatibility"></span>, rather than wrapping it so that you can always use Pixi
-    without Zephyr.</p>
+<h1>PixiJS</h1>
+  <p>Zephyr is designed to extend the functionality of <span id="compatibility">PixiJS</span>, rather than wrapping it so that you can always use Pixi without Zephyr.</p>
   <p>The <span class="return">Return</span> line below the function indicates the object type that is returned.</p>
   <p>The <span class="nightly">Nightly Exclusive</span> features can only be found in the current nightly branch of Zephyr. Consider trying it out, and letting us know of any bugs you find!</p>
   <p>The <span class="deprecated">Deprecated</span> features are set to be removed in the next stable release.</p>
