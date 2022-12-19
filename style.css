@@ -1,107 +1,47 @@
-:root {
-    /* Main Colors*/
-    --primary: #ef6f6c;
-    --warning: #f0cf6b;
-    --success: #6bf097;
-    --message: #6c6fef;
-    --advance: #a36cef;
-    /* Specific Colors*/
-    --pixi: #ea1e63;
-    /* FORMAT */
-    --anim-list: border-color 0.2s, color 0.2s;
-    --scale: 32px;
-}
-* {
-    margin: 4px 0;
-    padding: 0;
-    font-family: 'consolas', monospace;
-    color: #fff;
-    -webkit-transition: var(--anim-list);
-    -moz-transition: var(--anim-list);
-    -o-transition: var(--anim-list);
-    transition: var(--anim-list);
-    transition-timing-function: ease-out
-}
-
-html {
-    background: #333;
-    padding-bottom: var(--scale);
-}
-
 body {
-    display: block;
-    margin: auto;
-    width: 90vw;
-    max-width: 1200px;
-    padding: 0 var(--scale);
+    margin: var(--unit) auto calc(var(--unit) * 4);
+    width: 96vw;
+    max-width: 1600px;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    margin-top: var(--scale);
-    font-weight: 600;
-    color: var(--primary);
+h1,h2,h3,h4,h5,h6,strong {
+    color: var(--zephyr);
 }
 
-p {
-    font-size: calc(var(--scale) * 0.5);
-    line-height: calc(var(--scale) * 0.75);
-    margin-top: calc(var(--scale) * 0.5);
+* {
+    margin: calc(0.25 * var(--unit)) 0px;
+}
+
+h2 {
+    padding-top: var(--unit);
 }
 
 code {
     display: block;
-    text-decoration: none;
-    border-radius: 4px;
-    padding: 4px 8px;
-    background: #808080;
-    margin: 16px 0;
-}
-
-a {
-    text-decoration: none;
-    border-radius: 4px;
-    padding: 0px 4px;
-    border: 2px solid #808080;
-}
-
-a:hover {
-    border-color: var(--primary);
-    color: var(--primary);
+    font-family: Consolas, monospace;
+    color: var(--light);
+    background: var(--black);
 }
 
 dt {
-    margin-top: calc(var(--scale) * 0.5);
+    margin-top: calc(var(--unit) * 0.5);
 }
 
 dd {
-    margin: 0px calc(var(--scale) * 0.25);
-    padding-left: calc(var(--scale) * 0.25);
-    border-left: 2px solid #888;
-    color: #888;
-}
-
-strong {
-    color: var(--primary);
+    margin: 0px calc(var(--unit) * 0.25);
+    padding-left: calc(var(--unit) * 0.25);
+    border-left: 2px solid var(--mid);
+    color: var(--mid);
 }
 
 .return {
-    color: var(--message);
-}
-
-.deprecated {
-    color: var(--warning);
-    text-decoration: line-through;
+    color: var(--comfort);
 }
 
 .nightly {
     color: var(--advance);
 }
 
-.pixi {
-    color: var(--pixi);
+.deprecated {
+    color: var(--problem);
 }
