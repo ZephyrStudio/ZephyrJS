@@ -4,7 +4,7 @@ body {
     max-width: 1600px;
 }
 
-h1,h2,h3,h4,h5,h6 {
+h1,h2,h3,h4,h5,h6,.zephyr {
     color: var(--zephyr);
 }
 
@@ -50,4 +50,8 @@ dd {
 
 .deprecated {
     color: var(--problem);
+}
+
+.pixi {
+    color: var(--pixi)
 }

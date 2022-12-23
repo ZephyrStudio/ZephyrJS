@@ -133,6 +133,14 @@ PIXI.Zephyr = {
             return JSON.parse(contents);
         };
     },
+    fetch: (files) => {
+        filePromise = new Promise(function(resolve, reject) {
+
+        });
+        files.forEach((file) => {
+
+        })
+    },
     spriteFix: (s) => { // "Fixes" the provided sprite/object for use with the collision functions, adjusting for anchor positions
         let anchor = (s.anchor ? s.anchor : { x: 0, y: 0 });
         return {
