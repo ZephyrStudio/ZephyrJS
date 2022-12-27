@@ -14,8 +14,6 @@
         fetch("README.md").then(e => {
             e.text().then(e => {
                 document.body.innerHTML += e;
-                let t;
-                (t = document.querySelector("h1")).textContent = PIXI.Zephyr.version, (t = document.querySelector("#compatibility")).textContent = "Compatible with " + PIXI.Zephyr.compatible + "!";
                 let a = document.querySelector('#documentation-for-web');
                 a.href = 'documentation.html';
                 let s = document.querySelector('#link-to-other');

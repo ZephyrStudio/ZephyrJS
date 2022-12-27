@@ -2,6 +2,7 @@ body {
     margin: var(--unit) auto calc(var(--unit) * 4);
     width: 96vw;
     max-width: 1600px;
+    display: block
 }
 
 h1,h2,h3,h4,h5,h6,.zephyr {
@@ -9,7 +10,7 @@ h1,h2,h3,h4,h5,h6,.zephyr {
 }
 
 * {
-    margin-bottom: calc(var(--unit) * .25);;
+    margin-bottom: calc(var(--unit) * .25);
 }
 
 p {

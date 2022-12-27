@@ -1,7 +1,7 @@
 <h1>ZephyrJS | Documentation</h1>
   <p>Zephyr is designed to extend the functionality of <span id="compatibility">PixiJS</span>, rather than wrapping it so that you can always use Pixi without Zephyr.</p>
   <p>The <span class="return">Return</span> line below the function indicates the object type that is returned.</p>
-  <p>The <span class="nightly">Nightly Exclusive</span> features can only be found in the current nightly branch of Zephyr. Consider trying it out, and letting us know of any bugs you find!</p>
+  <p>The <span class="nightly">Nightly Exclusive</span> features can only be found in the current nightly version of Zephyr. Consider trying it out, and letting us know of any bugs you find!</p>
   <p>The <span class="deprecated">Deprecated</span> features are set to be removed in the next stable release.</p>
   <h2>PIXI.Zephyr</h2>
   <dl>
@@ -24,17 +24,18 @@
     <dd>Returns true if this is the first time the key value has been accessed since the key has been pressed.</dd>
     <dd class="return">Boolean</dd>
   </dl>
-  <h2>PIXI.Mouse</h2>
+  <h2 id="PIXI.Mouse">PIXI.Mouse</h2>
+  <p>For button-related functions, the button names are 'Primary', 'Middle', and 'Secondary'</p>
   <dl>
     <dt>PIXI.Mouse.setContainer(domElement)</dt>
     <dd>What the mouse’s coordinates should be scaled according to (Generally, this should be your Pixi app.view).</dd>
+    <dd><strong class="nightly">NOTE</strong>: There has been a bug report about passing in an element that hasn't been appended to the DOM. This has been addressed in Nightly version 22.12.26, and will be going into Stable in Zephyr 23.1. If not using one of these versions, please ensure your mouse container has been appended to the DOM BEFORE setting it as the mouse container.</dd>
     <dt>PIXI.Mouse.down([mouse button])</dt>
-    <dd>Returns true if the button is actively pressed down. - NOTE: Mouse buttons are Primary, Middle, and Secondary.</dd>
+    <dd>Returns true if the button is actively pressed down.</dd>
     <dd class="return">Boolean</dd>
     <dt>PIXI.Mouse.fired(mouseEvent.button)</dt>
-    <dd>Returns true if this is the first time the button value has been accessed since the button has been pressed. - NOTE: Mouse buttons are Primary, Middle, and Secondary.</dd>
+    <dd>Returns true if this is the first time the button value has been accessed since the button has been pressed.</dd>
     <dd class="return">Boolean</dd>
-
     <dt>PIXI.Mouse.x</dt>
     <dd>The last seen mouse X coordinate, scaled to the mouseContainer horizontally from left to right.</dd>
     <dd class="return">Number</dd>

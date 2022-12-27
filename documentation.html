@@ -1,1 +1,16 @@
-<!DOCTYPE html><html lang="en" class="theme-dark"><head><title>ZephyrJS | Home</title><link rel="stylesheet" href="https://ottcs.netlify.app/general.css"><link rel="stylesheet" href="style.css"><script>const PIXI={utils:{}};</script><script src="stable/zephyr.js"></script></head><body><script>fetch("documentation/README.md").then(e=>{e.text().then(e=>{document.body.innerHTML=e;let t;(t=document.querySelector("h1")).textContent=PIXI.Zephyr.version,(t=document.querySelector("#compatibility")).textContent=PIXI.Zephyr.compatible})});</script></body></html>
+<!DOCTYPE html>
+<html lang="en" class="theme-dark">
+
+<head>
+    <title>ZephyrJS | Home</title>
+    <link rel="stylesheet" href="https://ottcs.netlify.app/general.css">
+    <link rel="stylesheet" href="style.css">
+    <script>const PIXI = { utils: {} };</script>
+    <script src="stable/zephyr.js"></script>
+</head>
+
+<body>
+    <script>fetch("documentation/README.md").then(e => { e.text().then(e => { document.body.innerHTML = e; let t; (t = document.querySelector("#compatibility")).textContent = PIXI.Zephyr.compatible }) });</script>
+</body>
+
+</html>
