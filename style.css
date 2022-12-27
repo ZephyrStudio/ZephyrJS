@@ -26,7 +26,8 @@ code {
     display: inline-block;
     padding: 0px var(--corner);
     border-radius: var(--corner);
-    color: var(--white);
+    font-weight: 600;
+    color: var(--dark);
     background: var(--mid);
 }
 
