@@ -5,7 +5,7 @@ PIXI.Audio = {};
 PIXI.File = {};
 
 PIXI.Zephyr = {
-    version: "ZephyrJS 22.12.26",
+    version: "ZephyrJS 23.1.6",
     compatible: "PixiJS v7.0.5",
     useKeys: () => {
         PIXI.Keys.map = new Map();

@@ -29,7 +29,7 @@
   <dl>
     <dt>PIXI.Mouse.setContainer(domElement)</dt>
     <dd>What the mouse’s coordinates should be scaled according to (Generally, this should be your Pixi app.view).</dd>
-    <dd><strong class="nightly">NOTE</strong>: There has been a bug report about passing in an element that hasn't been appended to the DOM. This has been addressed in Nightly version 22.12.26, and will be going into Stable in Zephyr 23.1. If not using one of these versions, please ensure your mouse container has been appended to the DOM BEFORE setting it as the mouse container.</dd>
+    <dd><strong class="warning">NOTE</strong>: Please ensure that this element has already been appended to the DOM. As of version 23.1, calling this method an unappended element will print a console error about using an "invalid element".</dd>
     <dt>PIXI.Mouse.down([mouse button])</dt>
     <dd>Returns true if the button is actively pressed down.</dd>
     <dd class="return">Boolean</dd>

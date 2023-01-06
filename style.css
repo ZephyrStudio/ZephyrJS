@@ -42,6 +42,10 @@ dd {
     color: var(--mid);
 }
 
+.warning {
+    color: var(--warning);
+}
+
 .return {
     color: var(--comfort);
 }
