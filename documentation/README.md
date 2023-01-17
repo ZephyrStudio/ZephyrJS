@@ -1,7 +1,7 @@
 <h1>ZephyrJS | Documentation</h1>
-  <p>Zephyr is designed to extend the functionality of <span id="compatibility">PixiJS</span>, rather than wrapping it so that you can always use Pixi without Zephyr.</p>
+  <p>Zephyr is designed to extend the functionality of <span id="compatibility" class="nightly">PixiJS</span>, rather than wrapping it so that you can always use Pixi without Zephyr.</p>
   <p>The <span class="return">Return</span> line below the function indicates the object type that is returned.</p>
-  <p>The <span class="nightly">Nightly Exclusive</span> features can only be found in the current nightly version of Zephyr. Consider trying it out, and letting us know of any bugs you find!</p>
+  <p>The <span class="nightly">Nightly</span> features can only be found in the current nightly version of Zephyr. Consider trying it out, and letting us know of any bugs you find!</p>
   <p>The <span class="deprecated">Deprecated</span> features are set to be removed in the next stable release.</p>
   <h2>PIXI.Zephyr</h2>
   <dl>
@@ -15,7 +15,7 @@
     <dd>Sets up the File reading/writing system</dd>
   </dl>
   <h2>PIXI.Keys</h2>
-  <p>keyName is a string that is returned by keyboardEvent.code. Check out my <a href="keyName.html">Key Namer</a> to get specific key names</p>
+  <p>keyName is a string that is returned by keyboardEvent.code. Check out the <a href="https://zephyrjs.netlify.app/keyname">Key Namer</a> to get specific key names.</p>
   <dl>
     <dt>PIXI.Keys.down(keyName)</dt>
     <dd>Returns true if the key is actively pressed down.</dd>
@@ -29,7 +29,7 @@
   <dl>
     <dt>PIXI.Mouse.setContainer(domElement)</dt>
     <dd>What the mouse’s coordinates should be scaled according to (Generally, this should be your Pixi app.view).</dd>
-    <dd><strong class="warning">NOTE</strong>: Please ensure that this element has already been appended to the DOM. As of version 23.1, calling this method an unappended element will print a console error about using an "invalid element".</dd>
+    <dd class="warning"><strong>NOTE</strong>: Please ensure that this element has already been appended to the DOM. As of version 23.1, calling this method with an unappended element will fail with a console error about using an "invalid element".</dd>
     <dt>PIXI.Mouse.down([mouse button])</dt>
     <dd>Returns true if the button is actively pressed down.</dd>
     <dd class="return">Boolean</dd>

@@ -5,8 +5,8 @@ PIXI.Audio = {};
 PIXI.File = {};
 
 PIXI.Zephyr = {
-    version: "ZephyrJS 23.1.6",
-    compatible: "PixiJS v7.0.5",
+    version: "ZephyrJS 23.1.17",
+    compatible: "PixiJS v7.1.0",
     useKeys: () => {
         PIXI.Keys.map = new Map();
         PIXI.Keys.down = (key) => {
