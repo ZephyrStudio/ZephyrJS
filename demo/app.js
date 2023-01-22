@@ -26,7 +26,6 @@ let player = new PIXI.Sprite(tex.player);
 player.anchor = { x: 0.5, y: 1 };
 player.x = app.view.width * 0.5;
 player.y = app.view.height;
-player.scale.y = 1;
 player.vec = { x: 0, y: 0 };
 app.stage.addChild(player);
 
@@ -41,10 +40,15 @@ app.ticker.add((deltaTime) => {
         player.vec.y = 0;
         player.y = app.view.height;
     }
-    if (player.x - PIXI.Mouse.x > 16) {
-        player.scale.x = -player.scale.y;
-    } else if (PIXI.Mouse.x - player.x > 16) {
-        player.scale.x = player.scale.y;
+    if (player.x - planet.x > 24) {
+        player.scale.x = -1;
+    } else if (planet.x - player.x > 24) {
+        player.scale.x = 1;
+    }
+    if (player.y > PIXI.Mouse.y) {
+        player.scale.y = -1;
+    } else if (PIXI.Mouse.y >= player.y) {
+        player.scale.y = 1;
     }
 
     player.vec.x = player.vec.x * 0.995 + 0.005 * PIXI.clamp(planet.x - player.x, -8, 8) * deltaTime;
