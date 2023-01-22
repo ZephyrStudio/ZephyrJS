@@ -33,8 +33,8 @@ app.stage.addChild(player);
 let fTime = 0;
 
 app.ticker.add((deltaTime) => {
-    planet.x = PIXI.Mouse.x;
-    planet.y = PIXI.Mouse.y;
+    planet.x = PIXI.clamp(PIXI.Mouse.x, 0, app.view.width);
+    planet.y = PIXI.clamp(PIXI.Mouse.y, 0, app.view.height);
     fTime *= 0.99;
     fTime += 0.01 * deltaTime;
     if (player.y > app.view.height) {
@@ -47,8 +47,8 @@ app.ticker.add((deltaTime) => {
         player.scale.x = player.scale.y;
     }
 
-    player.vec.x = player.vec.x * 0.995 + 0.005 * PIXI.clamp(PIXI.Mouse.x - player.x, -8, 8) * deltaTime;
-    player.vec.y = player.vec.y * 0.995 + 0.005 * PIXI.clamp(PIXI.Mouse.y - planet.height * 0.5 - player.y, -8, 8) * deltaTime;
+    player.vec.x = player.vec.x * 0.995 + 0.005 * PIXI.clamp(planet.x - player.x, -8, 8) * deltaTime;
+    player.vec.y = player.vec.y * 0.995 + 0.005 * PIXI.clamp(planet.y - planet.height * 0.5 - player.y, -8, 8) * deltaTime;
     player.x += player.vec.x;
     player.y += player.vec.y;
 });
