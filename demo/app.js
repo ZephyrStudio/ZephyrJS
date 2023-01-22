@@ -1,4 +1,4 @@
-PIXI.Zephyr.useMouse();
+PIXI.Zephyr.useMouse(); 
 
 const app = new PIXI.Application({ width: screen.width, height: screen.height * .9 - 72, backgroundColor: 0xf0f0f0 });
 app.view.id = "DISPLAY";
