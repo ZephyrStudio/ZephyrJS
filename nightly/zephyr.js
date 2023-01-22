@@ -25,7 +25,6 @@ PIXI.Zephyr = {
         };
 
         window.addEventListener('keydown', (e) => {
-            e.preventDefault();
             PIXI.Keys.map.set(e.code, true);
         });
         window.addEventListener('keyup', (e) => {
@@ -35,8 +34,8 @@ PIXI.Zephyr = {
     useMouse: () => {
         PIXI.Mouse.bounds = document.getElementsByTagName("html")[0].getBoundingClientRect();
         PIXI.Mouse.container = document.getElementsByTagName("html")[0];
-        PIXI.Mouse.x = 0;
-        PIXI.Mouse.y = 0;
+        PIXI.Mouse.x = -1;
+        PIXI.Mouse.y = -1;
         PIXI.Mouse.setContainer = (view) => {
             let b = view.getBoundingClientRect();
             if (b.width * b.height == 0) {
@@ -48,6 +47,11 @@ PIXI.Zephyr = {
         }
         window.onresize = () => {
             PIXI.Mouse.bounds = PIXI.Mouse.container.getBoundingClientRect();
+        }
+        window.onscroll = () => {
+            PIXI.Mouse.bounds = PIXI.Mouse.container.getBoundingClientRect();
+            PIXI.Mouse.bounds.left -= window.pageXOffset;
+            PIXI.Mouse.bounds.top -= window.pageYOffset;
         }
 
         PIXI.Mouse.alias = ["Primary", "Middle", "Secondary"];
@@ -130,14 +134,14 @@ PIXI.Zephyr = {
             return JSON.parse(contents);
         };
     },
-    fetch: (files) => {
-        filePromise = new Promise(function(resolve, reject) {
+    // fetch: (files) => {
+    //     filePromise = new Promise(function (resolve, reject) {
 
-        });
-        files.forEach((file) => {
+    //     });
+    //     files.forEach((file) => {
 
-        })
-    },
+    //     })
+    // },
     spriteFix: (s) => { // "Fixes" the provided sprite/object for use with the collision functions, adjusting for anchor positions
         let anchor = (s.anchor ? s.anchor : { x: 0, y: 0 });
         return {
@@ -181,13 +185,25 @@ PIXI.rand = (min, max) => {
     return (Math.random() * (max - min + 1)) ^ 0 + min;
 };
 // Requests fullscreen for the provided element (view)
-PIXI.utils.requestFullScreen = (view) => {
-    if (view.requestFullscreen)
-        view.requestFullscreen();
-    else if (view.webkitRequestFullscreen)
-        view.webkitRequestFullscreen();
-    else if (view.msRequestFullscreen)
-        view.msRequestFullscreen();
+PIXI.toggleFullScreen = (view) => {
+    if (!view.fullscreenElement &&
+        !view.mozFullScreenElement && !view.webkitFullscreenElement) {  // current working methods
+        if (view.requestFullscreen) {
+            view.requestFullscreen();
+        } else if (view.mozRequestFullScreen) {
+            view.mozRequestFullScreen();
+        } else if (view.webkitRequestFullscreen) {
+            view.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+        }
+    } else {
+        if (view.cancelFullScreen) {
+            view.cancelFullScreen();
+        } else if (view.mozCancelFullScreen) {
+            view.mozCancelFullScreen();
+        } else if (view.webkitCancelFullScreen) {
+            view.webkitCancelFullScreen();
+        }
+    }
 }
 // Stop rClick
 window.addEventListener('contextmenu', (e) => {

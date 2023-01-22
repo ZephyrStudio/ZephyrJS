@@ -1,1 +1,207 @@
-<!DOCTYPE html><html lang="en" class="theme-dark"><head><link rel="preload" as="style" href="https://ottcs.netlify.app/general.css" onload="this.rel='stylesheet'"><style>body{margin:var(--unit) auto calc(var(--unit) * 4);width:96vw;max-width:1600px;display:block}h1,h2,h3,h4,h5,h6,.zephyr{color:var(--zephyr)}*{margin-bottom:calc(var(--unit) * .25)}p{margin-bottom:var(--unit)}h2{padding-top:var(--unit)}code{font-family:Consolas,monospace;display:inline-block;padding:0px var(--corner);border-radius:var(--corner);font-weight:600;color:var(--dark);background:var(--mid)}dt{margin-top:calc(var(--unit) * 0.5)}dd{margin:0px calc(var(--unit) * 0.25);padding-left:calc(var(--unit) * 0.25);border-left:2px solid var(--mid);color:var(--mid)}.warning{color:var(--warning)}.return{color:var(--comfort)}.nightly{color:var(--advance)}.deprecated{color:var(--problem)}.pixi{color:var(--pixi)}</style></head><body><header class="card"><h1 class="zephyr">ZephyrJS</h1><p><strong>Expands <a href="https://github.com/pixijs/pixijs" class="pixi" id="compatibility">PixiJS</a> for easy interactive projects!</strong></p></header><h2>Tell Me Why</h2><p>PixiJS on its own is very powerful, but a lot of work is needed to make it work for web-based interactive content. PhaserIO is exclusively used to make games, and not all of the functionality is translatable back to Pixi. ZephyrJS is for more than just games, made to be usable with interactive projects of any sort. It also directly ADDS to PixiJS instead of wrapping it, letting you use the full functionality of Pixi so that what you've gotten used to can still be used outside of Zephyr.</p><p><a id="documentation-for-web" href="/documentation">Check out the documentation!</a></p><h2>Getting Started</h2><p><strong>Please note that it is REQUIRED that you include the script tag for PixiJS before the script tag for ZephyrJS.</strong></p><p>Most projects should just use the monthly <a href="https://github.com/ZephyrJS-Helper/ZephyrJS/releases">Github Releases</a>, as the latest tested-compatible version of PixiJS is included with each one.</p><p>If you don't want to download Pixi/Zephyr, use the following code to use the hosted <strong>stable release</strong>. Please note that some specs WILL change at the start of every month when a new version is released, but this is a great way to test out Zephyr for projects without committing to using it.<br><code>&lt;script src="https://zephyrjs.netlify.app/stable/pixi.js"&gt;&lt;/script&gt;<br>&lt;script src="https://zephyrjs.netlify.app/stable/zephyr.js"&gt;&lt;/script&gt;</code><br>This will always use the latest stable-tested version of (minified, speed matters) Pixi/Zephyr.</p><p>If you're willing to help out development by reporting bugs and issues, consider using the <strong class="nightly">nightly release</strong>!<br><code>&lt;script src="https://zephyrjs.netlify.app/nightly/pixi.js"&gt;&lt;/script&gt;<br>&lt;script src="https://zephyrjs.netlify.app/nightly/zephyr.js"&gt;&lt;/script&gt;</code><br>Please do bear in mind that things ARE likely to break in functionality, especially right after a new release of Pixi.</p><h2>More</h2><p><a id="link-to-other" href="https://zephyrjs.netlify.app/">ZephyrJS Website</a></p><p><a href="https://github.com/ZephyrJS-Helper/ZephyrJS/issues">Issues Page</a></p><p><a href="https://github.com/ZephyrJS-Helper/ZephyrJS/discussions">Discussions Page</a></p><p>Thanks for using ZephyrJS &lt;3</p> </body></html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>ZephyrJS</title>
+    <link rel="stylesheet" as="style" href="https://ottcs.netlify.app/general.css">
+    <style>
+        html {
+            font-family: Helvetica;
+        }
+
+        body {
+            padding-top: 48px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .pixi {
+            color: var(--pixi)
+        }
+
+        .zephyr {
+            color: var(--zephyr)
+        }
+
+        header {
+            z-index: 2;
+            display: block;
+            text-align: center;
+            width: 100vw;
+            font-weight: 600;
+            height: 48px;
+            line-height: 48px;
+            font-size: 24px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: var(--dark);
+        }
+
+        #gameShowcase {
+            cursor: none;
+            overflow: hidden;
+            z-index: 0;
+            position: relative;
+            height: calc(90vh - 72px);
+        }
+
+        #showcaseOverlay {
+            color: #fff;
+            z-index: 2;
+            font-weight: 600;
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 600px;
+            width: 90%;
+            display: block;
+            margin: 0 auto;
+        }
+
+        #showcaseOverlay>* {
+            cursor: auto;
+        }
+
+        #showcaseOverlay>.button {
+            margin: 24px 12px 0px;
+        }
+
+        hr {
+            margin: 12px auto;
+            background: #fff;
+            border: none;
+            height: 3px;
+        }
+
+        #DISPLAY {
+            z-index: 1;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            transform: translate(-50%, 0%);
+        }
+
+        a.button {
+            border-radius: var(--corner);
+            display: inline-block;
+            padding: 12px 24px;
+            border: 3px solid;
+            text-decoration: none;
+            color: var(--advance);
+            font-weight: 600;
+        }
+
+        a.button:hover {
+            color: #fff !important;
+            background: var(--advance);
+            border-color: var(--advance);
+        }
+
+        a.button.zephyr {
+            border-color: var(--zephyr);
+            color: var(--zephyr);
+        }
+
+        a.button.zephyr:hover {
+            background: var(--zephyr);
+        }
+
+        a.button.pixi {
+            border-color: var(--pixi);
+            color: var(--pixi);
+        }
+
+        a.button.pixi:hover {
+            background: var(--pixi);
+        }
+
+        article {
+            padding: 64px 0;
+            width: calc(100% - 128px);
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        article>* {
+            margin-bottom: 16px;
+        }
+
+        code {
+            padding: 12px 24px;
+            border-radius: var(--corner);
+            display: inline-block;
+            background: #f0f0f0;
+        }
+
+        p>code {
+            padding: 0px var(--corner);
+        }
+    </style>
+
+    <script src="/nightly/pixi.js"></script>
+    <script src="/nightly/zephyr.js"></script>
+</head>
+
+<body>
+    <header class="zephyr">ZephyrJS</header>
+    <div id="gameShowcase">
+        <div id="showcaseOverlay">
+            <h1>Game Development for Everyone</h1>
+            <hr>
+            <p>ZephyrJS expands the fastest web renderer with game engine features so you can develop games quickly for
+                everyone on the internet.</p>
+            <a href="#getting-started" class="button zephyr">Get Started</a>
+            <a href="documentation.html" class="button zephyr">Documentation</a>
+            <a href="https://github.com/ZephyrJS-Project/ZephyrJS/" class="button">Github</a>
+        </div>
+    </div>
+    <article>
+        <h2>Why Zephyr?</h2>
+
+        <p>Web-based content has been providing a way to access all sorts of entertainment, and being able to game on
+            the web is the next step. While flash games existed in the past, browsers didn't have the kind of power to
+            run full games. But now they do, and browsers have been able to directly use the available hardware to speed
+            up rendering for some time now. ZephyrJS is an expansion of the fastest, most flexible 2D WebGL renderer <a
+                href="https://github.com/pixijs/pixijs" class="pixi">PixiJS</a>, letting anybody have access to a
+            blazing fast renderer with standard game engine features that developers have come to rely on.</p>
+
+        <p>PixiJS on its own is very powerful, but a lot of work is needed to make it work for web-based interactive
+            content, specifically games. Other alternatives typically wrap the PixiJS functions, making it tough to
+            translate what you've become accustomed to back to Pixi, or learn how to use it in the first place. Zephyr
+            directly ADDS to PixiJS instead of wrapping it, letting you use the full functionality of Pixi and use their
+            provided documentation, supplemented by ours. By doing this, it allows for developers to know they will
+            always have plenty of documentation and examples to learn from.</p>
+
+        <p>And ZephyrJS is <strong>quick</strong> to setup and use. After following PixiJS's standard setup
+            instructions, it only takes adding <strong>one line of code to add Zephyr</strong>. No more installing
+            packages, no more trying to figure out which plugins you need, just add Zephyr and you're ready to go.
+            Simply call Zephyr's methods in your javascript to add webgl audio, mouse and keyboard control, and file io,
+            and every piece you need is at your fingertips.</p>
+
+        <h2 id="getting-started">Getting Started</h2>
+
+        <a href="https://pixijs.io/guides/basics/getting-started.html" class="button pixi">PixiJS Getting Started</a>
+
+        <p>The Pixi setup guide is very good, there's really nothing to expand upon in it.</p>
+
+        <p>When you are loading PixiJS, you have a couple options. Following the instructions on the linked page, is
+            reliable, but for speed (and to be considerate to their servers), link our hosted, minified version or
+            download it. Immediately after the PixiJS script tag, include a script tag linking your downloaded zephyr.js
+            file, or our hosted one. Example code is below:</p>
+        <code>&lt;head&gt;<br>&lt;script src="https://zephyrjs.netlify.app/stable/pixi.js"&gt;&lt;/script&gt;<br><span class="zephyr">&lt;script src="https://zephyrjs.netlify.app/stable/zephyr.js"&gt;&lt;/script&gt;</span><br>&lt;/head&gt;</code>
+        <p>If you'd like to test out the nightly version, awesome! Thanks for helping out with development, and <a
+                href="https://github.com/ZephyrJS-Project/ZephyrJS/issues">issue</a> reports are super helpful. Just
+            replace where it says <code>stable</code> above with <code>nightly</code> and you're good to go!</p>
+    </article>
+    <script src="/demo/app.js"></script>
+</body>
+
+</html>
