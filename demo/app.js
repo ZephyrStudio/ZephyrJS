@@ -44,11 +44,7 @@ app.ticker.add((deltaTime) => {
     } else if (planet.x - player.x > 24) {
         player.scale.x = 1;
     }
-    if (player.y > PIXI.Mouse.y) {
-        player.scale.y = -1;
-    } else if (PIXI.Mouse.y >= player.y) {
-        player.scale.y = 1;
-    }
+    player.scale.y = PIXI.clamp((PIXI.Mouse.y - player.y) / 15, -1, 1);
 
     player.vec.x = player.vec.x * 0.995 + 0.005 * PIXI.clamp(planet.x - player.x, -8, 8) * deltaTime;
     player.vec.y = player.vec.y * 0.995 + 0.005 * PIXI.clamp(planet.y - planet.height * 0.5 - player.y, -8, 8) * deltaTime;
