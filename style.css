@@ -1,0 +1,147 @@
+html {
+    font-family: Helvetica;
+}
+
+body {
+    padding-top: 48px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.pixi {
+    color: var(--pixi)
+}
+
+.zephyr {
+    color: var(--zephyr)
+}
+
+header {
+    z-index: 2;
+    display: block;
+    text-align: center;
+    width: 100vw;
+    font-weight: 600;
+    height: 48px;
+    line-height: 48px;
+    font-size: 24px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #ffffff;
+    color: var(--zephyr);
+    border-bottom: 3px solid;
+    font-family: monospace;
+}
+
+#gameShowcase {
+    cursor: none;
+    overflow: hidden;
+    z-index: 0;
+    position: relative;
+    height: calc(90vh - 72px);
+}
+
+#showcaseOverlay {
+    color: #fff;
+    z-index: 2;
+    font-weight: 600;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 600px;
+    width: 90%;
+    display: block;
+    margin: 0 auto;
+}
+
+#showcaseOverlay * {
+    cursor: auto;
+}
+
+#showcaseOverlay>.button {
+    margin: 24px 12px 0px;
+}
+
+hr {
+    margin: 12px auto;
+    background: #fff;
+    border: none;
+    height: 3px;
+}
+
+#DISPLAY {
+    z-index: 1;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    transform: translate(-50%, 0%);
+}
+
+a.button {
+    border-radius: var(--corner);
+    display: inline-block;
+    padding: 12px 24px;
+    border: 3px solid;
+    text-decoration: none;
+    color: var(--advance);
+    font-weight: 600;
+}
+
+a.button:hover {
+    cursor: pointer !important;
+    color: #fff !important;
+    background: var(--advance);
+    border-color: var(--advance);
+}
+
+a.button.zephyr {
+    border-color: var(--zephyr);
+    color: var(--zephyr);
+}
+
+a.button.zephyr:hover {
+    background: var(--zephyr);
+}
+
+a.button.pixi {
+    border-color: var(--pixi);
+    color: var(--pixi);
+}
+
+a.button.pixi:hover {
+    background: var(--pixi);
+}
+
+article {
+    padding: 64px 0;
+    width: calc(100% - 128px);
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+article>* {
+    margin-bottom: 16px;
+}
+
+code {
+    padding: 12px 24px;
+    border-radius: var(--corner);
+    display: inline-block;
+    background: #f0f0f0;
+}
+
+p>code {
+    padding: 0px calc(var(--corner) * 0.5);
+}
+
+p {
+    margin: 6px;
+}

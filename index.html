@@ -4,155 +4,13 @@
 <head>
     <title>ZephyrJS</title>
     <link rel="stylesheet" as="style" href="https://ottcs.netlify.app/general.css">
-    <style>
-        html {
-            font-family: Helvetica;
-        }
-
-        body {
-            padding-top: 48px;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-        }
-
-        .pixi {
-            color: var(--pixi)
-        }
-
-        .zephyr {
-            color: var(--zephyr)
-        }
-
-        header {
-            z-index: 2;
-            display: block;
-            text-align: center;
-            width: 100vw;
-            font-weight: 600;
-            height: 48px;
-            line-height: 48px;
-            font-size: 24px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            background: var(--dark);
-        }
-
-        #gameShowcase {
-            cursor: none;
-            overflow: hidden;
-            z-index: 0;
-            position: relative;
-            height: calc(90vh - 72px);
-        }
-
-        #showcaseOverlay {
-            color: #fff;
-            z-index: 2;
-            font-weight: 600;
-            text-align: center;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            max-width: 600px;
-            width: 90%;
-            display: block;
-            margin: 0 auto;
-        }
-
-        #showcaseOverlay * {
-            cursor: auto;
-        }
-
-        #showcaseOverlay>.button {
-            margin: 24px 12px 0px;
-        }
-
-        hr {
-            margin: 12px auto;
-            background: #fff;
-            border: none;
-            height: 3px;
-        }
-
-        #DISPLAY {
-            z-index: 1;
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            min-width: 100%;
-            min-height: 100%;
-            transform: translate(-50%, 0%);
-        }
-
-        a.button {
-            border-radius: var(--corner);
-            display: inline-block;
-            padding: 12px 24px;
-            border: 3px solid;
-            text-decoration: none;
-            color: var(--advance);
-            font-weight: 600;
-        }
-
-        a.button:hover {
-            cursor: pointer !important;
-            color: #fff !important;
-            background: var(--advance);
-            border-color: var(--advance);
-        }
-
-        a.button.zephyr {
-            border-color: var(--zephyr);
-            color: var(--zephyr);
-        }
-
-        a.button.zephyr:hover {
-            background: var(--zephyr);
-        }
-
-        a.button.pixi {
-            border-color: var(--pixi);
-            color: var(--pixi);
-        }
-
-        a.button.pixi:hover {
-            background: var(--pixi);
-        }
-
-        article {
-            padding: 64px 0;
-            width: calc(100% - 128px);
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-
-        article>* {
-            margin-bottom: 16px;
-        }
-
-        code {
-            padding: 12px 24px;
-            border-radius: var(--corner);
-            display: inline-block;
-            background: #f0f0f0;
-        }
-
-        p>code {
-            padding: 0px var(--corner);
-        }
-    </style>
-
+    <link rel="stylesheet" as="style" href="style.css">
     <script src="/nightly/pixi.js"></script>
     <script src="/nightly/zephyr.js"></script>
 </head>
 
 <body>
-    <header class="zephyr">ZephyrJS</header>
+    <header>ZephyrJS Documentation</header>
     <div id="gameShowcase">
         <div id="showcaseOverlay">
             <h1>Game Development for Everyone</h1>
@@ -193,14 +51,9 @@
 
         <p>The Pixi setup guide is very good, there's really nothing to expand upon in it.</p>
 
-        <p>When you are loading PixiJS, you have a couple options. Following the instructions on the linked page, is
-            reliable, but for speed (and to be considerate to their servers), link our hosted, minified version or
-            download it. Immediately after the PixiJS script tag, include a script tag linking your downloaded zephyr.js
-            file, or our hosted one. Example code is below:</p>
+        <p>When you are loading PixiJS, you have a couple options. Following the instructions on the linked page, is reliable, but for speed (and to be considerate to their servers), link our hosted, minified versions or <a href="https://github.com/ZephyrJS-Project/ZephyrJS/releases">download</a> it. Immediately after the PixiJS script tag, include a script tag linking your downloaded zephyr.js file, or our hosted one. Example code is below:</p>
         <code>&lt;head&gt;<br>&lt;script src="https://zephyrjs.netlify.app/stable/pixi.js"&gt;&lt;/script&gt;<br><span class="zephyr">&lt;script src="https://zephyrjs.netlify.app/stable/zephyr.js"&gt;&lt;/script&gt;</span><br>&lt;/head&gt;</code>
-        <p>If you'd like to test out the nightly version, awesome! Thanks for helping out with development, and <a
-                href="https://github.com/ZephyrJS-Project/ZephyrJS/issues">issue</a> reports are super helpful. Just
-            replace where it says <code>stable</code> above with <code>nightly</code> and you're good to go!</p>
+        <p>If you'd like to test out the nightly version, awesome! Thanks for helping out with development, and <a href="https://github.com/ZephyrJS-Project/ZephyrJS/issues">issue</a> reports are super helpful. Just replace where it says <code>stable</code> above with <code>nightly</code> and you're good to go!</p>
     </article>
     <script src="/demo/app.js"></script>
 </body>
