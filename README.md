@@ -1,5 +1,5 @@
  <div id="gameShowcase"> <div id="showcaseOverlay"> <h1>Game Development for Everyone</h1> ZephyrJS expands the fastest web renderer with game engine features so you can develop games quickly for
- everyone on the internet.</p> <a href="#getting-started" class="button zephyr">Get Started</a> <a href="documentation.html" class="button zephyr">Documentation</a> <a href="https://github.com/ZephyrJS-Project/ZephyrJS/" class="button">Github</a> </div> </div> <article> <h2>Why Zephyr?</h2> <p>Web-based content has been providing a way to access all sorts of entertainment, and being able to game on
+ everyone on the internet.</p> <a href="#getting-started" class="button zephyr">Get Started</a> <a href="documentation/" class="button zephyr">Documentation</a> <a href="https://github.com/ZephyrJS-Project/ZephyrJS/" class="button">Github</a> </div> </div> <article> <h2>Why Zephyr?</h2> <p>Web-based content has been providing a way to access all sorts of entertainment, and being able to game on
  the web is the next step. While flash games existed in the past, browsers didn't have the kind of power to
  run full games. But now they do, and browsers have been able to directly use the available hardware to speed
  up rendering for some time now. ZephyrJS is an expansion of the fastest, most flexible 2D WebGL renderer <a
@@ -22,7 +22,7 @@
  href="https://github.com/ZephyrJS-Project/ZephyrJS/issues">issue</a> reports are super helpful. Just
  replace where it says <code>stable</code> above with <code>nightly</code> and you're good to go!</p> <p>When you're wanting to use one of Zephyr's features, you can call the <strong>Zephyr.use______()</strong>
  methods! The options
- are listed at <a href="documentation.html">the top of the documentation</a>. After that, you're ready to go!
+ are listed at the top of the <a href="documentation/">documentation</a>. After that, you're ready to go!
  Feel free to download the <a
  href="https://github.com/ZephyrJS-Project/ZephyrJS/raw/main/quickstart/bundle.zip">quickstart bundle</a>
  if you'd like!</p> </article> 
