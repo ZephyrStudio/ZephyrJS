@@ -26,24 +26,28 @@ player.anchor = { x: 0.5, y: 1 };
 player.x = app.view.width * 0.5;
 player.y = app.view.height;
 player.vec = { x: 0, y: 0 };
+player.turnTarget = {x: 1, y: 1};
+player.speedMult = 8;
 app.stage.addChild(player);
 
 app.ticker.add((deltaTime) => {
-    planet.x = PIXI.clamp(PIXI.Mouse.x, 0, app.view.width);
-    planet.y = PIXI.clamp(PIXI.Mouse.y, 0, app.view.height);
-    if (player.y > app.view.height) {
-        player.vec.y = 0;
-        player.y = app.view.height;
+    planet.x = PIXI.Mouse.x;
+    planet.y = PIXI.Mouse.y;
+    if (player.x - planet.x > 32) {
+        player.turnTarget.x = -1;
+    } else if (planet.x - player.x > 32) {
+        player.turnTarget.x = 1;
     }
-    if (player.x - planet.x > 24) {
-        player.scale.x = -1;
-    } else if (planet.x - player.x > 24) {
-        player.scale.x = 1;
-    }
-    player.scale.y = PIXI.clamp((PIXI.Mouse.y - player.y) / 15, -1, 1);
+    player.turnTarget.y = PIXI.clamp(planet.y - player.y, -1, 1);
 
-    player.vec.x = player.vec.x * 0.995 + 0.005 * PIXI.clamp(planet.x - player.x, -8, 8) * deltaTime;
-    player.vec.y = player.vec.y * 0.995 + 0.005 * PIXI.clamp(planet.y - planet.height * 0.5 - player.y, -8, 8) * deltaTime;
+    player.scale.x += 0.26 * (player.turnTarget.x - player.scale.x) * deltaTime;
+    player.scale.y += 0.26 * (player.turnTarget.y - player.scale.y) * deltaTime;
+
+    let x = planet.x - player.x;
+    let y = planet.y - planet.height * 0.5 - player.y;
+    let h = Math.hypot(x, y) / player.speedMult + 1;
+    player.vec.x = player.vec.x * 0.995 + 0.005 * (x / h) * deltaTime;
+    player.vec.y = player.vec.y * 0.995 + 0.005 * (y / h) * deltaTime;
     player.x += player.vec.x;
     player.y += player.vec.y;
 });
