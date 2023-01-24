@@ -38,7 +38,7 @@ app.ticker.add((deltaTime) => {
     } else if (planet.x - player.x > 32) {
         player.turnTarget.x = 1;
     }
-    player.turnTarget.y = PIXI.clamp(planet.y - player.y, -1, 1);
+    player.turnTarget.y = PIXI.clamp(planet.y - player.y, -16, 16) / 16;
 
     player.scale.x += 0.26 * (player.turnTarget.x - player.scale.x) * deltaTime;
     player.scale.y += 0.26 * (player.turnTarget.y - player.scale.y) * deltaTime;
