@@ -31,17 +31,16 @@ player.speedMult = 8;
 app.stage.addChild(player);
 
 app.ticker.add((deltaTime) => {
-    planet.x = PIXI.Mouse.x;
-    planet.y = PIXI.Mouse.y;
+    planet.x = (PIXI.Mouse.x + 0.5) ^ 0;
+    planet.y = (PIXI.Mouse.y + 0.5) ^ 0;
     if (player.x - planet.x > 32) {
         player.turnTarget.x = -1;
     } else if (planet.x - player.x > 32) {
         player.turnTarget.x = 1;
     }
-    player.turnTarget.y = PIXI.clamp(planet.y - player.y, -16, 16) / 16;
+    player.scale.y = PIXI.clamp(planet.y - player.y, -16, 16) / 16;
 
     player.scale.x += 0.26 * (player.turnTarget.x - player.scale.x) * deltaTime;
-    player.scale.y += 0.26 * (player.turnTarget.y - player.scale.y) * deltaTime;
 
     let x = planet.x - player.x;
     let y = planet.y - planet.height * 0.5 - player.y;
