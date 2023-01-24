@@ -1,26 +1,28 @@
-<header class="card">
-<h1 class="zephyr">ZephyrJS</h1>
-<p><strong>Expands <a href="https://github.com/pixijs/pixijs" class="pixi" id="compatibility">PixiJS</a> for simple and powerful Game Development!</strong></p>
-</header>
-
-<h2>Tell Me Why</h2>
-<p>PixiJS on its own is very powerful, but a lot of work is needed to make it work for web-based interactive content. PhaserIO is exclusively used to make games, and not all of the functionality is translatable back to Pixi. ZephyrJS is perfect for games and any interactive content, and directly ADDS to PixiJS instead of wrapping it.</p>
-
-<p><a id="documentation-for-web" href="/documentation">Check out the documentation!</a></p>
-
-<h2>Getting Started</h2>
-
-<p><strong>Please note that it is REQUIRED that you include the script tag for PixiJS before the script tag for ZephyrJS.</strong></p>
-
-<p>Most projects should just use the monthly <a href="https://github.com/ZephyrJS-Helper/ZephyrJS/releases">Github Releases</a>, as the latest tested-compatible version of PixiJS is included with each one.</p>
-
-<p>If you don't want to download Pixi/Zephyr, use the following code to use the hosted <strong>stable release</strong>. Please note that some specs WILL change at the start of every month when a new version is released, but this is a great way to test out Zephyr for projects without committing to using it.<br><code>&lt;script src="https://zephyrjs.netlify.app/stable/pixi.js"&gt;&lt;/script&gt;<br>&lt;script src="https://zephyrjs.netlify.app/stable/zephyr.js"&gt;&lt;/script&gt;</code><br>This will always use the latest stable-tested version of (minified, speed matters) Pixi/Zephyr.</p>
-
-<p>If you're willing to help out development by reporting bugs and issues, consider using the <strong class="nightly">nightly release</strong>!<br><code>&lt;script src="https://zephyrjs.netlify.app/nightly/pixi.js"&gt;&lt;/script&gt;<br>&lt;script src="https://zephyrjs.netlify.app/nightly/zephyr.js"&gt;&lt;/script&gt;</code><br>Please do bear in mind that things ARE likely to break in functionality, especially right after a new release of Pixi.</p>
-
-<h2>More</h2>
-<p><a id="link-to-other" href="https://zephyrjs.netlify.app/">ZephyrJS Website</a></p>
-<p><a href="https://github.com/ZephyrJS-Helper/ZephyrJS/issues">Issues Page</a></p>
-<p><a href="https://github.com/ZephyrJS-Helper/ZephyrJS/discussions">Discussions Page</a></p>
-
-<p>Thanks for using ZephyrJS &lt;3</p>
+<header>ZephyrJS Documentation</header><div id="gameShowcase"><div id="showcaseOverlay"><h1>Game Development for Everyone</h1><hr><p>ZephyrJS expands the fastest web renderer with game engine features so you can develop games quickly for
+ everyone on the internet.</p><a href="#getting-started" class="button zephyr">Get Started</a><a href="documentation.html" class="button zephyr">Documentation</a><a href="https://github.com/ZephyrJS-Project/ZephyrJS/" class="button">Github</a></div></div><article><h2>Why Zephyr?</h2><p>Web-based content has been providing a way to access all sorts of entertainment, and being able to game on
+ the web is the next step. While flash games existed in the past, browsers didn't have the kind of power to
+ run full games. But now they do, and browsers have been able to directly use the available hardware to speed
+ up rendering for some time now. ZephyrJS is an expansion of the fastest, most flexible 2D WebGL renderer <a
+ href="https://github.com/pixijs/pixijs" class="pixi">PixiJS</a>, letting anybody have access to a
+ blazing fast renderer with standard game engine features that developers have come to rely on.</p><p>PixiJS on its own is very powerful, but a lot of work is needed to make it work for web-based interactive
+ content, specifically games. Other alternatives typically wrap the PixiJS functions, making it tough to
+ translate what you've become accustomed to back to Pixi, or learn how to use it in the first place. Zephyr
+ directly ADDS to PixiJS instead of wrapping it, letting you use the full functionality of Pixi and use their
+ provided documentation, supplemented by ours. By doing this, it allows for developers to know they will
+ always have plenty of documentation and examples to learn from.</p><p>And ZephyrJS is <strong>quick</strong> to setup and use. After following PixiJS's standard setup
+ instructions, it only takes adding <strong>one line of code to add Zephyr</strong>. No more installing
+ packages, no more trying to figure out which plugins you need, just add Zephyr and you're ready to go.
+ Simply call Zephyr's methods in your javascript to add webgl audio, mouse and keyboard control, and file io,
+ and every piece you need is at your fingertips.</p><br><h2 id="getting-started">Getting Started</h2><p>The <a href="https://pixijs.io/guides/basics/getting-started.html" class="pixi">PixiJS Getting Started</a>
+ guide is very good, there's really nothing to expand upon in it.</p><p>When you are loading PixiJS, you have a couple options. Following the instructions on the linked page, is
+ reliable, but for speed (and to be considerate to their servers), link our hosted, minified versions or <a
+ href="https://github.com/ZephyrJS-Project/ZephyrJS/releases">download</a> it. Immediately after the
+ PixiJS script tag, include a script tag linking your downloaded zephyr.js file, or our hosted one. Example
+ code is below:</p><code>&lt;head&gt;<br>&lt;script src="https://zephyrjs.netlify.app/stable/pixi.js"&gt;&lt;/script&gt;<br><span class="zephyr">&lt;script src="https://zephyrjs.netlify.app/stable/zephyr.js"&gt;&lt;/script&gt;</span><br>&lt;/head&gt;</code><p>If you'd like to test out the nightly version, awesome! Thanks for helping out with development, and <a
+ href="https://github.com/ZephyrJS-Project/ZephyrJS/issues">issue</a> reports are super helpful. Just
+ replace where it says <code>stable</code> above with <code>nightly</code> and you're good to go!</p><p>When you're wanting to use one of Zephyr's features, you can call the <strong>Zephyr.use______()</strong>
+ methods! The options
+ are listed at <a href="documentation.html">the top of the documentation</a>. After that, you're ready to go!
+ Feel free to download the <a
+ href="https://github.com/ZephyrJS-Project/ZephyrJS/raw/main/quickstart/bundle.zip">quickstart bundle</a>
+ if you'd like!</p></article>
