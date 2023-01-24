@@ -31,8 +31,8 @@ player.speedMult = 8;
 app.stage.addChild(player);
 
 app.ticker.add((deltaTime) => {
-    planet.x = (PIXI.Mouse.x + 0.5) ^ 0;
-    planet.y = (PIXI.Mouse.y + 0.5) ^ 0;
+    planet.x = (PIXI.clamp(PIXI.Mouse.x, 0, app.view.width) + 0.5) ^ 0;
+    planet.y = (PIXI.clamp(PIXI.Mouse.y, 0, app.view.height) + 0.5) ^ 0;
     if (player.x - planet.x > 32) {
         player.turnTarget.x = -1;
     } else if (planet.x - player.x > 32) {
