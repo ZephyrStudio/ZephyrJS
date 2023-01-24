@@ -1,3 +1,38 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.zephyr {
+    color: var(--zephyr);
+}
+
+.warning {
+    color: var(--warning);
+    font-weight: 600;
+}
+
+.return {
+    color: var(--comfort);
+    font-weight: 600;
+}
+
+.nightly {
+    color: var(--advance);
+    font-weight: 600;
+}
+
+.deprecated {
+    color: var(--problem);
+    font-weight: 600;
+}
+
+.pixi {
+    color: var(--pixi);
+    font-weight: 600;
+}
+
 html {
     font-family: Helvetica;
 }
@@ -143,5 +178,16 @@ p>code {
 }
 
 p {
-    margin: 6px;
+    margin: 10px;
+}
+
+dt {
+    margin-top: calc(var(--unit) * 0.5)
+}
+
+dd {
+    margin: 0px calc(var(--unit) * 0.25);
+    padding-left: calc(var(--unit) * 0.25);
+    border-left: 2px solid var(--light);
+    color: var(--mid)
 }
