@@ -134,29 +134,24 @@ PIXI.Zephyr = {
             return JSON.parse(contents);
         };
     },
-    // fetch: (files) => {
-    //     filePromise = new Promise(function (resolve, reject) {
-
-    //     });
-    //     files.forEach((file) => {
-
-    //     })
-    // },
-    spriteFix: (s) => { // "Fixes" the provided sprite/object for use with the collision functions, adjusting for anchor positions
-        let anchor = (s.anchor ? s.anchor : { x: 0, y: 0 });
-        return {
-            x: -s.width * anchor.x + s.x,
-            y: -s.height * anchor.y + s.y,
-            width: s.width,
-            height: s.height
+    helper: {
+        spriteFix: (s) => { // "Fixes" the provided sprite/object for use with the collision functions, adjusting for anchor positions
+            let w = s.width * (s.scale ? s.scale.x : 1);
+            let h = s.height * (s.scale ? s.scale.y : 1);
+            return {
+                x: (s.x - (s.anchor ? s.anchor.x * w : 0)) + (w < 0) * w,
+                y: (s.y - (s.anchor ? s.anchor.y * h : 0)) + (h < 0) * h,
+                width: Math.abs(w),
+                height: Math.abs(h)
+            }
         }
     }
 }
 // Collision testing methods
 PIXI.collision = {
     aabb: (a, b) => { // Axis-Aligned Bounding Box method
-        let aFix = PIXI.Zephyr.spriteFix(a);
-        let bFix = PIXI.Zephyr.spriteFix(b);
+        let aFix = PIXI.Zephyr.helper.spriteFix(a);
+        let bFix = PIXI.Zephyr.helper.spriteFix(b);
         return !(
             aFix.x + a.width < bFix.x ||
             aFix.y + a.height < bFix.y ||
@@ -165,8 +160,8 @@ PIXI.collision = {
         );
     },
     radius: (a, b) => { // Circle collision, for objects a and b, provided they ha
-        let aFix = PIXI.Zephyr.spriteFix(a);
-        let bFix = PIXI.Zephyr.spriteFix(b);
+        let aFix = PIXI.Zephyr.helper.spriteFix(a);
+        let bFix = PIXI.Zephyr.helper.spriteFix(b);
         return (
             Math.sqrt(Math.pow(aFix.x - bFix.x, 2) + Math.pow(aFix.y - bFix.y, 2)) <= a.r + b.r
         );
