@@ -135,12 +135,12 @@ PIXI.Zephyr = {
         };
     },
     helper: {
-        spriteFix: (s) => { // "Fixes" the provided sprite/object for use with the collision functions, adjusting for anchor positions
+        spriteFix: (s) => { // Returns the actual x/y width/height of a scaled and anchored Sprite
             let w = s.width * (s.scale ? s.scale.x : 1);
             let h = s.height * (s.scale ? s.scale.y : 1);
             return {
-                x: (s.x - (s.anchor ? s.anchor.x * w : 0)) + (w < 0) * w,
-                y: (s.y - (s.anchor ? s.anchor.y * h : 0)) + (h < 0) * h,
+                x: s.x - (s.anchor ? s.anchor.x * w : 0) + Math.min(0, w),
+                y: s.y - (s.anchor ? s.anchor.y * h : 0) + Math.min(0, h),
                 width: Math.abs(w),
                 height: Math.abs(h)
             }
