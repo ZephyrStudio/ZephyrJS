@@ -89,6 +89,23 @@
             <dd class="return">Object</dd>
         </dl>
         <br>
+        <h2>PIXI.Particles</h2>
+        <dl>
+            <dt>PIXI.Particles.from(src, maxParticleCount)</dt>
+            <dd>Returns a "PIXI Particle Emitter" which is a particleContainer with a built-in <strong>step()</strong>
+                function to progress the animation. The different attributes of the container specify how the particles
+                are emitted.</dd>
+            <dd class="return">Pixi Particle Container
+                <br>{
+                <br>life: how far the particles can move away from the emitter's location, in pixels (default 128)
+                <br>speed: quickly the particles move to their end of life distance (default 1)
+                <br>direction: specifies the direction (in radians) that the particles will move (default 0)
+                <br>spread: the angle (in radians) of how closely particles should follow the direction. 0 is no deviation, 2 PI is in a full circle (default is 2 PI)
+                <br>step(): moves and updates all particles
+                <br>}
+            </dd>
+        </dl>
+        <br>
         <h2>PIXI.collision</h2>
         <dl>
             <dt>PIXI.collision.aabb(Sprite, Sprite)</dt>
@@ -110,6 +127,7 @@
             <dt>PIXI.utils.requestFullScreen(domElement)</dt>
             <dd>The element passed in (typically use the Application view) will attempt to go fullscreen</dd>
         </dl>
+        <br>
         <h2>Added Functions</h2>
         <dl>
             <dt>PIXI.clamp(x, min, max)</dt>

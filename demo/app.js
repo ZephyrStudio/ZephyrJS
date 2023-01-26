@@ -1,4 +1,5 @@
-PIXI.Zephyr.useMouse(); 
+PIXI.Zephyr.useMouse();
+PIXI.Zephyr.useParticles(); 
 
 const app = new PIXI.Application({ width: screen.width, height: screen.height * .9 - 72, backgroundColor: 0xf0f0f0 });
 app.view.id = "DISPLAY";
@@ -17,6 +18,9 @@ backdrop.height = app.view.height;
 backdrop.anchor = { x: 0, y: 0 };
 app.stage.addChild(backdrop);
 
+const emitter = PIXI.Particles.from('/demo/assets/star.png', 15);
+app.stage.addChild(emitter);
+
 let planet = new PIXI.Sprite(tex.planet);
 planet.anchor = { x: 0.5, y: 0.5 };
 app.stage.addChild(planet);
@@ -31,6 +35,9 @@ player.speedMult = 8;
 app.stage.addChild(player);
 
 app.ticker.add((deltaTime) => {
+    emitter.x = player.x;
+    emitter.y = player.y;
+    emitter.step(deltaTime);
     planet.x = (PIXI.clamp(PIXI.Mouse.x, 0, app.view.width) + 0.5) ^ 0;
     planet.y = (PIXI.clamp(PIXI.Mouse.y, 0, app.view.height) + 0.5) ^ 0;
     if (player.x - planet.x > 32) {

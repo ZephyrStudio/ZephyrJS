@@ -3,9 +3,10 @@ PIXI.Keys = {};
 PIXI.Mouse = {};
 PIXI.Audio = {};
 PIXI.File = {};
+PIXI.Particles = {};
 
 PIXI.Zephyr = {
-    version: "ZephyrJS 23.1.21",
+    version: "ZephyrJS 23.1.26",
     compatible: "PixiJS v7.1.1",
     useKeys: () => {
         PIXI.Keys.map = new Map();
@@ -133,6 +134,44 @@ PIXI.Zephyr = {
             let contents = await file.text();
             return JSON.parse(contents);
         };
+    },
+    useParticles: () => {
+        PIXI.Particles.from = (src, size) => {
+            let res = new PIXI.ParticleContainer(size);
+            res.baseTexture = PIXI.Texture.from(src);
+            res.life = 128;
+            res.speed = 1;
+            res.direction = 0;
+            res.spread = 6.2831853072;
+            res.spawnTime = 0;
+            res._initParticle = (p) => {
+                let r = (Math.random() - 0.5) * res.spread + res.direction;
+                p.move = { x: res.speed * Math.cos(r), y: res.speed * Math.sin(r) };
+                p.x = p.y = 0;
+                p.life = res.life;
+                return p;
+            }
+            res.step = (deltaTime) => {
+                if (res.children.length < size) {
+                    res.spawnTime -= deltaTime;
+                    if (res.spawnTime <= 0) {
+                        res.spawnTime = res.life / size;
+                        let p = res._initParticle(new PIXI.Sprite(res.baseTexture));
+                        p.anchor = { x: 0.5, y: 0.5 }
+                        res.addChild(p);
+                    }
+                }
+                res.children.forEach(p => {
+                    p.life -= deltaTime * res.speed;
+                    p.x += p.move.x * deltaTime;
+                    p.y += p.move.y * deltaTime;
+                    p.alpha = Math.min(p.life * 10 / res.life, 1);
+                    if (p.life <= 0)
+                        p = res._initParticle(p);
+                });
+            }
+            return res;
+        }
     },
     helper: {
         spriteFix: (s) => { // Returns the actual x/y width/height of a scaled and anchored Sprite
