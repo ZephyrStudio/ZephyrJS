@@ -19,7 +19,7 @@ backdrop.anchor = { x: 0, y: 0 };
 app.stage.addChild(backdrop);
 
 const emitter = PIXI.Particles.from('/demo/assets/star.png', 250);
-emitter.life = app.view.width;
+emitter.life = app.view.width * 0.7071067812;
 emitter.direction = Math.PI * 1.5;
 emitter.spread = Math.PI;
 emitter.x = app.view.width * 0.5;
