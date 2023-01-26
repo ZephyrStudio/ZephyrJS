@@ -110,7 +110,7 @@ hr {
     transform: translate(-50%, 0%);
 }
 
-a.button {
+button, a.button {
     border-radius: var(--corner);
     display: inline-block;
     padding: 12px 24px;
@@ -118,20 +118,21 @@ a.button {
     text-decoration: none;
     color: var(--advance);
     font-weight: 600;
+    background: none;
 }
 
-a.button:hover {
+button:hover, a.button:hover {
     cursor: pointer !important;
     color: #fff !important;
     background: var(--advance);
 }
 
-a.button.zephyr {
+button.zephyr, a.button.zephyr {
     border-color: var(--zephyr);
     color: var(--zephyr);
 }
 
-a.button.zephyr:hover {
+button:hover.zephyr, a.button.zephyr:hover {
     background: var(--zephyr);
 }
 
@@ -179,4 +180,8 @@ dd {
     padding-left: calc(var(--unit) * 0.25);
     border-left: 2px solid var(--light);
     color: var(--mid)
+}
+textarea {
+    width: 100%;
+    height: 128px;
 }
