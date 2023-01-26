@@ -35,8 +35,8 @@ player.speedMult = 8;
 app.stage.addChild(player);
 
 app.ticker.add((deltaTime) => {
-    emitter.x = player.x;
-    emitter.y = player.y;
+    emitter.x = planet.x;
+    emitter.y = planet.y;
     emitter.step(deltaTime);
     planet.x = (PIXI.clamp(PIXI.Mouse.x, 0, app.view.width) + 0.5) ^ 0;
     planet.y = (PIXI.clamp(PIXI.Mouse.y, 0, app.view.height) + 0.5) ^ 0;

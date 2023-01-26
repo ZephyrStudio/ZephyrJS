@@ -162,11 +162,9 @@ PIXI.Zephyr = {
                     }
                 }
                 res.children.forEach(p => {
-                    p.life -= deltaTime * res.speed;
                     p.x += p.move.x * deltaTime;
                     p.y += p.move.y * deltaTime;
-                    p.alpha = Math.min(p.life * 10 / res.life, 1);
-                    if (p.life <= 0)
+                    if ((p.life -= deltaTime * res.speed) <= 0)
                         p = res._initParticle(p);
                 });
             }
