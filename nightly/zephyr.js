@@ -154,9 +154,9 @@ PIXI.Zephyr = {
                     p.life = this.life;
                 }
                 if (this.children.length < this.size) {
-                    this.spawnTime -= deltaTime;
-                    if (this.spawnTime <= 0) {
-                        this.spawnTime = this.life / this.size;
+                    this._spawnTimer -= deltaTime;
+                    if (this._spawnTimer <= 0) {
+                        this._spawnTimer = this.life / this.size;
                         let p = new PIXI.Sprite(this.baseTexture);
                         p.anchor = { x: 0.5, y: 0.5 }
                         init(p);
@@ -170,15 +170,16 @@ PIXI.Zephyr = {
                         init(p);
                 });
             },
-            from: (src, size) => {
+            from: (src, size, options) => {
+                if (!options) options = {};
                 let res = new PIXI.ParticleContainer(size);
+                res._spawnTimer = 0;
                 res.size = size;
                 res.baseTexture = PIXI.Texture.from(src);
-                res.life = 128;
-                res.speed = 1;
-                res.direction = 0;
-                res.spread = 6.2831853072;
-                res.spawnTime = 0;
+                res.life = (options.life ? options.life : 128);
+                res.speed = (options.speed ? options.speed : 1);
+                res.direction = (options.direction ? options.direction : 0);
+                res.spread = (options.spread ? options.spread : 6.2831853072);
                 res.step = PIXI.Particles._step;
                 return res;
             }
