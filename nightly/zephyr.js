@@ -7,8 +7,8 @@ PIXI.Particles = {};
 // ZEPHYR FUNCTIONALITY //
 
 PIXI.Zephyr = {
-    version: "ZephyrJS 23.1.31",
-    compatible: "PixiJS v7.1.1",
+    version: "ZephyrJS 23.2",
+    compatible: "PixiJS v7.1.2",
     _spriteFix: (s) => { // Returns the actual x/y width/height of a scaled and anchored Sprite
         let w = s.width * (s.scale ? s.scale.x : 1);
         let h = s.height * (s.scale ? s.scale.y : 1);

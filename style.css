@@ -27,8 +27,8 @@ html {
     font-family: Helvetica;
 }
 
-body {
-    padding-top: 48px;
+h1,h2 {
+    padding-top: 64px;
 }
 
 * {
@@ -146,7 +146,7 @@ a.button.pixi:hover {
 }
 
 article {
-    padding: 64px 0;
+    padding-bottom: 64px;
     width: calc(100% - 128px);
     max-width: 1600px;
     margin: 0 auto;

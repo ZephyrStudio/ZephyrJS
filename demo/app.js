@@ -18,13 +18,14 @@ backdrop.height = app.view.height;
 backdrop.anchor = { x: 0, y: 0 };
 app.stage.addChild(backdrop);
 
-const emitter = PIXI.Particles.from('/demo/assets/star.png', 250);
-emitter.life = app.view.width * 0.7071067812;
-emitter.direction = Math.PI * 1.5;
-emitter.spread = Math.PI;
+const emitter = PIXI.Particles.from('/demo/assets/star.png', 250, {
+    life: app.view.width * 0.7071067812,
+    direction: Math.PI * 1.5,
+    spread: Math.PI,
+});
 emitter.x = app.view.width * 0.5;
 emitter.y = app.view.height;
-app.stage.addChild(emitter)
+app.stage.addChild(emitter);
 
 let planet = new PIXI.Sprite(tex.planet);
 planet.anchor = { x: 0.5, y: 0.5 };
