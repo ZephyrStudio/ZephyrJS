@@ -7,7 +7,7 @@ PIXI.Particles = {};
 // ZEPHYR FUNCTIONALITY //
 
 PIXI.Zephyr = {
-    version: "ZephyrJS 23.2",
+    version: "ZephyrJS 23.2.20",
     compatible: "PixiJS v7.1.2",
     _spriteFix: (s) => { // Returns the actual x/y width/height of a scaled and anchored Sprite
         let w = s.width * (s.scale ? s.scale.x : 1);
@@ -52,6 +52,9 @@ PIXI.Zephyr = {
             container: document.getElementsByTagName("html")[0],
             x: 0,
             y: 0,
+            anchor: {x: 0, y: 0},
+            width: 1,
+            height: 1,
             setContainer: (view) => {
                 let b = view.getBoundingClientRect();
                 if (b.width * b.height == 0) {
@@ -199,12 +202,8 @@ PIXI.collision = {
             aFix.y > bFix.y + b.height
         );
     },
-    radius: (a, b) => { // Circle collision, for objects a and b, provided they ha
-        let aFix = PIXI.Zephyr._spriteFix(a);
-        let bFix = PIXI.Zephyr._spriteFix(b);
-        return (
-            Math.sqrt(Math.pow(aFix.x - bFix.x, 2) + Math.pow(aFix.y - bFix.y, 2)) <= a.r + b.r
-        );
+    radius: (a, b) => { // Circle collision, for objects a and b
+        return Math.hypot(a.x - b.x + (a.width - b.width) * 0.5, a.y - b.y + (a.height - b.height) * 0.5) <= (Math.max(a.width, a.height) + Math.max(b.width, b.height)) * 0.5;
     }
 }
 // Returns the value of x if it is between the bounds of min and max, or the closest bound if x is outside
