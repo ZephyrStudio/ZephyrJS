@@ -1,1 +1,248 @@
-"use strict";PIXI.Audio={},PIXI.File={},PIXI.Particles={},PIXI.Zephyr={version:"ZephyrJS 23.2",compatible:"PixiJS v7.1.2",_spriteFix(e){let t=e.width*(e.scale?e.scale.x:1),s=e.height*(e.scale?e.scale.y:1);return{x:e.x-(e.anchor?e.anchor.x*t:0)+Math.min(0,t),y:e.y-(e.anchor?e.anchor.y*s:0)+Math.min(0,s),width:Math.abs(t),height:Math.abs(s)}},useKeys(){PIXI.Keys={map:new Map,down:e=>!!(PIXI.Keys.map.size>0&&PIXI.Keys.map.has(e))&&(PIXI.Keys.map.set(e,!1),!0),fired:e=>!!(PIXI.Keys.map.size>0&&PIXI.Keys.map.get(e))&&(PIXI.Keys.map.set(e,!1),!0)},window.addEventListener("keydown",e=>{PIXI.Keys.map.set(e.code,!0)}),window.addEventListener("keyup",e=>{PIXI.Keys.map.delete(e.code)})},useMouse(){PIXI.Mouse={bounds:document.getElementsByTagName("html")[0].getBoundingClientRect(),container:document.getElementsByTagName("html")[0],x:0,y:0,setContainer(e){let t=e.getBoundingClientRect();t.width*t.height==0?console.error("Cannot use PIXI.Mouse.setContainer() with an invalid element."):(PIXI.Mouse.container=e,PIXI.Mouse.bounds=PIXI.Mouse.container.getBoundingClientRect())},ALIAS:["Primary","Middle","Secondary"],map:new Map,down:e=>!!(PIXI.Mouse.map.size>0&&PIXI.Mouse.map.has(e))&&(PIXI.Mouse.map.set(e,!1),!0),fired:e=>!!(PIXI.Mouse.map.size>0&&PIXI.Mouse.map.get(e))&&(PIXI.Mouse.map.set(e,!1),!0)},window.onresize=()=>{PIXI.Mouse.bounds=PIXI.Mouse.container.getBoundingClientRect()},window.addEventListener("mouseup",e=>{PIXI.Mouse.map.delete(PIXI.Mouse.ALIAS[e.button])}),window.addEventListener("mousedown",e=>{PIXI.Mouse.map.set(PIXI.Mouse.ALIAS[e.button],!0)}),window.addEventListener("mousemove",e=>{PIXI.Mouse.x=(e.x-PIXI.Mouse.bounds.left+window.pageXOffset)/PIXI.Mouse.bounds.width*PIXI.Mouse.container.width,PIXI.Mouse.y=(e.y-PIXI.Mouse.bounds.top+window.pageYOffset)/PIXI.Mouse.bounds.height*PIXI.Mouse.container.height})},useAudio(){PIXI.Audio={ctx:new AudioContext,buffers:new Map,_player:function(){if(PIXI.Audio.buffers.has(this.src)){let e=PIXI.Audio.ctx.createBufferSource();e.buffer=PIXI.Audio.buffers.get(this.src),e.connect(PIXI.Audio.ctx.destination),e.start(0)}},from(e){let t=new XMLHttpRequest;return t.open("GET",e,!0),t.responseType="arraybuffer",t.onload=()=>{PIXI.Audio.ctx.decodeAudioData(t.response,function(t){PIXI.Audio.buffers.set(e,t)})},t.send(),{src:e,play:PIXI.Audio._player}}}},useFile(){PIXI.File={async write(e,t){let s=new Blob([JSON.stringify(e)],{type:JSON});var i=document.createElement("a"),n=URL.createObjectURL(s);i.href=n,i.download=t+".json",document.body.appendChild(i),i.click(),setTimeout(()=>{document.body.removeChild(i),window.URL.revokeObjectURL(n)},0)},open:async()=>([fileHandle]=await window.showOpenFilePicker(),JSON.parse(await (await fileHandle.getFile()).text()))}},useParticles(){PIXI.Particles={_step:function(e){let t=e=>{let t=(Math.random()-.5)*this.spread+this.direction;e.move={x:this.speed*Math.cos(t),y:this.speed*Math.sin(t)},e.x=e.y=0,e.life=this.life};if(this.children.length<this.size&&(this._spawnTimer-=e,this._spawnTimer<=0)){this._spawnTimer=this.life/this.size;let s=new PIXI.Sprite(this.baseTexture);s.anchor={x:.5,y:.5},t(s),this.addChild(s)}this.children.forEach(s=>{s.x+=s.move.x*e,s.y+=s.move.y*e,(s.life-=e*this.speed)<=0&&t(s)})},from(e,t,s){s||(s={});let i=new PIXI.ParticleContainer(t);return i._spawnTimer=0,i.size=t,i.baseTexture=PIXI.Texture.from(e),i.life=s.life?s.life:128,i.speed=s.speed?s.speed:1,i.direction=s.direction?s.direction:0,i.spread=s.spread?s.spread:6.2831853072,i.step=PIXI.Particles._step,i}}}},PIXI.collision={aabb(e,t){let s=PIXI.Zephyr._spriteFix(e),i=PIXI.Zephyr._spriteFix(t);return!(s.x+e.width<i.x||s.y+e.height<i.y||s.x>i.x+t.width||s.y>i.y+t.height)},radius(e,t){let s=PIXI.Zephyr._spriteFix(e),i=PIXI.Zephyr._spriteFix(t);return Math.sqrt(Math.pow(s.x-i.x,2)+Math.pow(s.y-i.y,2))<=e.r+t.r}},PIXI.clamp=(e,t,s)=>Math.min(Math.max(e,t),s),PIXI.mix=(e,t,s)=>e*(1-s)+t*s,PIXI.rand=(e,t)=>Math.random()*(t-e+1)^0+e,PIXI.toggleFullScreen=e=>{e.fullscreenElement||e.mozFullScreenElement||e.webkitFullscreenElement?e.cancelFullScreen?e.cancelFullScreen():e.mozCancelFullScreen?e.mozCancelFullScreen():e.webkitCancelFullScreen&&e.webkitCancelFullScreen():e.requestFullscreen?e.requestFullscreen():e.mozRequestFullScreen?e.mozRequestFullScreen():e.webkitRequestFullscreen&&e.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT)},window.addEventListener("contextmenu",e=>{e.preventDefault()}),console.log("%cUsing "+PIXI.Zephyr.version+"! https://github.com/OttCS/ZephyrJS","color:#ef6f6c"),console.log("%cCompatible with "+PIXI.Zephyr.compatible,"color:#ea1e63");
+"use strict"
+
+PIXI.Audio = {};
+PIXI.File = {};
+PIXI.Particles = {};
+
+// ZEPHYR FUNCTIONALITY //
+
+PIXI.Zephyr = {
+    version: "ZephyrJS 23.3",
+    compatible: "PixiJS v7.1.3",
+    _spriteFix: (s) => { // Returns the actual x/y width/height of a scaled and anchored Sprite
+        let w = s.width * (s.scale ? s.scale.x : 1);
+        let h = s.height * (s.scale ? s.scale.y : 1);
+        return {
+            x: s.x - (s.anchor ? s.anchor.x * w : 0) + Math.min(0, w),
+            y: s.y - (s.anchor ? s.anchor.y * h : 0) + Math.min(0, h),
+            width: Math.abs(w),
+            height: Math.abs(h)
+        }
+    },
+    useKeys: () => {
+        PIXI.Keys = {
+            map: new Map(),
+            down: (key) => {
+                if (PIXI.Keys.map.size > 0 && PIXI.Keys.map.has(key)) {
+                    PIXI.Keys.map.set(key, false);
+                    return true;
+                }
+                return false;
+            },
+            fired: (key) => {
+                if (PIXI.Keys.map.size > 0 && PIXI.Keys.map.get(key)) {
+                    PIXI.Keys.map.set(key, false);
+                    return true;
+                }
+                return false;
+            },
+        };
+        // EVENTS //
+        window.addEventListener('keydown', (e) => {
+            PIXI.Keys.map.set(e.code, true);
+        });
+        window.addEventListener('keyup', (e) => {
+            PIXI.Keys.map.delete(e.code);
+        });
+    },
+    useMouse: () => {
+        PIXI.Mouse = {
+            // COORDS //
+            bounds: document.getElementsByTagName("html")[0].getBoundingClientRect(),
+            container: document.getElementsByTagName("html")[0],
+            x: 0,
+            y: 0,
+            anchor: {x: 0, y: 0},
+            width: 1,
+            height: 1,
+            setContainer: (view) => {
+                let b = view.getBoundingClientRect();
+                if (b.width * b.height == 0) {
+                    console.error("Cannot use PIXI.Mouse.setContainer() with an invalid element.");
+                } else {
+                    PIXI.Mouse.container = view;
+                    PIXI.Mouse.bounds = PIXI.Mouse.container.getBoundingClientRect();
+                }
+            },
+            // BUTTONS //
+            ALIAS: ["Primary", "Middle", "Secondary"],
+            map: new Map(),
+            down: (btn) => {
+                if (PIXI.Mouse.map.size > 0 && PIXI.Mouse.map.has(btn)) {
+                    PIXI.Mouse.map.set(btn, false);
+                    return true;
+                }
+                return false;
+            },
+            fired: (btn) => {
+                if (PIXI.Mouse.map.size > 0 && PIXI.Mouse.map.get(btn)) {
+                    PIXI.Mouse.map.set(btn, false);
+                    return true;
+                }
+                return false;
+            }
+        }
+        // EVENTS //
+        window.onresize = () => {
+            PIXI.Mouse.bounds = PIXI.Mouse.container.getBoundingClientRect();
+        }
+        window.addEventListener('mouseup', (e) => {
+            PIXI.Mouse.map.delete(PIXI.Mouse.ALIAS[e.button]);
+        });
+        window.addEventListener('mousedown', (e) => {
+            PIXI.Mouse.map.set(PIXI.Mouse.ALIAS[e.button], true);
+        });
+        window.addEventListener('mousemove', (e) => {
+            PIXI.Mouse.x = (e.x - PIXI.Mouse.bounds.left + window.pageXOffset) / PIXI.Mouse.bounds.width * PIXI.Mouse.container.width;
+            PIXI.Mouse.y = (e.y - PIXI.Mouse.bounds.top + window.pageYOffset) / PIXI.Mouse.bounds.height * PIXI.Mouse.container.height;
+        });
+    },
+    useAudio: () => {
+        PIXI.Audio = {
+            ctx: new AudioContext(),
+            buffers: new Map(), // Stores all audio buffers
+            _player: function () { // Shared function for all Audio objects
+                if (PIXI.Audio.buffers.has(this.src)) {
+                    let aud = PIXI.Audio.ctx.createBufferSource();
+                    aud.buffer = PIXI.Audio.buffers.get(this.src);
+                    aud.connect(PIXI.Audio.ctx.destination);
+                    aud.start(0);
+                }
+            },
+            from: (src) => {
+                let r = new XMLHttpRequest();
+                r.open('GET', src, true);
+                r.responseType = 'arraybuffer';
+
+                r.onload = () => { // Decode asynchronously
+                    PIXI.Audio.ctx.decodeAudioData(r.response, function (buffer) {
+                        PIXI.Audio.buffers.set(src, buffer); // Store audio buffer once
+                    })
+                }
+                r.send();
+                return { src: src, play: PIXI.Audio._player };
+            }
+        }
+    },
+    useFile: () => {
+        PIXI.File = {
+            write: async (object, fName) => {
+                let file = new Blob([JSON.stringify(object)], { type: JSON });
+                var a = document.createElement("a"),
+                    url = URL.createObjectURL(file);
+                a.href = url;
+                a.download = fName + ".json";
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                }, 0);
+            },
+            open: async () => {
+                [fileHandle] = await window.showOpenFilePicker();
+                let file = await fileHandle.getFile();
+                let contents = await file.text();
+                return JSON.parse(contents);
+            }
+        }
+    },
+    useParticles: () => {
+        PIXI.Particles = {
+            _step: function (deltaTime) {
+                const init = (p) => {
+                    let r = (Math.random() - 0.5) * this.spread + this.direction;
+                    p.move = { x: this.speed * Math.cos(r), y: this.speed * Math.sin(r) };
+                    p.x = p.y = 0;
+                    p.life = this.life;
+                }
+                if (this.children.length < this.size) {
+                    this._spawnTimer -= deltaTime;
+                    if (this._spawnTimer <= 0) {
+                        this._spawnTimer = this.life / this.size;
+                        let p = new PIXI.Sprite(this.baseTexture);
+                        p.anchor = { x: 0.5, y: 0.5 }
+                        init(p);
+                        this.addChild(p);
+                    }
+                }
+                this.children.forEach(p => {
+                    p.x += p.move.x * deltaTime;
+                    p.y += p.move.y * deltaTime;
+                    if ((p.life -= deltaTime * this.speed) <= 0)
+                        init(p);
+                });
+            },
+            from: (src, size, options) => {
+                if (!options) options = {};
+                let res = new PIXI.ParticleContainer(size);
+                res._spawnTimer = 0;
+                res.size = size;
+                res.baseTexture = PIXI.Texture.from(src);
+                res.life = (options.life ? options.life : 128);
+                res.speed = (options.speed ? options.speed : 1);
+                res.direction = (options.direction ? options.direction : 0);
+                res.spread = (options.spread ? options.spread : 6.2831853072);
+                res.step = PIXI.Particles._step;
+                return res;
+            }
+        }
+    }
+}
+
+// Collision testing methods
+PIXI.collision = {
+    aabb: (a, b) => { // Axis-Aligned Bounding Box method
+        let aFix = PIXI.Zephyr._spriteFix(a);
+        let bFix = PIXI.Zephyr._spriteFix(b);
+        return !(
+            aFix.x + a.width < bFix.x ||
+            aFix.y + a.height < bFix.y ||
+            aFix.x > bFix.x + b.width ||
+            aFix.y > bFix.y + b.height
+        );
+    },
+    radius: (a, b) => { // Circle collision, for objects a and b
+        return Math.hypot(a.x - b.x + (a.width - b.width) * 0.5, a.y - b.y + (a.height - b.height) * 0.5) <= (Math.max(a.width, a.height) + Math.max(b.width, b.height)) * 0.5;
+    }
+}
+// Returns the value of x if it is between the bounds of min and max, or the closest bound if x is outside
+PIXI.clamp = (x, min, max) => {
+    return Math.min(Math.max(x, min), max);
+};
+// Linearly interpolate between values a and b
+PIXI.mix = (a, b, m) => {
+    return a * (1 - m) + b * (m);
+}
+// Generates a random integer between min and max, inclusive
+PIXI.rand = (min, max) => {
+    return (Math.random() * (max - min + 1)) ^ 0 + min;
+};
+// Requests fullscreen for the provided element (view)
+PIXI.toggleFullScreen = (view) => {
+    if (!view.fullscreenElement &&
+        !view.mozFullScreenElement && !view.webkitFullscreenElement) {  // current working methods
+        if (view.requestFullscreen) {
+            view.requestFullscreen();
+        } else if (view.mozRequestFullScreen) {
+            view.mozRequestFullScreen();
+        } else if (view.webkitRequestFullscreen) {
+            view.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+        }
+    } else {
+        if (view.cancelFullScreen) {
+            view.cancelFullScreen();
+        } else if (view.mozCancelFullScreen) {
+            view.mozCancelFullScreen();
+        } else if (view.webkitCancelFullScreen) {
+            view.webkitCancelFullScreen();
+        }
+    }
+}
+// Stop rClick
+window.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+})
+
+console.log("%cUsing " + PIXI.Zephyr.version + "! https://github.com/OttCS/ZephyrJS", "color:#ef6f6c");
+console.log("%cCompatible with " + PIXI.Zephyr.compatible, "color:#ea1e63")

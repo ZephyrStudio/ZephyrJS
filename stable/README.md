@@ -1,0 +1,1 @@
+This stable directory is used for serving the latest stable version of Zephyr, released monthly
