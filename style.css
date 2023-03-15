@@ -63,7 +63,6 @@ header {
 }
 
 #gameShowcase {
-    cursor: none;
     overflow: hidden;
     z-index: 0;
     position: relative;

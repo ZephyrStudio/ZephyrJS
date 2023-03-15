@@ -18,13 +18,10 @@ backdrop.height = app.view.height;
 backdrop.anchor = { x: 0, y: 0 };
 app.stage.addChild(backdrop);
 
-const emitter = PIXI.Particles.from('/demo/assets/star.png', 250, {
-    life: app.view.width * 0.7071067812,
-    direction: Math.PI * 1.5,
-    spread: Math.PI,
+const emitter = PIXI.Particles.from('/demo/assets/star.png', 32, {
+    life: 256,
+    spread: Math.PI * 2,
 });
-emitter.x = app.view.width * 0.5;
-emitter.y = app.view.height;
 app.stage.addChild(emitter);
 
 let planet = new PIXI.Sprite(tex.planet);
@@ -58,6 +55,7 @@ app.ticker.add((deltaTime) => {
     let h = Math.hypot(x, y) / player.speedMult + 1;
     player.vec.x = player.vec.x * 0.995 + 0.005 * (x / h) * deltaTime;
     player.vec.y = player.vec.y * 0.995 + 0.005 * (y / h) * deltaTime;
-    player.x += player.vec.x;
+    emitter.spawn.x = player.x += player.vec.x;
     player.y += player.vec.y;
+    emitter.spawn.y = player.y - player.scale.y * player.height * 0.5;
 });

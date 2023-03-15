@@ -17,6 +17,7 @@
  <br>.direction = specifies the direction (in radians) that the particles will move (default 0)
  <br>.spread = the angle (in radians) of how closely particles should follow the direction. 0 is no
  deviation, 2 PI is in a full circle (default is 2 PI)
+ <br><span class="nightly">.spawn</span> = {x, y} object that indicates where particles will be created
  <br>.step() = a shared function that moves and updates all particles
  </dd> </dl> <h2>PIXI.collision</h2> <dl> <dt>PIXI.collision.aabb(Sprite, Sprite)</dt> <dd>Checks if the two provided Sprites are colliding with the aabb algorithm - NOTE: Both a and b are
  formatted

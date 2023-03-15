@@ -7,8 +7,8 @@ PIXI.Particles = {};
 // ZEPHYR FUNCTIONALITY //
 
 PIXI.Zephyr = {
-    version: "ZephyrJS 23.2.20",
-    compatible: "PixiJS v7.1.3",
+    version: "ZephyrJS 23.3.15",
+    compatible: "PixiJS v7.2.0",
     _spriteFix: (s) => { // Returns the actual x/y width/height of a scaled and anchored Sprite
         let w = s.width * (s.scale ? s.scale.x : 1);
         let h = s.height * (s.scale ? s.scale.y : 1);
@@ -153,13 +153,14 @@ PIXI.Zephyr = {
                 const init = (p) => {
                     let r = (Math.random() - 0.5) * this.spread + this.direction;
                     p.move = { x: this.speed * Math.cos(r), y: this.speed * Math.sin(r) };
-                    p.x = p.y = 0;
+                    p.x = this.spawn.x;
+                    p.y = this.spawn.y;
                     p.life = this.life;
                 }
-                if (this.children.length < this.size) {
+                if (this.children.length < this.maxCount) {
                     this._spawnTimer -= deltaTime;
                     if (this._spawnTimer <= 0) {
-                        this._spawnTimer = this.life / this.size;
+                        this._spawnTimer = this.life / this.maxCount;
                         let p = new PIXI.Sprite(this.baseTexture);
                         p.anchor = { x: 0.5, y: 0.5 }
                         init(p);
@@ -173,17 +174,21 @@ PIXI.Zephyr = {
                         init(p);
                 });
             },
-            from: (src, size, options) => {
+            from: (src, maxCount, options) => {
                 if (!options) options = {};
-                let res = new PIXI.ParticleContainer(size);
+                let res = new PIXI.ParticleContainer(maxCount);
                 res._spawnTimer = 0;
-                res.size = size;
+                res.maxCount = maxCount;
                 res.baseTexture = PIXI.Texture.from(src);
                 res.life = (options.life ? options.life : 128);
                 res.speed = (options.speed ? options.speed : 1);
                 res.direction = (options.direction ? options.direction : 0);
                 res.spread = (options.spread ? options.spread : 6.2831853072);
                 res.step = PIXI.Particles._step;
+                res.spawn = {
+                    x: options.x ? options.x : 1,
+                    y: options.y ? options.y : 1
+                }
                 return res;
             }
         }
