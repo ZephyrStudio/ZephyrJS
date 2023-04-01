@@ -7,7 +7,7 @@ PIXI.Particles = {};
 // ZEPHYR FUNCTIONALITY //
 
 PIXI.Zephyr = {
-    version: "ZephyrJS 23.4",
+    version: "ZephyrJS 23.4.1",
     compatible: "PixiJS v7.2.3",
     _spriteFix: (s) => { // Returns the actual x/y width/height of a scaled and anchored Sprite
         let w = s.width * (s.scale ? s.scale.x : 1);
@@ -105,7 +105,8 @@ PIXI.Zephyr = {
                 if (PIXI.Audio.buffers.has(this.src)) {
                     let aud = PIXI.Audio.ctx.createBufferSource();
                     aud.buffer = PIXI.Audio.buffers.get(this.src);
-                    aud.connect(PIXI.Audio.ctx.destination);
+                    this._gainNode.gain.value = this.volume;
+                    aud.connect(this._gainNode).connect(PIXI.Audio.ctx.destination);
                     aud.start(0);
                 }
             },
@@ -120,7 +121,7 @@ PIXI.Zephyr = {
                     })
                 }
                 r.send();
-                return { src: src, play: PIXI.Audio._player };
+                return { _gainNode: PIXI.Audio.ctx.createGain(), src: src, volume: 1, play: PIXI.Audio._player };
             }
         }
     },

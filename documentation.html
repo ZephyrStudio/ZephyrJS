@@ -80,6 +80,10 @@
             <dt>PIXI.Audio.from(src)</dt>
             <dd>Returns a "Pixi Audio" object. These can have .play() called on them to play their sound.</dd>
             <dd class="return">Pixi Audio object</dd>
+            <dd>.play() starts the sound
+                <br>.volume = the gain/volume of the sound when it is played. 1 is normal volume, 0 is muted.
+
+            </dd>
         </dl>
         <h2 id="PIXI.File">PIXI.File</h2>
         <dl>
@@ -98,11 +102,11 @@
             <dd>An object can optionally be passed in to specify life, speed, direction, and spread, where the attributes are the associated values, for example, {life: 30, speed: 0.5, direction: Math.PI, Math.PI * 0.5}.</dd>
             <dd class="return">Pixi Particle Emitter</dd>
             <dd>.life = how far the particles can move away from the emitter's location, in pixels (default 128)
-                <br>.speed = quickly the particles move to their end of life distance (default 1)
                 <br>.direction = specifies the direction (in radians) that the particles will move (default 0)
+                <br>.speed = quickly the particles move to their end of life distance (default 1)
+                <br>.spawn = {x, y} object that indicates where particles will be created
                 <br>.spread = the angle (in radians) of how closely particles should follow the direction. 0 is no
                 deviation, 2 PI is in a full circle (default is 2 PI)
-                <br><span class="nightly">.spawn</span> = {x, y} object that indicates where particles will be created
                 <br>.step() = a shared function that moves and updates all particles
             </dd>
         </dl>
