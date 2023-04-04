@@ -1,0 +1,55 @@
+<!DOCTYPE html><html lang="en">
+    <head>
+        <link rel="stylesheet" as="style" href="https://ottcs.netlify.app/general.css">
+        <link rel="stylesheet" as="style" href="/site/style.css">
+        <script src="/src/pixi.js"></script>
+        <script src="/src/zephyr.js"></script>
+        <style>
+            body {
+                height: 100vh;
+                width: 100vw;
+                overflow: hidden;
+            }
+            #gameShowcase {
+                overflow: hidden;
+                z-index: 0;
+                position: relative;
+                height: 100vh;
+            }
+    
+            #showcaseOverlay {
+                color: #fff;
+                z-index: 2;
+                font-weight: 600;
+                text-align: center;
+                position: absolute;
+                top: 0;
+                left: 50%;
+                transform: translate(-50%, 0);
+                max-width: 700px;
+                width: 90%;
+                display: block;
+                margin: 0 auto;
+            }
+    
+            #showcaseOverlay>.button {
+                margin: 24px 12px 0px;
+            }
+    
+            #DISPLAY {
+                z-index: 1;
+                position: absolute;
+                top: 0;
+                left: 50%;
+                min-width: 100%;
+                min-height: 100%;
+                transform: translate(-50%, 0%);
+            }
+        </style>
+    </head>
+    <body>
+        <noscript>This page relies heavily on scripts, which are used to run the game demo and provide navigation.</noscript>
+        <div id="gameShowcase"></div>
+        <script src="/demo/app.js"></script>
+    </body>
+</html>

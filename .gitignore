@@ -1,8 +1,9 @@
 *.*~
 stable/*.zip
 stable/*/
-nightly/*/
+src/*/
 .obsidian/
 checklist.md
 .vscode
 hidden
+.testing

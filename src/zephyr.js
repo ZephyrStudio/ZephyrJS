@@ -7,7 +7,7 @@ PIXI.Particles = {};
 // ZEPHYR FUNCTIONALITY //
 
 PIXI.Zephyr = {
-    version: "ZephyrJS 23.4.1",
+    version: "ZephyrJS 23.4.2",
     compatible: "PixiJS v7.2.3",
     _spriteFix: (s) => { // Returns the actual x/y width/height of a scaled and anchored Sprite
         let w = s.width * (s.scale ? s.scale.x : 1);
@@ -52,7 +52,7 @@ PIXI.Zephyr = {
             container: document.getElementsByTagName("html")[0],
             x: 0,
             y: 0,
-            anchor: {x: 0, y: 0},
+            anchor: { x: 0, y: 0 },
             width: 1,
             height: 1,
             setContainer: (view) => {
@@ -153,12 +153,29 @@ PIXI.Zephyr = {
             _step: function (deltaTime) {
                 const init = (p) => {
                     let r = (Math.random() - 0.5) * this.spread + this.direction;
+                    p.alpha = 1;
                     p.move = { x: this.speed * Math.cos(r), y: this.speed * Math.sin(r) };
                     p.x = this.spawn.x;
                     p.y = this.spawn.y;
                     p.life = this.life;
+                    p.scale.x = p.scale.y = this.scaling;
+                    if (this.rotate)
+                        p.rotation = r + Math.PI * 0.5;
                 }
-                if (this.children.length < this.maxCount) {
+                this.children.forEach(p => {
+                    if ((p.life -= deltaTime * this.speed) <= 0) {
+                        if (this.fresh)
+                            init(p);
+                        else
+                            this.removeChild(p);
+                    } else {
+                        p.x += p.move.x * deltaTime;
+                        p.y += p.move.y * deltaTime;
+                        // p.alpha = PIXI.clamp(p.life / this.life, 0, 1);
+                    }
+
+                });
+                if (this.children.length < this.maxCount && this.fresh) {
                     this._spawnTimer -= deltaTime;
                     if (this._spawnTimer <= 0) {
                         this._spawnTimer = this.life / this.maxCount;
@@ -168,28 +185,21 @@ PIXI.Zephyr = {
                         this.addChild(p);
                     }
                 }
-                this.children.forEach(p => {
-                    p.x += p.move.x * deltaTime;
-                    p.y += p.move.y * deltaTime;
-                    if ((p.life -= deltaTime * this.speed) <= 0)
-                        init(p);
-                });
             },
             from: (src, maxCount, options) => {
                 if (!options) options = {};
                 let res = new PIXI.ParticleContainer(maxCount);
                 res._spawnTimer = 0;
-                res.maxCount = maxCount;
                 res.baseTexture = PIXI.Texture.from(src);
-                res.life = (options.life ? options.life : 128);
-                res.speed = (options.speed ? options.speed : 1);
                 res.direction = (options.direction ? options.direction : 0);
-                res.spread = (options.spread ? options.spread : 6.2831853072);
+                res.life = (options.life ? options.life : 128);
+                res.maxCount = maxCount;
+                res.rotate = (options.rotate ? options.rotate : false);
+                res.scaling = (options.scaling ? options.scaling : 1)
+                res.spawn = { x: 0, y: 0 };
+                res.speed = (options.speed ? options.speed : 1);
+                res.spread = (options.spread ? options.spread : 0);
                 res.step = PIXI.Particles._step;
-                res.spawn = {
-                    x: options.x ? options.x : 1,
-                    y: options.y ? options.y : 1
-                }
                 return res;
             }
         }
