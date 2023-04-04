@@ -1,4 +1,5 @@
- <div id="gameShowcase"> <div id="showcaseOverlay"> <h1>Game Development for Everyone</h1> ZephyrJS expands the fastest web renderer with game engine features so you can develop games quickly for
+# We're currently undergoing some repository structure changes, please bear with us
+<div id="gameShowcase"> <div id="showcaseOverlay"> <h1>Game Development for Everyone</h1> ZephyrJS expands the fastest web renderer with game engine features so you can develop games quickly for
  everyone on the internet.</p> <a href="#getting-started" class="button zephyr">Get Started</a> <a href="documentation/" class="button zephyr">Documentation</a> <a href="https://github.com/ZephyrJS-Project/ZephyrJS/" class="button">Github</a> </div> </div> <article> <h2>Why Zephyr?</h2> <p>Web-based content has been providing a way to access all sorts of entertainment, and being able to game on
  the web is the next step. While flash games existed in the past, browsers didn't have the kind of power to
  run full games. But now they do, and browsers have been able to directly use the available hardware to speed
