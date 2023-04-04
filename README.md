@@ -1,1 +1,2 @@
-# We're currently undergoing some repository structure changes for ease of use, this will be fixed on April 4th
+# Thank you for your patience.
+An acceptable structure has been achieved for the repository, and files are being updated to reflect these changes. ZephyrJS is still available for download through Github releases, and the CDN link is being revived currently.

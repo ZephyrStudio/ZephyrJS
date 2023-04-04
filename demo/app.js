@@ -11,12 +11,10 @@ document.querySelector('#gameShowcase').appendChild(app.view);
 PIXI.Mouse.setContainer(app.view);
 
 const tex = {
-    bg: PIXI.Texture.from('/demo/assets/Purple.png'),
-    player: PIXI.Texture.from('/demo/assets/character2x.png'),
-    planet: PIXI.Texture.from('/demo/assets/planet.png'),
+    player: PIXI.Texture.from('assets/character2x.png'),
 }
 
-const emitter = PIXI.Particles.from('/demo/assets/star.png', 512, {
+const emitter = PIXI.Particles.from('assets/star.png', 512, {
     life: 256,
     performant: true,
     spread: Math.PI * .5,
@@ -39,7 +37,7 @@ content.y = 0;
 content.anchor = { x: 0.5, y: 1 };
 app.stage.addChild(content);
 
-let zjsColor = getComputedStyle(document.documentElement).getPropertyValue('--zephyr') + '';
+let zjsColor = '#ef6f6c';
 
 let title = new PIXI.Text('ZephyrJS', {
     fontFamily: 'monospace',
