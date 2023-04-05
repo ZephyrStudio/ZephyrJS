@@ -1,11 +1,4 @@
 "use strict"
-
-PIXI.Audio = {};
-PIXI.File = {};
-PIXI.Particles = {};
-
-// ZEPHYR FUNCTIONALITY //
-
 PIXI.Zephyr = {
     version: "ZephyrJS 23.4.2",
     compatible: "PixiJS v7.2.3",
@@ -21,17 +14,17 @@ PIXI.Zephyr = {
     },
     useKeys: () => {
         PIXI.Keys = {
-            map: new Map(),
+            _map: new Map(),
             down: (key) => {
-                if (PIXI.Keys.map.size > 0 && PIXI.Keys.map.has(key)) {
-                    PIXI.Keys.map.set(key, false);
+                if (PIXI.Keys._map.size > 0 && PIXI.Keys._map.has(key)) {
+                    PIXI.Keys._map.set(key, false);
                     return true;
                 }
                 return false;
             },
             fired: (key) => {
-                if (PIXI.Keys.map.size > 0 && PIXI.Keys.map.get(key)) {
-                    PIXI.Keys.map.set(key, false);
+                if (PIXI.Keys._map.size > 0 && PIXI.Keys._map.get(key)) {
+                    PIXI.Keys._map.set(key, false);
                     return true;
                 }
                 return false;
@@ -39,17 +32,17 @@ PIXI.Zephyr = {
         };
         // EVENTS //
         window.addEventListener('keydown', (e) => {
-            PIXI.Keys.map.set(e.code, true);
+            PIXI.Keys._map.set(e.code, true);
         });
         window.addEventListener('keyup', (e) => {
-            PIXI.Keys.map.delete(e.code);
+            PIXI.Keys._map.delete(e.code);
         });
     },
     useMouse: () => {
         PIXI.Mouse = {
             // COORDS //
-            bounds: document.getElementsByTagName("html")[0].getBoundingClientRect(),
-            container: document.getElementsByTagName("html")[0],
+            _bounds: document.getElementsByTagName("html")[0].getBoundingClientRect(),
+            _container: document.getElementsByTagName("html")[0],
             x: 0,
             y: 0,
             anchor: { x: 0, y: 0 },
@@ -60,23 +53,23 @@ PIXI.Zephyr = {
                 if (b.width * b.height == 0) {
                     console.error("Cannot use PIXI.Mouse.setContainer() with an invalid element.");
                 } else {
-                    PIXI.Mouse.container = view;
-                    PIXI.Mouse.bounds = PIXI.Mouse.container.getBoundingClientRect();
+                    PIXI.Mouse._container = view;
+                    PIXI.Mouse._bounds = PIXI.Mouse._container.getBoundingClientRect();
                 }
             },
             // BUTTONS //
-            ALIAS: ["Primary", "Middle", "Secondary"],
-            map: new Map(),
+            _ALIAS: ["Primary", "Middle", "Secondary"],
+            _map: new Map(),
             down: (btn) => {
-                if (PIXI.Mouse.map.size > 0 && PIXI.Mouse.map.has(btn)) {
-                    PIXI.Mouse.map.set(btn, false);
+                if (PIXI.Mouse._map.size > 0 && PIXI.Mouse._map.has(btn)) {
+                    PIXI.Mouse._map.set(btn, false);
                     return true;
                 }
                 return false;
             },
             fired: (btn) => {
-                if (PIXI.Mouse.map.size > 0 && PIXI.Mouse.map.get(btn)) {
-                    PIXI.Mouse.map.set(btn, false);
+                if (PIXI.Mouse._map.size > 0 && PIXI.Mouse._map.get(btn)) {
+                    PIXI.Mouse._map.set(btn, false);
                     return true;
                 }
                 return false;
@@ -84,29 +77,29 @@ PIXI.Zephyr = {
         }
         // EVENTS //
         window.onresize = () => {
-            PIXI.Mouse.bounds = PIXI.Mouse.container.getBoundingClientRect();
+            PIXI.Mouse._bounds = PIXI.Mouse._container.getBoundingClientRect();
         }
         window.addEventListener('mouseup', (e) => {
-            PIXI.Mouse.map.delete(PIXI.Mouse.ALIAS[e.button]);
+            PIXI.Mouse._map.delete(PIXI.Mouse._ALIAS[e.button]);
         });
         window.addEventListener('mousedown', (e) => {
-            PIXI.Mouse.map.set(PIXI.Mouse.ALIAS[e.button], true);
+            PIXI.Mouse._map.set(PIXI.Mouse._ALIAS[e.button], true);
         });
         window.addEventListener('mousemove', (e) => {
-            PIXI.Mouse.x = (e.x - PIXI.Mouse.bounds.left + window.pageXOffset) / PIXI.Mouse.bounds.width * PIXI.Mouse.container.width;
-            PIXI.Mouse.y = (e.y - PIXI.Mouse.bounds.top + window.pageYOffset) / PIXI.Mouse.bounds.height * PIXI.Mouse.container.height;
+            PIXI.Mouse.x = (e.x - PIXI.Mouse._bounds.left + window.pageXOffset) / PIXI.Mouse._bounds.width * PIXI.Mouse._container.width;
+            PIXI.Mouse.y = (e.y - PIXI.Mouse._bounds.top + window.pageYOffset) / PIXI.Mouse._bounds.height * PIXI.Mouse._container.height;
         });
     },
     useAudio: () => {
         PIXI.Audio = {
-            ctx: new AudioContext(),
-            buffers: new Map(), // Stores all audio buffers
+            _ctx: new AudioContext(),
+            _buffers: new Map(), // Stores all audio buffers
             _player: function () { // Shared function for all Audio objects
-                if (PIXI.Audio.buffers.has(this.src)) {
-                    let aud = PIXI.Audio.ctx.createBufferSource();
-                    aud.buffer = PIXI.Audio.buffers.get(this.src);
+                if (PIXI.Audio._buffers.has(this.src)) {
+                    let aud = PIXI.Audio._ctx.createBufferSource();
+                    aud.buffer = PIXI.Audio._buffers.get(this.src);
                     this._gainNode.gain.value = this.volume;
-                    aud.connect(this._gainNode).connect(PIXI.Audio.ctx.destination);
+                    aud.connect(this._gainNode).connect(PIXI.Audio._ctx.destination);
                     aud.start(0);
                 }
             },
@@ -116,12 +109,12 @@ PIXI.Zephyr = {
                 r.responseType = 'arraybuffer';
 
                 r.onload = () => { // Decode asynchronously
-                    PIXI.Audio.ctx.decodeAudioData(r.response, function (buffer) {
-                        PIXI.Audio.buffers.set(src, buffer); // Store audio buffer once
+                    PIXI.Audio._ctx.decodeAudioData(r.response, function (buffer) {
+                        PIXI.Audio._buffers.set(src, buffer); // Store audio buffer once
                     })
                 }
                 r.send();
-                return { _gainNode: PIXI.Audio.ctx.createGain(), src: src, volume: 1, play: PIXI.Audio._player };
+                return { _gainNode: PIXI.Audio._ctx.createGain(), src: src, volume: 1, play: PIXI.Audio._player };
             }
         }
     },

@@ -1,2 +1,2 @@
-# Thank you for your patience.
-An acceptable structure has been achieved for the repository, and files are being updated to reflect these changes. ZephyrJS is still available for download through Github releases, and the CDN link is being revived currently.
+# FOSS PixiJS Expansion for Simple and Powerful Game Development
+We're working on a welcome message currently. But thanks for checking it out!
