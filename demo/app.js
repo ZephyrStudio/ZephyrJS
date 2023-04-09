@@ -3,7 +3,7 @@ PIXI.Zephyr.useMouse();
 PIXI.Zephyr.useParticles();
 // PIXI.BaseTexture.defaultOptions.scaleMode = PIXI.SCALE_MODES.NEAREST;
 
-const mvScale = 2.5;
+const mvScale = 2;
 
 const app = new PIXI.Application({ width: screen.width, height: screen.height, backgroundColor: 0x0, antialias: true });
 app.view.id = "DISPLAY";
@@ -140,8 +140,8 @@ app.ticker.add((deltaTime) => {
     player.vec.y *= 0.97;
     let h = Math.hypot(applied.x, applied.y);
     if (h != 0) {
-        player.vec.x += applied.x / h * deltaTime / 15;
-        player.vec.y += applied.y / h * deltaTime / 15;
+        player.vec.x += applied.x / h * deltaTime / 12;
+        player.vec.y += applied.y / h * deltaTime / 12;
     }
     player.x += player.vec.x;
     player.y += player.vec.y;
