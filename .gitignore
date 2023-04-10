@@ -1,9 +1,0 @@
-*.*~
-stable/*.zip
-stable/*/
-src/*/
-.obsidian/
-checklist.md
-.vscode
-hidden
-.testing
