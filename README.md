@@ -1,1 +1,3 @@
-# ZephyrJS - FOSS Game Development Features expanding PixiJS
+<h1>FOSS Game Development Features for PixiJS</h1>
+
+<p>ZephyrJS expands PixiJS with free and open-source game engine features, so that developers don't have to learn a a new system that is just a wrapper for PixiJS. Zephyr adds to it instead of wrapping, so that developers using PixiJS always have the <strong>option</strong> to use Zephyr. Free and Open-Source Software (FOSS) is all about letting people choose what they want to use, and wrapping all of Pixi just to add game development tools doesn't make a lot of sense. PixiJS is the fastest web renderer with incredible documentation and examples, so why re-engineer all the great things that the Pixi team does? The ZephyrJS project only maintains its own documentation, so we can get updates out faster and give you the latest and greatest of Pixi.</p>
