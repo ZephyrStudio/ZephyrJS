@@ -4,7 +4,7 @@
 
 <p><a href="https://github.com/ZephyrJS-Project/ZephyrJS/releases" title="ZephyrJS Github Releases" class="button">Download ZephyrJS</a></p>
 
-<p>For a first project, following the <a href="https://pixijs.io/guides/basics/getting-started.html" class="pixi">PixiJS Getting Started</a> guide is a great way to go. When you're all set up, your code should have a script tag that links to PixiJS. If you downloaded our version of Pixi, use that file here. Otherwise, replace the script src with <strong class="pixi">https://zephyrjs.netlify.app/pixi.js</strong> an you're all set:</p>
+<p>For a first project, following the <a href="https://pixijs.io/guides/basics/getting-started.html">PixiJS Getting Started</a> guide is a great way to go. When you're all set up, your code should have a script tag that links to PixiJS. If you downloaded our version of Pixi, use that file here. Otherwise, replace the script src with <strong class="pixi">https://zephyrjs.netlify.app/pixi.js</strong> an you're all set:</p>
 
 <code>&lt;script src="<span class="pixi">/path/to/pixi.js</span>"&gt;&lt;/script&gt;</code>
 
