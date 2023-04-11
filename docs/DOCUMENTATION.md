@@ -1,7 +1,6 @@
- <h1>How to Read the Documentation</h1>
+<h2>How to Read the Documentation</h2>
  <p><span class="warning">WARNINGS</span> are just general knowledge to be aware of when using a particular feature.</p>
- <p>Lines color coded as <span class="return">RETURN</span> below the function indicates the object type that is returned.
- </p>
+ <p>Lines color coded as <span class="return">RETURN</span> below the function indicates the object type that is returned.</p>
  <p>Lines coded as <span class="nightly">NIGHTLY</span> can only be found in the current nightly version of Zephyr.
  Consider trying it out, and letting us know of any bugs you find!</p>
  <p><span class="deprecated">DEPRECATED</span> lines specify features are set to be removed in the next stable release.</p>
