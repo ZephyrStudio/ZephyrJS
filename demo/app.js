@@ -1,6 +1,3 @@
-PIXI.Zephyr.useKeys();
-PIXI.Zephyr.useMouse();
-PIXI.Zephyr.useParticles();
 PIXI.BaseTexture.defaultOptions.scaleMode = PIXI.SCALE_MODES.NEAREST;
 
 const mvScale = 2;
@@ -8,7 +5,6 @@ const mvScale = 2;
 const app = new PIXI.Application({ width: screen.width, height: screen.height, backgroundColor: 0x0, antialias: true });
 app.view.id = "DISPLAY";
 document.querySelector('#gameShowcase').appendChild(app.view);
-PIXI.Mouse.setContainer(app.view);
 
 const tex = {
     player: PIXI.Texture.from('assets/character2x.png'),
@@ -117,9 +113,6 @@ txt.y = wreight;
 txt.anchor = {x: 0.5, y: 0};
 content.addChild(txt);
 
-PIXI.Mouse.x = app.view.width * 0.5;
-PIXI.Mouse.y = app.view.height * 0.5;
-
 app.ticker.add((deltaTime) => {
 
     let applied = {
@@ -149,8 +142,8 @@ app.ticker.add((deltaTime) => {
         player.scale.x = applied.x;
     
 
-    player.x = PIXI.clamp(player.x, 0, app.view.width);
-    player.y = PIXI.clamp(player.y, 0, app.view.height);
+    player.x = PIXI.utils.clamp(player.x, 0, app.view.width);
+    player.y = PIXI.utils.clamp(player.y, 0, app.view.height);
 
     content.x = emitter.x = (app.view.width * 0.5 - player.x) * mvScale + app.view.width * 0.5;
     content.y = emitter.y = ((window.innerHeight * 0.25) - player.y) * mvScale;
