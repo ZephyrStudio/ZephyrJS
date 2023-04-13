@@ -1,7 +1,7 @@
 PIXI.Zephyr.useKeys();
 PIXI.Zephyr.useMouse();
 PIXI.Zephyr.useParticles();
-// PIXI.BaseTexture.defaultOptions.scaleMode = PIXI.SCALE_MODES.NEAREST;
+PIXI.BaseTexture.defaultOptions.scaleMode = PIXI.SCALE_MODES.NEAREST;
 
 const mvScale = 2;
 
@@ -28,7 +28,7 @@ let player = new PIXI.Sprite(tex.player);
 player.anchor = { x: 0.5, y: 0.5 };
 player.vec = { x: 0, y: 0 };
 player.x = app.view.width * 0.5;
-player.y = wreight += window.innerHeight * 0.25;
+player.y = wreight += (window.innerHeight * 0.25) ^ 0;
 app.stage.addChild(player);
 
 let content = new PIXI.Container();

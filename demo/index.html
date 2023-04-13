@@ -1,56 +1,83 @@
-<!DOCTYPE html><html lang="en">
-    <head>
-        <script src="../src/pixi.js"></script>
-        <script src="../src/zephyr.js"></script>
-        <style>
-            * {
-                margin: 0;
-                padding: 0;
-            }
-            body {
-                height: 100vh;
-                width: 100vw;
-                overflow: hidden;
-            }
-            #gameShowcase {
-                overflow: hidden;
-                z-index: 0;
-                position: relative;
-                height: 100vh;
-            }
-    
-            #showcaseOverlay {
-                color: #fff;
-                z-index: 2;
-                font-weight: 600;
-                text-align: center;
-                position: absolute;
-                top: 0;
-                left: 50%;
-                transform: translate(-50%, 0);
-                max-width: 700px;
-                width: 90%;
-                display: block;
-                margin: 0 auto;
-            }
-    
-            #showcaseOverlay>.button {
-                margin: 24px 12px 0px;
-            }
-    
-            #DISPLAY {
-                z-index: 1;
-                position: absolute;
-                top: 0;
-                left: 50%;
-                min-width: 100%;
-                min-height: 100%;
-                transform: translate(-50%, 0%);
-            }
-        </style>
-    </head>
-    <body>
-        <div id="gameShowcase"></div>
-        <script src="app.js"></script>
-    </body>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>ZephyrJS Demo</title>
+    <link rel="stylesheet" as="style" href="/style.css">
+    <script src="../src/pixi.js"></script>
+    <script src="../src/zephyr.js"></script>
+    <style>
+        :root {
+            --anim-list: background-color .3s, border-color .3s, color .3s, fill .3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: monospace;
+            -webkit-transition: var(--anim-list);
+            -moz-transition: var(--anim-list);
+            -o-transition: var(--anim-list);
+            transition: var(--anim-list);
+            transition-timing-function: ease-out;
+        }
+
+        html {
+            background: #000;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+
+        #gameShowcase {
+            overflow: hidden;
+            z-index: 0;
+            position: relative;
+            height: 100vh;
+        }
+
+        #DISPLAY {
+            z-index: 1;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            transform: translate(-50%, 0%);
+        }
+
+        #return {
+            color: #ef6f6c;
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            z-index: 2;
+            transform: translate(-50%, 0);
+            padding: 9px;
+            border: 3px solid #ef6f6c;
+            background: #000;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        #return:hover {
+            background: #ef6f6c;
+            color: #000;
+        }
+    </style>
+</head>
+
+<body>
+    <header id="deliver"><noscript>This page needs scripts to work</noscript></header>
+    <div id="gameShowcase"></div>
+    <script src="app.js"></script>
+    <script src="/deliver.js"></script>
+</body>
+
 </html>
