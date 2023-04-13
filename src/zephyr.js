@@ -8,6 +8,11 @@
 PIXI = (function (exports) {
     'use strict';
 
+    // NON-BUNDLE SETUP
+    let index = exports.utils;
+
+    /* START ZEPHYR BUNDLE ZONE */
+
     const Zephyr = {
         VERSION: "23.4.13",
         _spriteFix: (s) => { // Returns the actual x/y width/height of a scaled and anchored Sprite
@@ -50,10 +55,10 @@ PIXI = (function (exports) {
             return { _gainNode: PIXI.Audio._ctx.createGain(), src: src, volume: 1, play: PIXI.Audio._player };
         }
         return a;
-    })({});
+    })(Audio || {});
 
     // FILE IS BUGGY AND BAD
-    const File = (function (f) {
+    var File = (function (f) {
         f.write = async (object, fName) => {
             let file = new Blob([JSON.stringify(object)], { type: JSON });
             var a = document.createElement("a"),
@@ -73,9 +78,9 @@ PIXI = (function (exports) {
             let contents = await file.text();
             return JSON.parse(contents);
         };
-    })({});
+    })(File || {});
 
-    const Keys = (function (k) {
+    var Keys = (function (k) {
         k._map = new Map(),
             k.down = function (key) {
                 if (k._map.size > 0 && k._map.has(key)) {
@@ -92,9 +97,9 @@ PIXI = (function (exports) {
             return false;
         };
         return k;
-    })({});
+    })(Keys || {});
 
-    const Mouse = (function (m) {
+    var Mouse = (function (m) {
         m._bounds = document.getElementsByTagName("html")[0].getBoundingClientRect();
         m._container = document.getElementsByTagName("html")[0];
         m.x = 0;
@@ -128,9 +133,9 @@ PIXI = (function (exports) {
             return false;
         }
         return m;
-    })({});
+    })(Mouse || {});
 
-    const Particles = (function (p) {
+    var Particles = (function (p) {
         p._init = function (particle) {
             let r = (Math.random() - 0.5) * this.spread + this.direction;
             particle.alpha = 1;
@@ -183,9 +188,9 @@ PIXI = (function (exports) {
             return res;
         }
         return p;
-    })({});
+    })(Particles || {});
 
-    const utils = (function (u) {
+    index = (function (u) {
         u.clamp = function (x, min, max) { return Math.min(Math.max(x, min), max) };
         u.mix = function (a, b, m) { return a * (1 - m) + b * (m) };
         u.random = function random(min, max) { return (Math.random() * (max - min + 1)) ^ 0 + min };
@@ -210,7 +215,7 @@ PIXI = (function (exports) {
             }
         }
         return u;
-    })(exports.utils || {});
+    })(index || {});
 
     const Collision = {
         aabb: (a, b) => { // Axis-Aligned Bounding Box method
@@ -266,9 +271,11 @@ PIXI = (function (exports) {
     exports.Keys = Keys;
     exports.Mouse = Mouse;
     exports.Particles = Particles;
-    exports.utils = utils;
     exports.Collision = Collision;
     exports.toggleFullScreen = toggleFullScreen;
+
+    /* END ZEPHYR BUNDLE ZONE */
+    exports.utils = index;
 
     return exports;
 })(PIXI || {});
