@@ -1,7 +1,7 @@
 "use strict"
 PIXI.Zephyr = {
-    version: "ZephyrJS 23.4.2",
-    compatible: "PixiJS v7.2.3",
+    version: "ZephyrJS 23.4.13",
+    compatible: "PixiJS v7.2.4",
     _spriteFix: (s) => { // Returns the actual x/y width/height of a scaled and anchored Sprite
         let w = s.width * (s.scale ? s.scale.x : 1);
         let h = s.height * (s.scale ? s.scale.y : 1);
@@ -164,7 +164,6 @@ PIXI.Zephyr = {
                     } else {
                         p.x += p.move.x * deltaTime;
                         p.y += p.move.y * deltaTime;
-                        // p.alpha = PIXI.clamp(p.life / this.life, 0, 1);
                     }
 
                 });
