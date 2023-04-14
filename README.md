@@ -4,7 +4,7 @@
 
 <h1>What is ZephyrJS?</h1>
 
-<p>ZephyrJS is a Free and Open Source Software (FOSS) project that aims to provide <strong>a simple yet powerful expansion of <a href="https://github.com/pixijs/pixijs">PixiJS</a> for powerful web game development, without wrapping</strong>. Since the team behind Pixi is devoted to making the fastest web renderer around, Zephyr adds onto it by supplying commonly used features such as:</p>
+<p>ZephyrJS is a Free and Open Source Software (FOSS) project that aims to provide <strong>a simple yet powerful expansion of <a href="https://github.com/pixijs/pixijs">PixiJS</a> for web game development, without wrapping</strong>. Since the team behind Pixi is devoted to making the fastest web renderer around, Zephyr adds onto it by supplying commonly used features such as:</p>
 <ul>
 <li>efficient mouse and keyboard input tracking</li>
 <li>an easy-to-use implementation of the WebAudio API</li>
