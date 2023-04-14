@@ -4,26 +4,6 @@
  <p>Lines coded as <span class="nightly">NIGHTLY</span> can only be found in the current nightly version of Zephyr.
  Consider trying it out, and letting us know of any bugs you find!</p>
  <p><span class="deprecated">DEPRECATED</span> lines specify features are set to be removed in the next stable release.</p>
- <h2>PIXI.Zephyr</h2>
- <dl>
- <dt>PIXI.Zephyr.useKeys()</dt>
- <dd><em>Enables <a href="#PIXI.Keys">PIXI.Keys</a></em></dd>
- <dd>Sets up the key tracking system for use</dd>
- <dt>PIXI.Zephyr.useMouse()</dt>
- <dd><em>Enables <a href="#PIXI.Mouse">PIXI.Mouse</a></em></dd>
- <dd>Sets up the mouse tracking system for use</dd>
- <dd><span class="warning">NOTE</span>: Please make sure you call PIXI.Mouse.setContainer() with an appended
- element afterward!</dd>
- <dt>PIXI.Zephyr.useAudio()</dt>
- <dd><em>Enables <a href="#PIXI.Audio">PIXI.Audio</a></em></dd>
- <dd>Sets up the WebAudio API for Pixi-style usage</dd>
- <dt>PIXI.Zephyr.useFile()</dt>
- <dd><em>Enables <a href="#PIXI.File">PIXI.File</a></em></dd>
- <dd>Sets up the File reading/writing system</dd>
- <dt>PIXI.Zephyr.useParticles()</dt>
- <dd><em>Enables <a href="#PIXI.Particles">PIXI.Particles</a></em></dd>
- <dd>Sets up the Particle Emitter backend for Pixi-Style usage</dd>
- </dl>
  <h2 id="PIXI.Audio">PIXI.Audio</h2>
  <dl>
  <dt>PIXI.Audio.from(src)</dt>
