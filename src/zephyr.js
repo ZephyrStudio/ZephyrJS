@@ -1,8 +1,9 @@
 /* 
  * ZephyrJS - FOSS Game Engine Features for PixiJS
- * https://zephyrjs.netlify.app/
  * 
- * ZephyrJS is licensed under the MIT License. Consider contributing on our Github
+ * ZephyrJS is licensed under the MIT License.
+ * 
+ * Consider contributing to the project!
  * https://github.com/ZephyrJS-Project/ZephyrJS
  */
 PIXI = (function (exports) {
@@ -13,7 +14,7 @@ PIXI = (function (exports) {
 
     /* START ZEPHYR BUNDLE ZONE */
 
-    const Zephyr = {
+    var Zephyr = {
         VERSION: "23.4.13",
         _spriteFix: (s) => { // Returns the actual x/y width/height of a scaled and anchored Sprite
             let w = s.width * (s.scale ? s.scale.x : 1);
