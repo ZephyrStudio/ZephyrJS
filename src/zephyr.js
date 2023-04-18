@@ -14,9 +14,15 @@ PIXI = (function (exports) {
 
     /* START ZEPHYR BUNDLE ZONE */
 
-    var Zephyr = {
-        VERSION: "23.4.13",
-        _spriteFix: (s) => { // Returns the actual x/y width/height of a scaled and anchored Sprite
+    var Zephyr = (function (z) {
+        z.VERSION = '23.4.18'; // Version number, yy.mm.dd format
+
+        z._audio = { // Backend for both Direct and Spatial Audio sprites
+            buffers: new Map(), // Store all decoded audio buffers in one location
+            ctx: new AudioContext() // More than one audio context causes lag
+        }
+
+        z._spriteFix = function (s) { // Returns the actual x/y width/height of a scaled and anchored Sprite
             let w = s.width * (s.scale ? s.scale.x : 1);
             let h = s.height * (s.scale ? s.scale.y : 1);
             return {
@@ -25,38 +31,74 @@ PIXI = (function (exports) {
                 width: Math.abs(w),
                 height: Math.abs(h)
             }
-        },
-        useAudio: () => { console.error('ZephyrJS: useAudio() is deprecated') },
-        useFile: () => { console.error('ZephyrJS: useFile() is deprecated') },
-        useKeys: () => { console.error('ZephyrJS: useKeys() is deprecated') },
-        useMouse: () => { console.error('ZephyrJS: useMouse() is deprecated') },
-        useParticles: () => { console.error('ZephyrJS: useParticles() is deprecated') },
-    }
+        };
+        z.useAudio = () => { console.error('ZephyrJS: useAudio() is deprecated') };
+        z.useFile = () => { console.error('ZephyrJS: useFile() is deprecated') };
+        z.useKeys = () => { console.error('ZephyrJS: useKeys() is deprecated') };
+        z.useMouse = () => { console.error('ZephyrJS: useMouse() is deprecated') };
+        z.useParticles = () => { console.error('ZephyrJS: useParticles() is deprecated') };
+        return z;
+    })(Zephyr || {});
 
-    var Audio = (function (a) {
-        a._ctx = new AudioContext();
-        a._buffers = new Map(), // Stores all audio buffers
-            a._player = function () { // Shared function for all Audio objects
-                if (a._buffers.has(this.src)) {
-                    let aud = a._ctx.createBufferSource();
-                    aud.buffer = a._buffers.get(this.src);
-                    this._gainNode.gain.value = this.volume;
-                    aud.connect(this._gainNode).connect(a._ctx.destination);
-                    aud.start(0);
-                } else {
-                    console.warn('ZephyrJS Audio: ' + this.src + ' is not ready to be played');
-                }
+    var Collision = (function (c) {
+        c.aabb = function (a, b) { // Axis-Aligned Bounding Box method
+            let aFix = PIXI.Zephyr._spriteFix(a);
+            let bFix = PIXI.Zephyr._spriteFix(b);
+            return !(aFix.x + a.width < bFix.x || aFix.y + a.height < bFix.y || aFix.x > bFix.x + b.width || aFix.y > bFix.y + b.height);
+        };
+        c.radius = function (a, b) { // Circle collision, for objects a and b
+            return Math.hypot(a.x - b.x + (a.width - b.width) * 0.5, a.y - b.y + (a.height - b.height) * 0.5) <= (Math.max(a.width, a.height) + Math.max(b.width, b.height)) * 0.5;
+        };
+        return c;
+    })(Collision || {});
+
+    var DirectAudio = (function (d) {
+        let ctx = Zephyr._audio.ctx;
+        let buffers = Zephyr._audio.buffers;
+        d._starter = function () {
+            if (buffers.has(this.src)) {
+                d._stopper();
+                this._source = ctx.createBufferSource();
+                this._source.buffer = buffers.get(this.src);
+
+                this._gainNode.gain.value = this.gain; // 0 mute, 1 full
+                this._panNode.pan.value = this.pan; // -1 full left, 0 original, 1 full right
+
+                this._source.connect(this._gainNode).connect(this._panNode).connect(ctx.destination);
+                this._source.start(0);
+            } else {
+                console.warn('ZephyrJS Audio: ' + this.src + ' has not finished being decoded.');
             }
-        a.from = function (src) {
-            let r = new XMLHttpRequest();
-            r.open('GET', src, true);
-            r.responseType = 'arraybuffer';
-            r.onload = () => { PIXI.Audio._ctx.decodeAudioData(r.response, function (buffer) { PIXI.Audio._buffers.set(src, buffer) }) }
-            r.send();
-            return { _gainNode: PIXI.Audio._ctx.createGain(), src: src, volume: 1, play: PIXI.Audio._player };
         }
-        return a;
-    })(Audio || {});
+        d._stopper = function () {
+            if (this._source) {
+                this._source.stop(0);
+                this._source.disconnect();
+                this._source = null;
+            }
+        }
+        d.from = function (src) {
+            if (!buffers.has(src)) {
+                let r = new XMLHttpRequest();
+                r.open('GET', src, true);
+                r.responseType = 'arraybuffer';
+                r.onload = function () { ctx.decodeAudioData(r.response, function (buffer) { buffers.set(src, buffer) }) };
+                r.send();
+            }
+
+            return {
+                _source: null,
+                _gainNode: ctx.createGain(),
+                _panNode: ctx.createStereoPanner(),
+                gain: 1,
+                pan: 0,
+                start: d._starter,
+                stop: d._stopper,
+                src: src,
+            };
+        }
+        return d;
+    })(DirectAudio || {});
 
     // FILE IS BUGGY AND BAD
     var File = (function (f) {
@@ -177,20 +219,30 @@ PIXI = (function (exports) {
             res._init = p._init;
             res._spawnTimer = 0;
             res.baseTexture = PIXI.Texture.from(src);
-            res.direction = (options.direction ? options.direction : 0);
-            res.life = (options.life ? options.life : 128);
+            res.direction = (typeof options.direction !== 'undefined' ? options.direction : 0);
+            res.life = (typeof options.life !== 'undefined' ? options.life : 128);
             res.maxCount = maxCount;
-            res.rotate = (options.rotate ? options.rotate : false);
-            res.scaling = (options.scaling ? options.scaling : 1)
+            res.rotate = (typeof options.rotate !== 'undefined' ? options.rotate : false);
+            res.scaling = (typeof options.scaling !== 'undefined' ? options.scaling : 1)
             res.spawn = { x: 0, y: 0 };
-            res.speed = (options.speed ? options.speed : 1);
-            res.spread = (options.spread ? options.spread : 0);
+            res.speed = (typeof options.speed !== 'undefined' ? options.speed : 1);
+            res.spread = (typeof options.spread !== 'undefined' ? options.spread : 0);
             res.step = p._step;
             return res;
         }
         return p;
     })(Particles || {});
 
+    var SpatialAudio = (function (s) {
+        s._ctx = new AudioContext();
+        s._buffers = new Map(); // Stores all audio buffers
+        s._player = function () { }
+        s._pauser = function () { }
+        s.from = function (src) { }
+        return s;
+    })(SpatialAudio || {});
+
+    // UTILITIES (For some reason it's called index inside PIXI setup?)
     index = (function (u) {
         u.clamp = function (x, min, max) { return Math.min(Math.max(x, min), max) };
         u.mix = function (a, b, m) { return a * (1 - m) + b * (m) };
@@ -218,17 +270,6 @@ PIXI = (function (exports) {
         return u;
     })(index || {});
 
-    const Collision = {
-        aabb: (a, b) => { // Axis-Aligned Bounding Box method
-            let aFix = PIXI.Zephyr._spriteFix(a);
-            let bFix = PIXI.Zephyr._spriteFix(b);
-            return !(aFix.x + a.width < bFix.x || aFix.y + a.height < bFix.y || aFix.x > bFix.x + b.width || aFix.y > bFix.y + b.height);
-        },
-        radius: (a, b) => { // Circle collision, for objects a and b
-            return Math.hypot(a.x - b.x + (a.width - b.width) * 0.5, a.y - b.y + (a.height - b.height) * 0.5) <= (Math.max(a.width, a.height) + Math.max(b.width, b.height)) * 0.5;
-        }
-    }
-
     function toggleFullScreen(view) {
         if (!view.fullscreenElement &&
             !view.mozFullScreenElement && !view.webkitFullscreenElement) {  // current working methods
@@ -253,9 +294,11 @@ PIXI = (function (exports) {
     (function listenerSetup() {
         // CTX MENU BLOCK
         window.addEventListener('contextmenu', e => { e.preventDefault() });
+
         // KEYBOARD
         window.addEventListener('keydown', e => { Keys._map.set(e.code, true) });
         window.addEventListener('keyup', e => { Keys._map.delete(e.code) });
+
         // MOUSE
         window.addEventListener('resize', () => { Mouse._bounds = Mouse._container.getBoundingClientRect() });
         window.addEventListener('mouseup', e => { Mouse._map.delete(Mouse._btns[e.button]) });
@@ -267,12 +310,13 @@ PIXI = (function (exports) {
     })();
 
     exports.Zephyr = Zephyr;
-    exports.Audio = Audio;
+    exports.Collision = Collision;
+    exports.DirectAudio = DirectAudio;
     exports.File = File;
     exports.Keys = Keys;
     exports.Mouse = Mouse;
     exports.Particles = Particles;
-    exports.Collision = Collision;
+    exports.SpatialAudio = SpatialAudio;
     exports.toggleFullScreen = toggleFullScreen;
 
     /* END ZEPHYR BUNDLE ZONE */
