@@ -16,7 +16,6 @@ PIXI = (function (exports) {
 
     var Zephyr = (function (z) {
         z.VERSION = '23.4.18'; // Version number, yy.mm.dd format
-
         z._audio = {};
         z._audio.buffers = new Map(); // Store all decoded audio buffers in one location
         z._audio.ctx = new AudioContext(); // More than one audio context causes lag
@@ -30,17 +29,26 @@ PIXI = (function (exports) {
                 r.send();
             }
         };
-
-        z._spriteFix = function (s) { // Returns the actual x/y width/height of a scaled and anchored Sprite
-            let w = s.width * (s.scale ? s.scale.x : 1);
-            let h = s.height * (s.scale ? s.scale.y : 1);
-            return {
-                x: s.x - (s.anchor ? s.anchor.x * w : 0) + Math.min(0, w),
-                y: s.y - (s.anchor ? s.anchor.y * h : 0) + Math.min(0, h),
-                width: Math.abs(w),
-                height: Math.abs(h)
+        z.SpriteFix = {
+            rect: function (s) { // Returns the actual x/y width/height of a scaled and anchored Sprite
+                let w = s.width * (s.scale ? s.scale.x : 1);
+                let h = s.height * (s.scale ? s.scale.y : 1);
+                return {
+                    x: s.x - (s.anchor ? s.anchor.x * w : 0) + Math.min(0, w),
+                    y: s.y - (s.anchor ? s.anchor.y * h : 0) + Math.min(0, h),
+                    width: Math.abs(w),
+                    height: Math.abs(h)
+                }
+            },
+            rads: function (s) {
+                if (!s.scale) s.scale = { x: 1, y: 1 };
+                return {
+                    x: (0.5 - s.anchor.x) * s.width * (s.scale.x < 0 ? -1 : 1) + s.x,
+                    y: (0.5 - s.anchor.y) * s.height * (s.scale.y < 0 ? -1 : 1) + s.y,
+                    r: (s.width + s.height) * 0.25
+                }
             }
-        };
+        }
         z.useAudio = () => { console.error('ZephyrJS: useAudio() is deprecated') };
         z.useFile = () => { console.error('ZephyrJS: useFile() is deprecated') };
         z.useKeys = () => { console.error('ZephyrJS: useKeys() is deprecated') };
@@ -51,12 +59,14 @@ PIXI = (function (exports) {
 
     var collision = (function (c) {
         c.aabb = function (a, b) { // Axis-Aligned Bounding Box method
-            let aFix = PIXI.Zephyr._spriteFix(a);
-            let bFix = PIXI.Zephyr._spriteFix(b);
+            let aFix = PIXI.Zephyr.SpriteFix.rect(a);
+            let bFix = PIXI.Zephyr.SpriteFix.rect(b);
             return !(aFix.x + a.width < bFix.x || aFix.y + a.height < bFix.y || aFix.x > bFix.x + b.width || aFix.y > bFix.y + b.height);
         };
         c.radius = function (a, b) { // Circle collision, for objects a and b
-            return Math.hypot(a.x - b.x + (a.width - b.width) * 0.5, a.y - b.y + (a.height - b.height) * 0.5) <= (Math.max(a.width, a.height) + Math.max(b.width, b.height)) * 0.5;
+            let aFix = PIXI.Zephyr.SpriteFix.rads(a);
+            let bFix = PIXI.Zephyr.SpriteFix.rads(b);
+            return Math.hypot(bFix.x - aFix.x, bFix.y - aFix.y) <= aFix.r + bFix.r;
         };
         return c;
     })(collision || {});
@@ -77,11 +87,11 @@ PIXI = (function (exports) {
                     this._source.connect(this._gainNode).connect(this._panNode).connect(ctx.destination);
                     this._source.start(0);
                 } else {
-                    console.warn('ZephyrJS Audio: ' + this.src + ' decoding is in progress.');
+                    console.warn('ZephyrJS DirectAudio: ' + this.src + ' decoding is in progress.');
                 }
             } else {
                 Zephyr._audio.buffer(this.src);
-                console.warn('ZephyrJS Audio: ' + this.src + ' has not been buffered, starting now.');
+                console.warn('ZephyrJS DirectAudio: ' + this.src + ' has not been buffered, starting now.');
             }
         }
         d._stopper = function () {
@@ -265,11 +275,11 @@ PIXI = (function (exports) {
                     this._source.connect(this._gainNode).connect(this._panNode).connect(ctx.destination);
                     this._source.start(0);
                 } else {
-                    console.warn('ZephyrJS Audio: ' + this.src + ' decoding is in progress.');
+                    console.warn('ZephyrJS SpatialAudio: ' + this.src + ' decoding is in progress.');
                 }
             } else {
                 Zephyr._audio.buffer(this.src);
-                console.warn('ZephyrJS Audio: ' + this.src + ' has not been buffered, starting now.');
+                console.warn('ZephyrJS SpatialAudio: ' + this.src + ' has not been buffered, starting now.');
             }
         }
         s._stopper = function () {
@@ -280,13 +290,14 @@ PIXI = (function (exports) {
             }
         }
         s.from = function (src) {
+            console.warning("Creating SpatialAudio of " + src + ". Please not this is VERY unstable currently")
             Zephyr._audio.buffer(src);
             return {
                 _source: null,
                 _gainNode: ctx.createGain(),
                 maxDistance: 10000,
                 position: { x: 0, y: 0 },
-                listener: { x: 0, y: 0 , angle: 0},
+                listener: { x: 0, y: 0, angle: 0 },
                 start: s._starter,
                 stop: s._stopper,
                 src: src,
@@ -323,27 +334,6 @@ PIXI = (function (exports) {
         return u;
     })(index || {});
 
-    function toggleFullScreen(view) {
-        if (!view.fullscreenElement &&
-            !view.mozFullScreenElement && !view.webkitFullscreenElement) {  // current working methods
-            if (view.requestFullscreen) {
-                view.requestFullscreen();
-            } else if (view.mozRequestFullScreen) {
-                view.mozRequestFullScreen();
-            } else if (view.webkitRequestFullscreen) {
-                view.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-            }
-        } else {
-            if (view.cancelFullScreen) {
-                view.cancelFullScreen();
-            } else if (view.mozCancelFullScreen) {
-                view.mozCancelFullScreen();
-            } else if (view.webkitCancelFullScreen) {
-                view.webkitCancelFullScreen();
-            }
-        }
-    }
-
     (function listenerSetup() {
         // CTX MENU BLOCK
         window.addEventListener('contextmenu', e => { e.preventDefault() });
@@ -370,7 +360,6 @@ PIXI = (function (exports) {
     exports.Mouse = Mouse;
     exports.Particles = Particles;
     exports.SpatialAudio = SpatialAudio;
-    exports.toggleFullScreen = toggleFullScreen;
 
     /* END ZEPHYR BUNDLE ZONE */
     exports.utils = index;
