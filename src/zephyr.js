@@ -49,7 +49,7 @@ PIXI = (function (exports) {
         return z;
     })(Zephyr || {});
 
-    var Collision = (function (c) {
+    var collision = (function (c) {
         c.aabb = function (a, b) { // Axis-Aligned Bounding Box method
             let aFix = PIXI.Zephyr._spriteFix(a);
             let bFix = PIXI.Zephyr._spriteFix(b);
@@ -59,7 +59,7 @@ PIXI = (function (exports) {
             return Math.hypot(a.x - b.x + (a.width - b.width) * 0.5, a.y - b.y + (a.height - b.height) * 0.5) <= (Math.max(a.width, a.height) + Math.max(b.width, b.height)) * 0.5;
         };
         return c;
-    })(Collision || {});
+    })(collision || {});
 
     var DirectAudio = (function (d) {
         let ctx = Zephyr._audio.ctx;
@@ -363,7 +363,7 @@ PIXI = (function (exports) {
     })();
 
     exports.Zephyr = Zephyr;
-    exports.Collision = Collision;
+    exports.collision = collision;
     exports.DirectAudio = DirectAudio;
     exports.File = File;
     exports.Keys = Keys;
