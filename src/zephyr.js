@@ -17,10 +17,19 @@ PIXI = (function (exports) {
     var Zephyr = (function (z) {
         z.VERSION = '23.4.18'; // Version number, yy.mm.dd format
 
-        z._audio = { // Backend for both Direct and Spatial Audio sprites
-            buffers: new Map(), // Store all decoded audio buffers in one location
-            ctx: new AudioContext() // More than one audio context causes lag
-        }
+        z._audio = {};
+        z._audio.buffers = new Map(); // Store all decoded audio buffers in one location
+        z._audio.ctx = new AudioContext(); // More than one audio context causes lag
+        z._audio.buffer = function (src) {
+            if (!z._audio.buffers.has(src)) {
+                z._audio.buffers.set(src, false);
+                let r = new XMLHttpRequest();
+                r.open('GET', src, true);
+                r.responseType = 'arraybuffer';
+                r.onload = function () { z._audio.ctx.decodeAudioData(r.response, function (buffer) { z._audio.buffers.set(src, buffer) }) };
+                r.send();
+            }
+        };
 
         z._spriteFix = function (s) { // Returns the actual x/y width/height of a scaled and anchored Sprite
             let w = s.width * (s.scale ? s.scale.x : 1);
@@ -57,17 +66,22 @@ PIXI = (function (exports) {
         let buffers = Zephyr._audio.buffers;
         d._starter = function () {
             if (buffers.has(this.src)) {
-                d._stopper();
-                this._source = ctx.createBufferSource();
-                this._source.buffer = buffers.get(this.src);
+                if (buffers.get(this.src)) {
+                    d._stopper();
+                    this._source = ctx.createBufferSource();
+                    this._source.buffer = buffers.get(this.src);
 
-                this._gainNode.gain.value = this.gain; // 0 mute, 1 full
-                this._panNode.pan.value = this.pan; // -1 full left, 0 original, 1 full right
+                    this._gainNode.gain.value = this.gain; // 0 mute, 1 full
+                    this._panNode.pan.value = this.pan; // -1 full left, 0 original, 1 full right
 
-                this._source.connect(this._gainNode).connect(this._panNode).connect(ctx.destination);
-                this._source.start(0);
+                    this._source.connect(this._gainNode).connect(this._panNode).connect(ctx.destination);
+                    this._source.start(0);
+                } else {
+                    console.warn('ZephyrJS Audio: ' + this.src + ' decoding is in progress.');
+                }
             } else {
-                console.warn('ZephyrJS Audio: ' + this.src + ' has not finished being decoded.');
+                Zephyr._audio.buffer(this.src);
+                console.warn('ZephyrJS Audio: ' + this.src + ' has not been buffered, starting now.');
             }
         }
         d._stopper = function () {
@@ -78,14 +92,7 @@ PIXI = (function (exports) {
             }
         }
         d.from = function (src) {
-            if (!buffers.has(src)) {
-                let r = new XMLHttpRequest();
-                r.open('GET', src, true);
-                r.responseType = 'arraybuffer';
-                r.onload = function () { ctx.decodeAudioData(r.response, function (buffer) { buffers.set(src, buffer) }) };
-                r.send();
-            }
-
+            Zephyr._audio.buffer(src);
             return {
                 _source: null,
                 _gainNode: ctx.createGain(),
@@ -102,25 +109,35 @@ PIXI = (function (exports) {
 
     // FILE IS BUGGY AND BAD
     var File = (function (f) {
-        f.write = async (object, fName) => {
-            let file = new Blob([JSON.stringify(object)], { type: JSON });
-            var a = document.createElement("a"),
-                url = URL.createObjectURL(file);
-            a.href = url;
-            a.download = fName + ".json";
-            document.body.appendChild(a);
-            a.click();
-            setTimeout(() => {
-                document.body.removeChild(a);
-                window.URL.revokeObjectURL(url);
-            }, 0);
+        f.write = function (content, fName) {
+            if (typeof content === "string") {
+                const a = document.createElement('a');
+                a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(content);
+                a.download = (typeof fName === "string") ? fName : document.title + '.txt';
+                a.click();
+                a.remove();
+            } else {
+                console.error("PIXI.File: Content to be written into " + fName + " is not a string.\nTry JSON.stringify(obj)?");
+            }
         };
-        f.open = async function () {
-            [fileHandle] = await window.showOpenFilePicker();
-            let file = await fileHandle.getFile();
-            let contents = await file.text();
-            return JSON.parse(contents);
+        f.open = function (type) {
+            let res = { fulfilled: false, result: undefined };
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = (typeof type === "string") ? type : '*';
+            input.addEventListener('change', function () {
+                const reader = new FileReader();
+                reader.readAsText(input.files[0]);
+                reader.onload = function () {
+                    res.fulfilled = true;
+                    res.result = reader.result;
+                };
+            });
+            input.click();
+            input.remove();
+            return res;
         };
+        return f;
     })(File || {});
 
     var Keys = (function (k) {
@@ -213,20 +230,19 @@ PIXI = (function (exports) {
                 }
             }
         };
-        p.from = function (src, maxCount, options) {
-            if (!options) options = {};
+        p.from = function (src, maxCount) {
             let res = new PIXI.ParticleContainer(maxCount);
             res._init = p._init;
             res._spawnTimer = 0;
             res.baseTexture = PIXI.Texture.from(src);
-            res.direction = (typeof options.direction !== 'undefined' ? options.direction : 0);
-            res.life = (typeof options.life !== 'undefined' ? options.life : 128);
+            res.direction = 0;
+            res.life = 128;
             res.maxCount = maxCount;
-            res.rotate = (typeof options.rotate !== 'undefined' ? options.rotate : false);
-            res.scaling = (typeof options.scaling !== 'undefined' ? options.scaling : 1)
+            res.rotate = false;
+            res.scaling = 1;
             res.spawn = { x: 0, y: 0 };
-            res.speed = (typeof options.speed !== 'undefined' ? options.speed : 1);
-            res.spread = (typeof options.spread !== 'undefined' ? options.spread : 0);
+            res.speed = 1;
+            res.spread = 0;
             res.step = p._step;
             return res;
         }
@@ -234,11 +250,48 @@ PIXI = (function (exports) {
     })(Particles || {});
 
     var SpatialAudio = (function (s) {
-        s._ctx = new AudioContext();
-        s._buffers = new Map(); // Stores all audio buffers
-        s._player = function () { }
-        s._pauser = function () { }
-        s.from = function (src) { }
+        let ctx = Zephyr._audio.ctx;
+        let buffers = Zephyr._audio.buffers;
+        s._starter = function () {
+            if (buffers.has(this.src)) {
+                if (buffers.get(this.src)) {
+                    s._stopper();
+                    this._source = ctx.createBufferSource();
+                    this._source.buffer = buffers.get(this.src);
+
+                    this._gainNode.gain.value = this.gain; // 0 mute, 1 full
+                    this._panNode.pan.value = this.pan; // -1 full left, 0 original, 1 full right
+
+                    this._source.connect(this._gainNode).connect(this._panNode).connect(ctx.destination);
+                    this._source.start(0);
+                } else {
+                    console.warn('ZephyrJS Audio: ' + this.src + ' decoding is in progress.');
+                }
+            } else {
+                Zephyr._audio.buffer(this.src);
+                console.warn('ZephyrJS Audio: ' + this.src + ' has not been buffered, starting now.');
+            }
+        }
+        s._stopper = function () {
+            if (this._source) {
+                this._source.stop(0);
+                this._source.disconnect();
+                this._source = null;
+            }
+        }
+        s.from = function (src) {
+            Zephyr._audio.buffer(src);
+            return {
+                _source: null,
+                _gainNode: ctx.createGain(),
+                maxDistance: 10000,
+                position: { x: 0, y: 0 },
+                listener: { x: 0, y: 0 , angle: 0},
+                start: s._starter,
+                stop: s._stopper,
+                src: src,
+            };
+        }
         return s;
     })(SpatialAudio || {});
 

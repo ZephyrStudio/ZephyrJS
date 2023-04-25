@@ -1,17 +1,20 @@
 <h1 id="getting-started">Getting Started</h1>
 
-<p>For most projects, it's recommended to download the latest version of Zephyr and the compatible version of Pixi from our Github releases. If you're new to Zephyr though, don't feel obligated to download our code! We have hosted files that you can link to for trying it out.</p>
+<p>Selecting an appropriate version of Zephyr for your project is very important, and is the first thing you really have to do. Think about the scope of your project: if you're making a quick test that'll be done in a day or two, you're most likely good with just linking one of our hosted versions. If this is a larger project, consider downloading the version that works for you through the <a href="https://github.com/ZephyrJS-Project/ZephyrJS/releases">Github Releases</a> page.</p>
 
-<p><a href="https://github.com/ZephyrJS-Project/ZephyrJS/releases" title="ZephyrJS Github Releases" class="button">Download ZephyrJS</a></p>
+<p>As of Zephyr 23.4.13, there's nothing you need to do to activate its features. Just link the needed files, and you're ready to go!</p>
 
-<p>For a first project, following the <a href="https://pixijs.io/guides/basics/getting-started.html">PixiJS Getting Started</a> guide is a great way to go. When you're all set up, your code should have a script tag that links to PixiJS. If you downloaded our version of Pixi, use that file here. Otherwise, replace the script src with <strong class="pixi">https://zephyrjs.netlify.app/pixi.js</strong> an you're all set:</p>
+<h2>The Bundle</h2>
+<p>This is the easiest way to use Zephyr. Since Zephyr 23.4.13, we've distributed a version of Pixi and Zephyr combined and minified for ease of use.</p>
 
-<code>&lt;script src="<span class="pixi">/path/to/pixi.js</span>"&gt;&lt;/script&gt;</code>
+<code>&lt;script src="<strong class="bundle">https://zephyrjs.netlify.app/bundle.js</strong>"&gt;&lt;/script&gt;</code>
 
-<h2>Adding Zephyr</h2>
+<p>If you <a href="https://raw.githubusercontent.com/ZephyrJS-Project/ZephyrJS/main/stable/bundle.js">download the bundle</a> instead, replace the src of the script tag with the <strong class="bundle">path/to/bundle.js</strong>.
 
-<p>Add a script tag for Zephyr <strong>after</strong> the one for Pixi, using the path to the Zephyr file or the delivered version from <strong class="zephyr">https://zephyrjs.netlify.app/zephyr.js</strong>.</p>
+<h2>PIXI + Zephyr</h2>
+<p>If you're looking to keep Zephyr and Pixi separate (maybe you want to use a specific version combination of the two, etc), you can link each file independantly.</p>
 
-<code>&lt;script src="/path/to/pixi.js"&gt;&lt;/script&gt;<br>&lt;script src="<span class="zephyr">/path/to/zephyr.js</span>"&gt;&lt;/script&gt;</code>
+<code>&lt;script src="<strong class="pixi">https://zephyrjs.netlify.app/pixi.js</strong>"&gt;&lt;/script&gt;<br>&lt;!-- Pixi must come before Zephyr --&gt;<br>&lt;script src="<strong class="zephyr">https://zephyrjs.netlify.app/zephyr.js</strong>"&gt;&lt;/script&gt;</code>
 
-<p>By default, Zephyr doesn't change Pixi or implement any features. When you need one, you enable it by calling its respective <strong>PIXI.Zephyr.use</strong> methods. The options are listed at the top of the <a href="documentation.html">documentation</a>. After that, you're ready to go! Feel free to browse the <a href="https://github.com/ZephyrJS-Project/ZephyrJS/tree/main/demo">demo code</a> if you're looking for a jumping-off point.</p>
+<p>If you <a href="https://raw.githubusercontent.com/ZephyrJS-Project/ZephyrJS/main/stable/pixi.js">download PixiJS</a> instead, replace the src of the script tag with the <strong class="pixi">path/to/pixi.js</strong>.</p>
+<p>Likewise with Zephyr, if you <a href="https://raw.githubusercontent.com/ZephyrJS-Project/ZephyrJS/main/stable/pixi.js">download ZephyrJS</a>, replace the src of the script tag with the <strong class="zephyr">path/to/zephyr.js</strong>.</p>

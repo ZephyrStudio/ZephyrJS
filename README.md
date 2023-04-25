@@ -1,18 +1,16 @@
 <div class="github">
-<p><a href="https://github.com/ZephyrJS-Project/ZephyrJS/blob/main/docs/STARTGUIDE.md">Getting Started Guide</a> | <a href="https://github.com/ZephyrJS-Project/ZephyrJS/blob/main/docs/CONTRIBUTE.md">Looking to help?</a></p>
+<p><a href="https://github.com/ZephyrJS-Project/ZephyrJS/blob/main/docs/STARTGUIDE.md">Getting Started Guide</a> | <a href="https://github.com/ZephyrJS-Project/ZephyrJS/blob/main/docs/CONTRIBUTE.md">Looking to help?</a> | <a href="https://github.com/ZephyrJS-Project/ZephyrJS/tree/main/docs/documentation">Documentation</a></p>
 </div>
 
 <h1>What is ZephyrJS?</h1>
 
 <p>ZephyrJS is a Free and Open Source Software (FOSS) project that aims to provide <strong>a simple yet powerful expansion of <a href="https://github.com/pixijs/pixijs">PixiJS</a> for web game development, without wrapping</strong>. Since the team behind Pixi is devoted to making the fastest web renderer around, Zephyr adds onto it by supplying commonly used features such as:</p>
 <ul>
-<li>efficient mouse and keyboard input tracking</li>
-<li>an easy-to-use implementation of the WebAudio API</li>
-<li>fine-tunable particle emitters</li>
-<li>and much more!</li>
+<li>Efficient mouse and keyboard input tracking</li>
+<li>Easy-to-use implementation of the WebAudio API with volume/panning</li>
+<li>Fine-tunable particle emitters</li>
 </ul>
-
-<p>Since Zephyr is an expansion (not a wrapper), every feature is written to feel right at home amongst PixiJS' other features.
+<p>...and much more! Since Zephyr is an expansion (not a wrapper), every feature is written to feel right at home amongst PixiJS' other features, while you still have full access to all of Pixi</p>
 
 <h2>Zephyr is Open-Source</h2>
 
