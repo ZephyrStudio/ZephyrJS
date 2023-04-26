@@ -15,18 +15,29 @@ PIXI = (function (exports) {
     /* START ZEPHYR BUNDLE ZONE */
 
     var Zephyr = (function (z) {
-        z.VERSION = '23.4.18'; // Version number, yy.mm.dd format
+        z.VERSION = '23.4.26'; // Version number, yy.mm.dd format
         z._audio = {};
         z._audio.buffers = new Map(); // Store all decoded audio buffers in one location
         z._audio.ctx = new AudioContext(); // More than one audio context causes lag
-        z._audio.buffer = function (src) {
-            if (!z._audio.buffers.has(src)) {
-                z._audio.buffers.set(src, false);
+        z._audio.buffer = function (sound) {
+            let onload = function (sound) {
+                // if (sound.autoplay) sound.start();
+                if (typeof sound.onload === 'function') sound.onload();
+            }
+            if (!z._audio.buffers.get(sound.src)) {
+                z._audio.buffers.set(sound.src, false);
                 let r = new XMLHttpRequest();
-                r.open('GET', src, true);
+                r.open('GET', sound.src, true);
                 r.responseType = 'arraybuffer';
-                r.onload = function () { z._audio.ctx.decodeAudioData(r.response, function (buffer) { z._audio.buffers.set(src, buffer) }) };
+                r.onload = function () {
+                    z._audio.ctx.decodeAudioData(r.response, function (buffer) {
+                        z._audio.buffers.set(sound.src, buffer)
+                        onload(sound);
+                    });
+                };
                 r.send();
+            } else {
+                onload(sound);
             }
         };
         z.SpriteFix = {
@@ -58,6 +69,7 @@ PIXI = (function (exports) {
         return z;
     })(Zephyr || {});
 
+    // Collision
     var collision = (function (c) {
         c.rectangle = function (a, b) { // Axis-Aligned Bounding Box method
             let aFix = PIXI.Zephyr.SpriteFix.rect(a);
@@ -72,6 +84,7 @@ PIXI = (function (exports) {
         return c;
     })(collision || {});
 
+    // DirectAudio
     var DirectAudio = (function (d) {
         let ctx = Zephyr._audio.ctx;
         let buffers = Zephyr._audio.buffers;
@@ -83,7 +96,9 @@ PIXI = (function (exports) {
                     this._source.buffer = buffers.get(this.src);
 
                     this._gainNode.gain.value = this.gain; // 0 mute, 1 full
+                    this._source.loop = this.loop; // True loop, False don't
                     this._panNode.pan.value = this.pan; // -1 full left, 0 original, 1 full right
+                    this._source.playbackRate.value = this.speed; // Change speed
 
                     this._source.connect(this._gainNode).connect(this._panNode).connect(ctx.destination);
                     this._source.start(0);
@@ -102,23 +117,39 @@ PIXI = (function (exports) {
                 this._source = null;
             }
         }
-        d.from = function (src) {
-            Zephyr._audio.buffer(src);
-            return {
+        d.from = function (arg) {
+            let DSound = {
                 _source: null,
                 _gainNode: ctx.createGain(),
                 _panNode: ctx.createStereoPanner(),
-                gain: 1,
-                pan: 0,
+                // autoplay: false,
+                gain: 1.0,
+                loop: false,
+                pan: 0.0,
+                speed: 1,
+                src: null,
                 start: d._starter,
-                stop: d._stopper,
-                src: src,
+                stop: d._stopper
             };
+            switch (typeof arg) {
+                case 'string':
+                    DSound.src = arg;
+                    Zephyr._audio.buffer(DSound);
+                    break;
+                case 'object':
+                    DSound = {
+                        ...DSound,
+                        ...arg
+                    }
+                    Zephyr._audio.buffer(DSound);
+                    break;
+            }
+            return DSound;
         }
         return d;
     })(DirectAudio || {});
 
-    // FILE IS BUGGY AND BAD
+    // File
     var File = (function (f) {
         f.write = function (content, fName) {
             if (typeof content === "string") {
@@ -170,6 +201,7 @@ PIXI = (function (exports) {
         return k;
     })(Keys || {});
 
+    // Mouse
     var Mouse = (function (m) {
         m._bounds = document.getElementsByTagName("html")[0].getBoundingClientRect();
         m._container = document.getElementsByTagName("html")[0];
@@ -206,6 +238,7 @@ PIXI = (function (exports) {
         return m;
     })(Mouse || {});
 
+    // Particles
     var Particles = (function (p) {
         p._init = function (particle) {
             let r = (Math.random() - 0.5) * this.spread + this.direction;
@@ -260,6 +293,7 @@ PIXI = (function (exports) {
         return p;
     })(Particles || {});
 
+    // SpatialAudio - In progress
     var SpatialAudio = (function (s) {
         let ctx = Zephyr._audio.ctx;
         let buffers = Zephyr._audio.buffers;
