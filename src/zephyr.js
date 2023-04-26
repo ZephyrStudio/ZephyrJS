@@ -31,8 +31,9 @@ PIXI = (function (exports) {
         };
         z.SpriteFix = {
             rect: function (s) { // Returns the actual x/y width/height of a scaled and anchored Sprite
-                let w = s.width * (s.scale ? s.scale.x : 1);
-                let h = s.height * (s.scale ? s.scale.y : 1);
+                if (!s.scale) s.scale = { x: 1, y: 1 };
+                let w = s.width * (s.scale.x < 0 ? -1 : 1);
+                let h = s.height * (s.scale.y < 0 ? -1 : 1);
                 return {
                     x: s.x - (s.anchor ? s.anchor.x * w : 0) + Math.min(0, w),
                     y: s.y - (s.anchor ? s.anchor.y * h : 0) + Math.min(0, h),
@@ -40,7 +41,7 @@ PIXI = (function (exports) {
                     height: Math.abs(h)
                 }
             },
-            rads: function (s) {
+            circ: function (s) {
                 if (!s.scale) s.scale = { x: 1, y: 1 };
                 return {
                     x: (0.5 - s.anchor.x) * s.width * (s.scale.x < 0 ? -1 : 1) + s.x,
@@ -58,14 +59,14 @@ PIXI = (function (exports) {
     })(Zephyr || {});
 
     var collision = (function (c) {
-        c.aabb = function (a, b) { // Axis-Aligned Bounding Box method
+        c.rectangle = function (a, b) { // Axis-Aligned Bounding Box method
             let aFix = PIXI.Zephyr.SpriteFix.rect(a);
             let bFix = PIXI.Zephyr.SpriteFix.rect(b);
             return !(aFix.x + a.width < bFix.x || aFix.y + a.height < bFix.y || aFix.x > bFix.x + b.width || aFix.y > bFix.y + b.height);
         };
-        c.radius = function (a, b) { // Circle collision, for objects a and b
-            let aFix = PIXI.Zephyr.SpriteFix.rads(a);
-            let bFix = PIXI.Zephyr.SpriteFix.rads(b);
+        c.circle = function (a, b) { // Circle collision, for objects a and b
+            let aFix = PIXI.Zephyr.SpriteFix.circ(a);
+            let bFix = PIXI.Zephyr.SpriteFix.circ(b);
             return Math.hypot(bFix.x - aFix.x, bFix.y - aFix.y) <= aFix.r + bFix.r;
         };
         return c;
