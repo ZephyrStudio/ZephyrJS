@@ -10,11 +10,13 @@ const tex = {
     player: PIXI.Texture.from('assets/character2x.png'),
 }
 
-const emitter = PIXI.Particles.from('assets/star.png', 512, {
+const emitter = PIXI.Particles.from({
     life: 256,
+    maxCount: 512,
     performant: true,
     spread: Math.PI * .5,
-    speed: mvScale
+    speed: mvScale,
+    src: 'assets/star.png'
 });
 app.stage.addChild(emitter);
 
@@ -120,14 +122,14 @@ app.ticker.add((deltaTime) => {
         y: (PIXI.Keys.down('ArrowDown') - PIXI.Keys.down('ArrowUp'))
     }
 
-    emitter.step(deltaTime);
-    emitter.fresh = false;
-    emitter.spawn.x = player.x - emitter.x;
-    emitter.spawn.y = player.y - emitter.y;
-    emitter.fresh = applied.x != 0 || applied.y != 0;
-    if (emitter.fresh) {
-        emitter.direction = (applied.y != 0 ? Math.PI * 0.5 * -applied.y : (1 + applied.x) * Math.PI * 0.5); 
-    }
+    // emitter.step(deltaTime);
+    // emitter.fresh = false;
+    // emitter.spawn.x = player.x - emitter.x;
+    // emitter.spawn.y = player.y - emitter.y;
+    // emitter.fresh = applied.x != 0 || applied.y != 0;
+    // if (emitter.fresh) {
+    //     emitter.direction = (applied.y != 0 ? Math.PI * 0.5 * -applied.y : (1 + applied.x) * Math.PI * 0.5); 
+    // }
 
     player.vec.x *= 0.97;
     player.vec.y *= 0.97;
@@ -145,6 +147,6 @@ app.ticker.add((deltaTime) => {
     player.x = PIXI.utils.clamp(player.x, 0, app.view.width);
     player.y = PIXI.utils.clamp(player.y, 0, app.view.height);
 
-    content.x = emitter.x = (app.view.width * 0.5 - player.x) * mvScale + app.view.width * 0.5;
-    content.y = emitter.y = ((window.innerHeight * 0.25) - player.y) * mvScale;
+    content.x = /* emitter.x = */ (app.view.width * 0.5 - player.x) * mvScale + app.view.width * 0.5;
+    content.y = /* emitter.y = */ ((window.innerHeight * 0.25) - player.y) * mvScale;
 });

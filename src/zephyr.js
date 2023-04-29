@@ -21,7 +21,7 @@ PIXI = (function (exports) {
         z._audio.ctx = new AudioContext(); // More than one audio context causes lag
         z._audio.buffer = function (sound) {
             let onload = function (sound) {
-                // if (sound.autoplay) sound.start();
+                if (sound.autoplay) sound.start();
                 if (typeof sound.onload === 'function') sound.onload();
             }
             if (!z._audio.buffers.get(sound.src)) {
@@ -117,14 +117,15 @@ PIXI = (function (exports) {
                 this._source = null;
             }
         }
-        d.from = function (arg) {
+        d.from = function (arg, onload) {
             let DSound = {
                 _source: null,
                 _gainNode: ctx.createGain(),
                 _panNode: ctx.createStereoPanner(),
-                // autoplay: false,
+                autoplay: false,
                 gain: 1.0,
                 loop: false,
+                onload: onload,
                 pan: 0.0,
                 speed: 1,
                 src: null,
@@ -162,17 +163,34 @@ PIXI = (function (exports) {
                 console.error("PIXI.File: Content to be written into " + fName + " is not a string.\nTry JSON.stringify(obj)?");
             }
         };
-        f.open = function (type) {
-            let res = { fulfilled: false, result: undefined };
+        f.open = function (arg, onload) {
+            let res = {
+                fulfilled: false,
+                onload: onload,
+                result: null,
+                type: '*'
+            };
+            switch (typeof arg) {
+                case 'string':
+                    res.type = arg;
+                    break;
+                case 'object':
+                    res = {
+                        ...res,
+                        ...arg
+                    }
+                    break;
+            }
             const input = document.createElement('input');
             input.type = 'file';
-            input.accept = (typeof type === "string") ? type : '*';
+            input.accept = res.type;
             input.addEventListener('change', function () {
                 const reader = new FileReader();
                 reader.readAsText(input.files[0]);
                 reader.onload = function () {
                     res.fulfilled = true;
                     res.result = reader.result;
+                    if (typeof res.onload === 'function') res.onload();
                 };
             });
             input.click();
@@ -274,20 +292,37 @@ PIXI = (function (exports) {
                 }
             }
         };
-        p.from = function (src, maxCount) {
-            let res = new PIXI.ParticleContainer(maxCount);
-            res._init = p._init;
-            res._spawnTimer = 0;
-            res.baseTexture = PIXI.Texture.from(src);
-            res.direction = 0;
-            res.life = 128;
-            res.maxCount = maxCount;
-            res.rotate = false;
-            res.scaling = 1;
-            res.spawn = { x: 0, y: 0 };
-            res.speed = 1;
-            res.spread = 0;
-            res.step = p._step;
+        p.from = function (arg1, arg2) {
+            let res = {
+                _init: p._init,
+                _spawnTimer: 0,
+                direction: 0,
+                life: 128,
+                rotate: false,
+                scaling: 1,
+                spawn: { x: 0, y: 0 },
+                speed: 1,
+                spread: 0,
+                step: p._step,
+            };
+            switch (typeof arg1) {
+                case 'string':
+                    res = {
+                        ...new PIXI.ParticleContainer(arg2),
+                        ...res,
+                        baseTexture: PIXI.Texture.from(arg1),
+                        maxCount: arg2
+
+                    }
+                    break;
+                case 'object':
+                    res = {
+                        ...new PIXI.ParticleContainer(arg1.maxCount),
+                        ...res,
+                        ...arg1
+                    }
+                    break;
+            }
             return res;
         }
         return p;
