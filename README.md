@@ -2,8 +2,8 @@
 <p><a href="https://github.com/ZephyrJS-Project/ZephyrJS/blob/main/docs/STARTGUIDE.md">Getting Started Guide</a> | <a href="https://github.com/ZephyrJS-Project/ZephyrJS/blob/main/docs/CONTRIBUTE.md">Looking to help?</a> | <a href="https://github.com/ZephyrJS-Project/ZephyrJS/tree/main/docs/documentation">Documentation</a></p>
 </div>
 
-<h1>Development Delay until May 6th</h1>
-<p>I'm in the middle of finals right now, and will be getting to the monthly release on/around May 6th</p>
+<h1>Monthly Releases Schedule Change</h1>
+<p>I'm in the middle of finals right now, and the Birthday release of Zephyr happened in mid-April. As a result, monthly releases will be taking place on the 13th of each month.</p>
 
 <h1>What is ZephyrJS?</h1>
 
