@@ -15,7 +15,7 @@ PIXI = (function (exports) {
     /* START ZEPHYR BUNDLE ZONE */
 
     var Zephyr = (function (z) {
-        z.VERSION = '23.4.26'; // Version number, yy.mm.dd format
+        z.VERSION = '23.5.11'; // Version number, yy.mm.dd format
         z._audio = {};
         z._audio.buffers = new Map(); // Store all decoded audio buffers in one location
         z._audio.ctx = new AudioContext(); // More than one audio context causes lag

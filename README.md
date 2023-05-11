@@ -2,8 +2,8 @@
 <p><a href="https://github.com/ZephyrJS-Project/ZephyrJS/blob/main/docs/STARTGUIDE.md">Getting Started Guide</a> | <a href="https://github.com/ZephyrJS-Project/ZephyrJS/blob/main/docs/CONTRIBUTE.md">Looking to help?</a> | <a href="https://github.com/ZephyrJS-Project/ZephyrJS/tree/main/docs/documentation">Documentation</a></p>
 </div>
 
-<h1>Monthly Releases Schedule Change</h1>
-<p>I'm in the middle of finals right now, and the Birthday release of Zephyr happened in mid-April. As a result, monthly releases will be taking place on the 13th of each month.</p>
+<p class="pixi">Compatible with PixiJS 7.2.4!</p>
+
 
 <h1>What is ZephyrJS?</h1>
 
