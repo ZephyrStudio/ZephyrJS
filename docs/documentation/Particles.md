@@ -2,13 +2,14 @@
 <p>A well-optimized and heavily-customizable particle emission system.</p>
 
 <p><pre><code>{
-    life: How far the particles last in pixels
     direction: The direction (in radians) that the particles move.
+    distance: How far the particles travel in total pixels
+    life: In milliseconds, how long it takes for particles to reach the distance
     maxCount: The target total number of particles to be emitting.
     speed: How fast the particles move to end of life.
     spawn: A relative {x,y} where particles will be created.
     spread: The angle (in radians) of particle dispersion.
-    step(): Progresses particle emission animation
+    step(elapsedMS): Progresses particle emission animation
 }</code></pre>
 <em>Standard ParticleEmitter Sprite. This also includes the standard properties of a Pixi ParticleContainer.</em></p>
 
