@@ -290,38 +290,34 @@ PIXI = (function (exports) {
             }
         };
         p.from = function (arg1, arg2) {
-            let res;
-            let setDefaults = function (obj) {
-                obj._init = p._init;
-                obj._spawnTimer = 0;
-                obj.direction = 0;
-                obj.distance = 128;
-                obj.life = 1000;
-                obj.maxCount = 2048;
-                obj.rotate = false;
-                obj.scaling = 1;
-                obj.spawn = { x: 0, y: 0 };
-                obj.spread = Math.PI * 0.5;
-                obj.step = p._step;
-                return obj;
+            const DEFAULTS = {
+                _init: p._init,
+                _spawnTimer: 0,
+                direction: 0,
+                distance: 256,
+                life: 1000,
+                maxCount: 512,
+                rotate: false,
+                scaling: 1,
+                spawn: { x: 0, y: 0 },
+                spread: Math.PI * 0.5,
+                step: p._step
             }
+            let res;
             switch (typeof arg1) {
                 case 'string':
-                    res = setDefaults(new PIXI.ParticleContainer(arg2));
+                    res = new PIXI.ParticleContainer(arg2);
+                    for (const k in DEFAULTS) res[k] = DEFAULTS[k];
                     res.baseTexture = PIXI.Texture.from(arg1);
                     res.maxCount = arg2;
                     res.src = arg1;
                     break;
-                // case 'object':
-                //     res = new PIXI.ParticleContainer(arg1.maxCount);
-                //     res.baseTexture = PIXI.Texture.from(arg1.src);
-                //     res.src = arg1.src;
-                //     // res = {
-                //     //     ...res,
-                //     //     ...defaults,
-                //     //     ...arg1
-                //     // }
-                //     break;
+                case 'object':
+                    res = new PIXI.ParticleContainer(arg1.maxCount);
+                    for (const k in DEFAULTS) res[k] = DEFAULTS[k];
+                    for (const k in arg1) res[k] = arg1[k];
+                    res.baseTexture = PIXI.Texture.from(arg1.src);
+                    break;
             }
             return res;
         }

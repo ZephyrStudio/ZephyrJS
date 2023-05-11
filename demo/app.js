@@ -10,9 +10,15 @@ const tex = {
     player: PIXI.Texture.from('assets/character2x.png'),
 }
 
-const emitter = PIXI.Particles.from('assets/star.png', 1024);
-emitter.distance = 256;
-emitter.life = 2000;
+// Individual attribute declaration, easiest
+// const emitter = PIXI.Particles.from('assets/star.png', 512);
+// emitter.life = 2000;
+// Object parameter, specify all of the attributes you want at creation time
+const emitter = PIXI.Particles.from({
+    life: 2000,
+    maxCount: 512,
+    src: 'assets/star.png',
+});
 app.stage.addChild(emitter);
 
 let wreight = 0;
