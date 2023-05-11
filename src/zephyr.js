@@ -260,8 +260,7 @@ PIXI = (function (exports) {
     var Particles = (function (p) {
         p._init = function (particle) {
             let r = (Math.random() - 0.5) * this.spread + this.direction;
-            particle.alpha = 1;
-            particle.move = { x: this.speed * Math.cos(r), y: this.speed * Math.sin(r) };
+            particle.move = { x: this.distance / (this.life * 0.001) * Math.cos(r), y: this.distance / (this.life * 0.001) * Math.sin(r) };
             particle.x = this.spawn.x;
             particle.y = this.spawn.y;
             particle.life = this.life;
@@ -269,59 +268,60 @@ PIXI = (function (exports) {
             if (this.rotate)
                 particle.rotation = r + Math.PI * 0.5;
         };
-        p._step = function (deltaTime) {
-            this.children.forEach(particle => {
-                if ((particle.life -= deltaTime * this.speed) <= 0) {
-                    if (this.fresh)
-                        this._init(particle);
-                    else
-                        this.removeChild(particle);
+        p._step = function (elapsedMS) {
+            let msPerParticle = this.life / this.maxCount;
+            this.children.forEach(p => {
+                if ((p.life -= elapsedMS) < 0) {
+                    this.removeChild(p);
                 } else {
-                    particle.x += particle.move.x * deltaTime;
-                    particle.y += particle.move.y * deltaTime;
+                    p.x += p.move.x * elapsedMS * 0.001;
+                    p.y += p.move.y * elapsedMS * 0.001;
                 }
             });
             if (this.children.length < this.maxCount && this.fresh) {
-                this._spawnTimer -= deltaTime;
-                if (this._spawnTimer <= 0) {
-                    this._spawnTimer = this.life / this.maxCount;
-                    let particle = new PIXI.Sprite(this.baseTexture);
-                    particle.anchor = { x: 0.5, y: 0.5 }
-                    this._init(particle);
-                    this.addChild(particle);
+                this._spawnTimer -= elapsedMS;
+                while (this._spawnTimer < 0) {
+                    let p = new PIXI.Sprite(this.baseTexture);
+                    p.anchor = { x: 0.5, y: 0.5 }
+                    this._init(p);
+                    this.addChild(p);
+                    this._spawnTimer += msPerParticle;
                 }
             }
         };
         p.from = function (arg1, arg2) {
-            let res = {
-                _init: p._init,
-                _spawnTimer: 0,
-                direction: 0,
-                life: 128,
-                rotate: false,
-                scaling: 1,
-                spawn: { x: 0, y: 0 },
-                speed: 1,
-                spread: 0,
-                step: p._step,
-            };
+            let res;
+            let setDefaults = function (obj) {
+                obj._init = p._init;
+                obj._spawnTimer = 0;
+                obj.direction = 0;
+                obj.distance = 128;
+                obj.life = 1000;
+                obj.maxCount = 2048;
+                obj.rotate = false;
+                obj.scaling = 1;
+                obj.spawn = { x: 0, y: 0 };
+                obj.spread = Math.PI * 0.5;
+                obj.step = p._step;
+                return obj;
+            }
             switch (typeof arg1) {
                 case 'string':
-                    res = {
-                        ...new PIXI.ParticleContainer(arg2),
-                        ...res,
-                        baseTexture: PIXI.Texture.from(arg1),
-                        maxCount: arg2
-
-                    }
+                    res = setDefaults(new PIXI.ParticleContainer(arg2));
+                    res.baseTexture = PIXI.Texture.from(arg1);
+                    res.maxCount = arg2;
+                    res.src = arg1;
                     break;
-                case 'object':
-                    res = {
-                        ...new PIXI.ParticleContainer(arg1.maxCount),
-                        ...res,
-                        ...arg1
-                    }
-                    break;
+                // case 'object':
+                //     res = new PIXI.ParticleContainer(arg1.maxCount);
+                //     res.baseTexture = PIXI.Texture.from(arg1.src);
+                //     res.src = arg1.src;
+                //     // res = {
+                //     //     ...res,
+                //     //     ...defaults,
+                //     //     ...arg1
+                //     // }
+                //     break;
             }
             return res;
         }

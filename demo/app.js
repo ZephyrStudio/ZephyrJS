@@ -10,14 +10,9 @@ const tex = {
     player: PIXI.Texture.from('assets/character2x.png'),
 }
 
-const emitter = PIXI.Particles.from({
-    life: 256,
-    maxCount: 512,
-    performant: true,
-    spread: Math.PI * .5,
-    speed: mvScale,
-    src: 'assets/star.png'
-});
+const emitter = PIXI.Particles.from('assets/star.png', 1024);
+emitter.distance = 256;
+emitter.life = 2000;
 app.stage.addChild(emitter);
 
 let wreight = 0;
@@ -27,6 +22,7 @@ player.anchor = { x: 0.5, y: 0.5 };
 player.vec = { x: 0, y: 0 };
 player.x = app.view.width * 0.5;
 player.y = wreight += (window.innerHeight * 0.25) ^ 0;
+player.speed = 4;
 app.stage.addChild(player);
 
 let content = new PIXI.Container();
@@ -115,28 +111,32 @@ txt.y = wreight;
 txt.anchor = {x: 0.5, y: 0};
 content.addChild(txt);
 
-app.ticker.add((deltaTime) => {
-
+let time = {
+    now: performance.now(),
+    elapsedMS: 0
+}
+app.ticker.add(function () {
+    time.elapsedMS = -time.now + (time.now = performance.now());
     let applied = {
         x: (PIXI.Keys.down('ArrowRight') - PIXI.Keys.down('ArrowLeft')),
         y: (PIXI.Keys.down('ArrowDown') - PIXI.Keys.down('ArrowUp'))
     }
 
-    // emitter.step(deltaTime);
-    // emitter.fresh = false;
-    // emitter.spawn.x = player.x - emitter.x;
-    // emitter.spawn.y = player.y - emitter.y;
-    // emitter.fresh = applied.x != 0 || applied.y != 0;
-    // if (emitter.fresh) {
-    //     emitter.direction = (applied.y != 0 ? Math.PI * 0.5 * -applied.y : (1 + applied.x) * Math.PI * 0.5); 
-    // }
+    emitter.fresh = false;
+    emitter.spawn.x = player.x - emitter.x;
+    emitter.spawn.y = player.y - emitter.y;
+    emitter.fresh = applied.x != 0 || applied.y != 0;
+    if (emitter.fresh) {
+        emitter.direction = (applied.y != 0 ? Math.PI * 0.5 * -applied.y : (1 + applied.x) * Math.PI * 0.5); 
+    }
+    emitter.step(time.elapsedMS);
 
     player.vec.x *= 0.97;
     player.vec.y *= 0.97;
     let h = Math.hypot(applied.x, applied.y);
     if (h != 0) {
-        player.vec.x += applied.x / h * deltaTime / 12;
-        player.vec.y += applied.y / h * deltaTime / 12;
+        player.vec.x += applied.x / h * time.elapsedMS * 0.001 * player.speed;
+        player.vec.y += applied.y / h * time.elapsedMS * 0.001 * player.speed;
     }
     player.x += player.vec.x;
     player.y += player.vec.y;
@@ -147,6 +147,6 @@ app.ticker.add((deltaTime) => {
     player.x = PIXI.utils.clamp(player.x, 0, app.view.width);
     player.y = PIXI.utils.clamp(player.y, 0, app.view.height);
 
-    content.x = /* emitter.x = */ (app.view.width * 0.5 - player.x) * mvScale + app.view.width * 0.5;
-    content.y = /* emitter.y = */ ((window.innerHeight * 0.25) - player.y) * mvScale;
+    content.x = emitter.x = (app.view.width * 0.5 - player.x) * mvScale + app.view.width * 0.5;
+    content.y = emitter.y = ((window.innerHeight * 0.25) - player.y) * mvScale;
 });
