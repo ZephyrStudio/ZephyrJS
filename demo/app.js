@@ -88,7 +88,7 @@ txt.anchor = {x: 0.5, y: 0};
 content.addChild(txt);
 
 wreight += txt.height + 16;
-txt = new PIXI.Text("What's the point in making a game if it's not interactive? ZephyrJS' mouse and keyboard handling uses an extremely efficient backend, benchmarked in both Chromium and Firefox to ensure the best performance no matter the user.\n\nUsage is even easier, just call PIXI.Zephyr.useMouse() or PIXI.Zephyr.useKeys() and you're ready to go! Due to the way ZephyrJS actually stores input data, you can determine if a key/mouse button is newly pressed with PIXI.Mouse.fired(k), or if it's held down with PIXI.Mouse.down(k)", basicTextStyle);
+txt = new PIXI.Text("What's the point in making a game if it's not interactive? ZephyrJS' mouse and keyboard handling uses an extremely efficient backend, benchmarked in both Chromium and Firefox to ensure the best performance no matter the user.\n\nUsage is even easier, just call the PIXI.Mouse and/or PIXI.Keys functions! Due to the way ZephyrJS actually stores input data, you can determine if a key/mouse button is newly pressed with fired(keyOrBtnName), or if it's held down with down(keyOrBtnName)", basicTextStyle);
 txt.y = wreight;
 txt.anchor = {x: 0.5, y: 0};
 content.addChild(txt);
@@ -100,7 +100,7 @@ txt.anchor = {x: 0.5, y: 0};
 content.addChild(txt);
 
 wreight += txt.height + 16;
-txt = new PIXI.Text("A game without sound effects sounds... like nothing at all? But YOU want sound for your games, so why bother wrestling with having <audio> elements offscreen, or trying to wrangle WebAudio? Well ZephyrJS does the latter for you, using the extremely fast API with a backend to minimize memory usage while providing a dead-simple interface for it!\n\nUse PIXI.Zephyr.useAudio() to get going, then use PIXI.Audio.from(src) to get an object back with a volume attribute and a play() function. Zephyr takes care of the audio storing, buffering, and creating WebAudio nodes!", basicTextStyle);
+txt = new PIXI.Text("A game without sound effects sounds... like nothing at all? But YOU want sound for your games, so why bother wrestling with having <audio> elements offscreen, or trying to wrangle WebAudio? Well ZephyrJS does the latter for you, using the extremely fast API with a backend to minimize memory usage while providing a dead-simple interface for it!\n\nUse PIXI.Audio.from(src) to get an object back with a customizable attributes like gain and pan, as well as play() and start functions. Zephyr takes care of the audio storing, buffering, and creating WebAudio nodes!", basicTextStyle);
 txt.y = wreight;
 txt.anchor = {x: 0.5, y: 0};
 content.addChild(txt);
@@ -112,7 +112,7 @@ txt.anchor = {x: 0.5, y: 0};
 content.addChild(txt);
 
 wreight += txt.height + 16;
-txt = new PIXI.Text("PixiJS provides a particle container, but it acts just like a faster but more limited container. So why not use ZephyrJS' particle emitters, which take care of all of the hard work and further optimization to provide an extremely customizable particle emitter!\n\nCall PIXI.Zephyr.useParticles(), then you can create an emitter with PIXI.Particles.from(src, maxCount, options). After that, add it to your scene and call the step() function in the returned object from your ticker loop!", basicTextStyle);
+txt = new PIXI.Text("PixiJS provides a particle container, but it acts just like a faster but more limited container. So why not use ZephyrJS' particle emitters, which take care of all of the hard work and further optimization to provide an extremely customizable particle emitter!\n\nAll it takes to create an emitter is PIXI.Particles.from(options). After that, add it to your scene and call the step() function in the returned object from your ticker loop!", basicTextStyle);
 txt.y = wreight;
 txt.anchor = {x: 0.5, y: 0};
 content.addChild(txt);
