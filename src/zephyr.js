@@ -80,9 +80,9 @@ PIXI = (function (exports) {
         };
         u.mix = function (a, b, m) { return a * (1 - m) + b * (m) };
         u.random = function random(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min };
-        u.withinRange = function (number, min, max) {
+        u.withinRange = function (x, min, max) {
             // Would only return 0 if in between, negative to determine how "middle" it is preferred
-            return Math.abs(number - (min + max) * 0.5) - (max - min) * 0.5;
+            return Math.abs(x - (min + max) * 0.5) - (max - min) * 0.5;
         }
         u.toggleFullScreen = function (view) {
             if (!view.fullscreenElement &&
