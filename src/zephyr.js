@@ -15,7 +15,7 @@ PIXI = (function (exports) {
     /* START ZEPHYR BUNDLE ZONE */
 
     var Zephyr = (function (z) {
-        z.VERSION = '23.5.11'; // Version number, yy.mm.dd format
+        z.VERSION = '23.7.9'; // Version number, yy.mm.dd format
         z._audio = {};
         z._audio.buffers = new Map(); // Store all decoded audio buffers in one location
         z._audio.ctx = new AudioContext(); // More than one audio context causes lag
@@ -69,14 +69,54 @@ PIXI = (function (exports) {
         return z;
     })(Zephyr || {});
 
+    // UTILITIES (For some reason it's called index inside PIXI setup?)
+    index = (function (u) {
+        u.clamp = function (x, min, max) { return Math.min(Math.max(x, min), max) };
+        u.merge = function (tgt, arr) {
+            let b;
+            let i = 0;
+            while (b = arr[i++])
+                for (const k in b) tgt[k] = b[k];
+        };
+        u.mix = function (a, b, m) { return a * (1 - m) + b * (m) };
+        u.random = function random(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min };
+        u.withinRange = function (number, min, max) {
+            // Would only return 0 if in between, negative to determine how "middle" it is preferred
+            return Math.abs(number - (min + max) * 0.5) - (max - min) * 0.5;
+        }
+        u.toggleFullScreen = function (view) {
+            if (!view.fullscreenElement &&
+                !view.mozFullScreenElement && !view.webkitFullscreenElement) {
+                if (view.requestFullscreen) {
+                    view.requestFullscreen();
+                } else if (view.mozRequestFullScreen) {
+                    view.mozRequestFullScreen();
+                } else if (view.webkitRequestFullscreen) {
+                    view.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+                }
+            } else {
+                if (view.cancelFullScreen) {
+                    view.cancelFullScreen();
+                } else if (view.mozCancelFullScreen) {
+                    view.mozCancelFullScreen();
+                } else if (view.webkitCancelFullScreen) {
+                    view.webkitCancelFullScreen();
+                }
+            }
+        }
+        return u;
+    })(index || {});
+
     // Collision
     var collision = (function (c) {
         c.rectangle = function (a, b) { // Axis-Aligned Bounding Box method
+            if (!a || !b) return false;
             let aFix = PIXI.Zephyr.SpriteFix.rect(a);
             let bFix = PIXI.Zephyr.SpriteFix.rect(b);
             return !(aFix.x + a.width < bFix.x || aFix.y + a.height < bFix.y || aFix.x > bFix.x + b.width || aFix.y > bFix.y + b.height);
         };
         c.circle = function (a, b) { // Circle collision, for objects a and b
+            if (!a || !b) return false;
             let aFix = PIXI.Zephyr.SpriteFix.circ(a);
             let bFix = PIXI.Zephyr.SpriteFix.circ(b);
             return Math.hypot(bFix.x - aFix.x, bFix.y - aFix.y) <= aFix.r + bFix.r;
@@ -306,16 +346,17 @@ PIXI = (function (exports) {
             let res;
             switch (typeof arg1) {
                 case 'string':
-                    res = new PIXI.ParticleContainer(arg2);
-                    for (const k in DEFAULTS) res[k] = DEFAULTS[k];
+                    res = index.merge([new PIXI.ParticleContainer(arg2), DEFAULTS]);
                     res.baseTexture = PIXI.Texture.from(arg1);
                     res.maxCount = arg2;
                     res.src = arg1;
                     break;
                 case 'object':
-                    res = new PIXI.ParticleContainer(arg1.maxCount);
-                    for (const k in DEFAULTS) res[k] = DEFAULTS[k];
-                    for (const k in arg1) res[k] = arg1[k];
+                    res = index.merge([
+                        new PIXI.ParticleContainer(arg1.maxCount),
+                        DEFAULTS,
+                        arg1
+                    ]);
                     res.baseTexture = PIXI.Texture.from(arg1.src);
                     break;
             }
@@ -372,40 +413,12 @@ PIXI = (function (exports) {
         return s;
     })(SpatialAudio || {});
 
-    // UTILITIES (For some reason it's called index inside PIXI setup?)
-    index = (function (u) {
-        u.clamp = function (x, min, max) { return Math.min(Math.max(x, min), max) };
-        u.mix = function (a, b, m) { return a * (1 - m) + b * (m) };
-        u.random = function random(min, max) { return (Math.random() * (max - min + 1)) ^ 0 + min };
-        u.toggleFullScreen = function (view) {
-            if (!view.fullscreenElement &&
-                !view.mozFullScreenElement && !view.webkitFullscreenElement) {
-                if (view.requestFullscreen) {
-                    view.requestFullscreen();
-                } else if (view.mozRequestFullScreen) {
-                    view.mozRequestFullScreen();
-                } else if (view.webkitRequestFullscreen) {
-                    view.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-                }
-            } else {
-                if (view.cancelFullScreen) {
-                    view.cancelFullScreen();
-                } else if (view.mozCancelFullScreen) {
-                    view.mozCancelFullScreen();
-                } else if (view.webkitCancelFullScreen) {
-                    view.webkitCancelFullScreen();
-                }
-            }
-        }
-        return u;
-    })(index || {});
-
     (function listenerSetup() {
         // CTX MENU BLOCK
         window.addEventListener('contextmenu', e => { e.preventDefault() });
 
         // KEYBOARD
-        window.addEventListener('keydown', e => { Keys._map.set(e.code, true) });
+        window.addEventListener('keydown', e => { if (!Keys._map.has(e.code)) Keys._map.set(e.code, true) });
         window.addEventListener('keyup', e => { Keys._map.delete(e.code) });
 
         // MOUSE
