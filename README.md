@@ -4,6 +4,9 @@
 
 <p class="pixi">Compatible with PixiJS 7.2.4!</p>
 
+<h1>Where'd We Go?</h1>
+<p><strong>We're still here!</strong><br>PixiJS is undergoing some <a href="https://github.com/pixijs/pixijs/releases/tag/v8.0.0-alpha.0">BIG CHANGES</a> as of late, and working to keep up with the alpha development is taxing. I'm spending the "downtime" actually doing some game development with Zephyr, so I can figure out what Zephyr is missing.</p>
+
 
 <h1>What is ZephyrJS?</h1>
 
