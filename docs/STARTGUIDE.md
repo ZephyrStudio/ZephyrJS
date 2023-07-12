@@ -7,14 +7,14 @@
 <h2>The Bundle</h2>
 <p>This is the easiest way to use Zephyr. Since Zephyr 23.4.13, we've distributed a version of Pixi and Zephyr combined and minified for ease of use.</p>
 
-<code>&lt;script src="<strong class="bundle">https://zephyrjs.netlify.app/bundle.js</strong>"&gt;&lt;/script&gt;</code>
+<code>&lt;script src="<strong class="bundle">https://https://zephyrjs.pages.dev/bundle.js</strong>"&gt;&lt;/script&gt;</code>
 
 <p>If you <a href="https://raw.githubusercontent.com/ZephyrJS-Project/ZephyrJS/main/stable/bundle.js">download the bundle</a> instead, replace the src of the script tag with the <strong class="bundle">path/to/bundle.js</strong>.
 
 <h2>PIXI + Zephyr</h2>
 <p>If you're looking to keep Zephyr and Pixi separate (maybe you want to use a specific version combination of the two, etc), you can link each file independantly.</p>
 
-<code>&lt;script src="<strong class="pixi">https://zephyrjs.netlify.app/pixi.js</strong>"&gt;&lt;/script&gt;<br>&lt;!-- Pixi must come before Zephyr --&gt;<br>&lt;script src="<strong class="zephyr">https://zephyrjs.netlify.app/zephyr.js</strong>"&gt;&lt;/script&gt;</code>
+<code>&lt;script src="<strong class="pixi">https://https://zephyrjs.pages.dev/pixi.js</strong>"&gt;&lt;/script&gt;<br>&lt;!-- Pixi must come before Zephyr --&gt;<br>&lt;script src="<strong class="zephyr">https://https://zephyrjs.pages.dev/zephyr.js</strong>"&gt;&lt;/script&gt;</code>
 
 <p>If you <a href="https://raw.githubusercontent.com/ZephyrJS-Project/ZephyrJS/main/stable/pixi.js">download PixiJS</a> instead, replace the src of the script tag with the <strong class="pixi">path/to/pixi.js</strong>.</p>
 <p>Likewise with Zephyr, if you <a href="https://raw.githubusercontent.com/ZephyrJS-Project/ZephyrJS/main/stable/pixi.js">download ZephyrJS</a>, replace the src of the script tag with the <strong class="zephyr">path/to/zephyr.js</strong>.</p>
