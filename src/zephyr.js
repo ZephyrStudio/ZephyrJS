@@ -352,8 +352,8 @@ PIXI = (function (exports) {
                     res.src = arg1;
                     break;
                 case 'object':
-                    res = index.merge([
-                        new PIXI.ParticleContainer(arg1.maxCount),
+                    res = new PIXI.ParticleContainer(arg1.maxCount);
+                    index.merge(res, [
                         DEFAULTS,
                         arg1
                     ]);
