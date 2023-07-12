@@ -1,4 +1,4 @@
-<div class="github">
+<div class="github"> 
 <p><a href="https://github.com/ZephyrJS-Project/ZephyrJS/blob/main/docs/STARTGUIDE.md">Getting Started Guide</a> | <a href="https://github.com/ZephyrJS-Project/ZephyrJS/blob/main/docs/CONTRIBUTE.md">Looking to help?</a> | <a href="https://github.com/ZephyrJS-Project/ZephyrJS/tree/main/docs/documentation">Documentation</a></p>
 </div>
 
