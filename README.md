@@ -9,7 +9,7 @@
     
 <p><strong>We're still here!</strong> Nothing has changed as a result of the "behind the scenes" of Zephyr, it's still free and open source for all. We'll continue to build up ZephyrJS as we discover new features to add, and we'll eventually be building out into a less Pixi-specific system (like adding our custom layers work).</p>
 
-<p>PixiJS is undergoing some <a href="https://github.com/pixijs/pixijs/releases/tag/v8.0.0-alpha.0">BIG CHANGES</a> as of late, and working to keep up with the alpha development is taxing. I'm spending the "downtime" actually doing some game development with Zephyr, so I can figure out what Zephyr is missing.</p>
+<p>PixiJS is undergoing some <a href="https://github.com/pixijs/pixijs/releases/tag/v8.0.0-alpha.0">BIG CHANGES</a> as of late, and working to keep up with the alpha development is taxing. We'll be back to our monthly release schedule once Pixi returns.</p>
 
 
 <h1>What is ZephyrJS?</h1>
