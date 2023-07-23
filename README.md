@@ -4,8 +4,12 @@
 
 <p class="pixi">Compatible with PixiJS 7.2.4!</p>
 
-<h1>Where'd We Go?</h1>
-<p><strong>We're still here!</strong><br>PixiJS is undergoing some <a href="https://github.com/pixijs/pixijs/releases/tag/v8.0.0-alpha.0">BIG CHANGES</a> as of late, and working to keep up with the alpha development is taxing. I'm spending the "downtime" actually doing some game development with Zephyr, so I can figure out what Zephyr is missing.</p>
+<h1>We've undergone some changes!</h1>
+<p>ZephyrJS is now under the official perview of <a href="https://zephyrstudios.pages.dev>Zephyr Studios</a>, our startup indie game studio launched from the original Zephyr Project team! We wanted a chance to flex our game design muscles with all of the work we've done with the project. So what does this mean?</p>
+    
+<p><strong>We're still here!</strong> Nothing has changed as a result of the "behind the scenes" of Zephyr, it's still free and open source for all. </p>
+
+<p>PixiJS is undergoing some <a href="https://github.com/pixijs/pixijs/releases/tag/v8.0.0-alpha.0">BIG CHANGES</a> as of late, and working to keep up with the alpha development is taxing. I'm spending the "downtime" actually doing some game development with Zephyr, so I can figure out what Zephyr is missing.</p>
 
 
 <h1>What is ZephyrJS?</h1>
