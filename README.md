@@ -1,5 +1,5 @@
 <div class="github"> 
-<p><a href="https://github.com/ZephyrJS-Project/ZephyrJS/blob/main/docs/STARTGUIDE.md">Getting Started Guide</a> | <a href="https://github.com/ZephyrJS-Project/ZephyrJS/blob/main/docs/CONTRIBUTE.md">Looking to help?</a> | <a href="https://github.com/ZephyrJS-Project/ZephyrJS/tree/main/docs/documentation">Documentation</a> | <a href="https://discord.gg/ncP4cdVztQ">Discord Server</a></p>
+<p><a href="https://github.com/ZephyrStudio/ZephyrJS/blob/main/docs/STARTGUIDE.md">Getting Started Guide</a> | <a href="https://github.com/ZephyrStudio/ZephyrJS/blob/main/docs/CONTRIBUTE.md">Looking to help?</a> | <a href="https://github.com/ZephyrStudio/ZephyrJS/tree/main/docs/documentation">Documentation</a> | <a href="https://discord.gg/ncP4cdVztQ">Discord Server</a></p>
 </div>
 
 <p class="pixi">Compatible with PixiJS 7.2.4!</p>
