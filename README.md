@@ -7,7 +7,7 @@
 <h1>We've undergone some changes!</h1>
 <p>ZephyrJS is now under the official perview of <a href="https://zephyrstudios.pages.dev">Zephyr Studios</a>, our startup indie game studio launched from the original Zephyr Project team! We wanted a chance to flex our game design muscles with all of the work we've done with the project. So what does this mean?</p>
     
-<p>Nothing has changed in the "behind the scenes" of Zephyr, it's still free and open source for all. We'll continue to build up ZephyrJS as we discover new features to add, and we'll eventually be building out into a less Pixi-specific system. <strong>We now also have a <a href="https://discord.gg/ncP4cdVztQ">Discord Server</a> where you can show off what you're doing with Zephyr, ask questions, and much more!</strong></p>
+<p>Nothing has changed in the "behind the scenes" of Zephyr, it's still free and open source for all. We'll continue to build up ZephyrJS as we discover new features to add, and we'll eventually be building out into a less Pixi-specific system. <strong>We now also have a <a href="https://discord.gg/ncP4cdVztQ">Discord Server</a></strong> where you can show off what you're doing with Zephyr, ask questions, and much more!</p>
 
 <p><strong>We're still here!</strong> PixiJS is undergoing some <a href="https://github.com/pixijs/pixijs/releases/tag/v8.0.0-alpha.0">BIG CHANGES</a> as of late, and working to keep up with the alpha development is taxing. We'll be back to our monthly release schedule once Pixi returns.</p>
 
