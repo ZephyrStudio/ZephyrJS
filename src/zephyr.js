@@ -15,7 +15,7 @@ PIXI = (function (exports) {
     /* START ZEPHYR BUNDLE ZONE */
 
     var Zephyr = (function (z) {
-        z.VERSION = '23.7.9'; // Version number, yy.mm.dd format
+        z.VERSION = '23.7.28'; // Version number, yy.mm.dd format
         z._audio = {};
         z._audio.buffers = new Map(); // Store all decoded audio buffers in one location
         z._audio.ctx = new AudioContext(); // More than one audio context causes lag
@@ -207,6 +207,7 @@ PIXI = (function (exports) {
             let res = {
                 fulfilled: false,
                 onload: onload,
+                name: '',
                 result: null,
                 type: '*'
             };
@@ -228,9 +229,10 @@ PIXI = (function (exports) {
                 const reader = new FileReader();
                 reader.readAsText(input.files[0]);
                 reader.onload = function () {
-                    res.fulfilled = true;
+                    res.name = input.value.split("\\").pop();
                     res.result = reader.result;
                     if (typeof res.onload === 'function') res.onload();
+                    res.fulfilled = true;
                 };
             });
             input.click();
@@ -423,11 +425,11 @@ PIXI = (function (exports) {
 
         // MOUSE
         window.addEventListener('resize', () => { Mouse._bounds = Mouse._container.getBoundingClientRect() });
-        window.addEventListener('mouseup', e => { Mouse._map.delete(Mouse._btns[e.button]) });
-        window.addEventListener('mousedown', e => { Mouse._map.set(Mouse._btns[e.button], true) });
+        window.addEventListener('mouseup', e => { Mouse._map.delete(Mouse._btns[e.button])});
+        window.addEventListener('mousedown', e => { Mouse._map.set(Mouse._btns[e.button], true)});
         window.addEventListener('mousemove', e => {
-            Mouse.x = (e.x - Mouse._bounds.left + window.pageXOffset) / Mouse._bounds.width * Mouse._container.width;
-            Mouse.y = (e.y - Mouse._bounds.top + window.pageYOffset) / Mouse._bounds.height * Mouse._container.height;
+            Mouse.x = (e.x - Mouse._bounds.left + window.scrollX) / Mouse._bounds.width * Mouse._container.width;
+            Mouse.y = (e.y - Mouse._bounds.top + window.scrollY) / Mouse._bounds.height * Mouse._container.height;
         });
     })();
 
