@@ -1,4 +1,4 @@
-<h1>PIXI.DirectAudio</h1>
+<h1>ZEPHYR.DirectAudio</h1>
 <p><strong>DirectAudio</strong> adds sound effects and music that you (the developer) can start/stop, set gain and pan, looping, speed, etc. Zephyr sets up an efficient WebAudio API backend, and only exposes useful features for the developer. Zephyr also processes audio files once and keeps the buffers in memory, so that audio is as responsive as possible.</p>
 
 <p><pre><code>{
@@ -16,16 +16,16 @@
 <em>A standard DirectAudio Sprite.</em></p>
 
 <dl>
-<dt>PIXI.DirectAudio.from(src)</dt>
+<dt>ZEPHYR.DirectAudio.from(src)</dt>
 <dd>Creates a DirectAudio object with the desired audio source. An example for this usage is below:
-<pre><code>let normalAttackSound = PIXI.DirectAudio.from('sfx/attack.wav', function () {
+<pre><code>let normalAttackSound = ZEPHYR.DirectAudio.from('sfx/attack.wav', function () {
     console.log("Normal attack loaded!");
 });</code></pre>
 </dd>
 <dd><strong class="return">RETURN </strong> A DirectAudio Sprite</dd>
-<dt>PIXI.DirectAudio.from(srcObject)</dt>
+<dt>ZEPHYR.DirectAudio.from(srcObject)</dt>
 <dd>Creates a DirectAudio object with the desired attributes. This can have any of the values of the standard DirectAudio Sprite shown above. An example for this usage is below:
-<pre><code>let heavyAttackSound = PIXI.DirectAudio.from({
+<pre><code>let heavyAttackSound = ZEPHYR.DirectAudio.from({
     src: 'sfx/attack.wav',
     gain: 1.2,
     speed: 0.8,

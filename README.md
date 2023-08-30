@@ -1,33 +1,20 @@
 <div class="github"> 
-<p><a href="https://github.com/ZephyrStudio/ZephyrJS/blob/main/docs/STARTGUIDE.md">Getting Started Guide</a> | <a href="https://github.com/ZephyrStudio/ZephyrJS/blob/main/docs/CONTRIBUTE.md">Looking to help?</a> | <a href="https://github.com/ZephyrStudio/ZephyrJS/tree/main/docs/documentation">Documentation</a> | <a href="https://discord.gg/ncP4cdVztQ">Discord Server</a></p>
+<p><a href="https://github.com/ZephyrStudio/ZephyrJS/blob/main/docs/STARTGUIDE.md">Getting Started Guide</a> | <a href="https://github.com/ZephyrStudio/ZephyrJS/blob/main/docs/CONTRIBUTE.md">Looking to help?</a> | <a href="https://github.com/ZephyrStudio/ZephyrJS/tree/main/docs/documentation">Documentation</a> | <a href="https://discord.gg/NFXKE5kxXN">Discord Server</a></p>
 </div>
 
-<p class="pixi">Compatible with PixiJS 7.2.4!</p>
+<p class="pixi">Compatible with any stack, tested with PixiJS 7.2.4</p>
 
-<h1>We've undergone some changes!</h1>
-<p>ZephyrJS is now under the official purview of <a href="https://zephyrstudios.pages.dev">Zephyr Studios</a>, our startup indie game studio launched from the original Zephyr Project team! We wanted a chance to flex our game design muscles with all of the work we've done with the project. So what does this mean?</p>
-    
-<p>Nothing has changed in the "behind the scenes" of Zephyr, it's still free and open source for all. We'll continue to build up ZephyrJS as we discover new features to add, and we'll eventually be building out into a less Pixi-specific system. <strong>We now also have a <a href="https://discord.gg/ncP4cdVztQ">Discord Server</a></strong> where you can show off what you're doing with Zephyr, ask questions, and much more!</p>
+<h1>What is ZephyrJS</h2>
+<p>ZephyrJS is a Free and Open Source Software (FOSS) javascript library that adds game-engine features like input handling, file io, audio and music, and more. There's tons of web renderers out there (we started with building with <a href="https://github.com/pixijs/pixijs">PixiJS</a>) so there's no sense reinventing the wheel. We provide what other libraries don't: a focus on commonly needed and often neglected (or poorly implemented) features. REGARDLESS of your graphics stack.</p>
 
-<p><strong>We're still here!</strong> PixiJS is undergoing some <a href="https://github.com/pixijs/pixijs/releases/tag/v8.0.0-alpha.0">BIG CHANGES</a> as of late, and working to keep up with the alpha development is taxing. We'll be back to our monthly release schedule once Pixi returns.</p>
+<p>The project is maintained by <a href="https://zephyrstudios.pages.dev/">Zephyr Studios</a>, which is a small but passionate indie development team. We test our work with ZephyrJS through actual game development and compatibility testing with PixiJS. Consider joining our <a href="https://discord.gg/NFXKE5kxXN">Discord Server</a> to keep up with ZephyrJS or our studio's projects!</p>
 
+<h1>Zephyr is Open-Source</h1>
 
-<h1>What is ZephyrJS?</h1>
-
-<p>ZephyrJS is a Free and Open Source Software (FOSS) project that aims to provide <strong>a simple yet powerful expansion of <a href="https://github.com/pixijs/pixijs">PixiJS</a> for web game development, without wrapping</strong>. Since the team behind Pixi is devoted to making the fastest web renderer around, Zephyr adds onto it by supplying commonly used features such as:</p>
-<ul>
-<li>Efficient mouse and keyboard input tracking</li>
-<li>Easy-to-use implementation of the WebAudio API with volume/panning</li>
-<li>Fine-tunable particle emitters</li>
-</ul>
-<p>...and much more! Since Zephyr is an expansion (not a wrapper), every feature is written to feel right at home amongst PixiJS' other features, while you still have full access to all of Pixi</p>
-
-<h2>Zephyr is Open-Source</h2>
-
-<p>Because it makes sense: Zephyr is FOSS because Pixi is. It doesn't make sense to charge developers when they're creating their own projects, and why shouldn't they be able to tweak Zephyr to better fit their needs? Free and Open-Source Software (FOSS) is all about letting people choose what they want to use, and wrapping all of PixiJS just to add game development tools just hides the work of the team behind it. Zephyr <strong>adds</strong> functionality to PixiJS instead of wrapping it, allowing developers to work with the PixiJS they know and love while also letting them use fast and efficient game engine features.</p>
+<p>Zephyr is FOSS because there's no sense keeping it hidden. These are features that others could develop, and we value the ideas and contributions of others. It also doesn't make sense to slow down developers when they're creating their own projects, and they should be able to tweak Zephyr to better fit their needs. Free and Open-Source Software (FOSS) is about letting people choose what they want to use, and building a whole system just to add game development tools just dilutes the work of many talented teams building incredible renderers. Zephyr <strong>adds</strong> functionality to any stack instead of creating a new one, allowing developers to work with whatever system they know and love.</p>
 
 <h1>Why Zephyr?</h1>
 
-<p>Web-based content has been providing a way to access all sorts of entertainment, and being able to game on the web is the next step. While flash games existed in the past, browsers didn't have the kind of power to run full games. They do now though, and browsers have been able to directly leverage the available hardware to speed up rendering for some time now. PixiJS does this by using the WebGL API, letting anybody have access to the fast web renderer around.</p>
+<p>Web-based content has been providing a way to access all sorts of entertainment, and being able to game on the web is the next step. While flash games existed in the past, browsers didn't have the kind of power to run full games. They do now though, and browsers have been able to directly leverage the available hardware to speed up rendering for some time now. Many web renderers like PixiJS do this by using WebGL (and soon, <a href="https://github.com/pixijs/pixijs/releases/tag/v8.0.0-alpha.0">WebGPU</a>), letting anybody have access to speedy web renderers.</p>
 
-<p>There are so many PixiJS game engine wrappers out there, but that's not Zephyr's goal. Pixi's team has provided incredible documentation and examples, so why re-engineer all of them? The ZephyrJS project adds the game engine features developers need, and doesn't touch what it shouldn't. Because of this, the Zephyr project only maintains documentation for its added features, meaning updates can get released faster while staying compatibile with the latest and greatest of versions of Pixi.</p>
+<p>There are so many WebGL renderers and wrappers out there, but that's not Zephyr's goal. Pixi's team and others have provided incredible documentation and examples, so why re-engineer them? ZephyrJS adds the game engine features developers need, and doesn't touch what it shouldn't. Because of this, the Zephyr project only maintains documentation for its added features, meaning updates can get released faster while staying compatibile with the latest and greatest in web technologies.</p>

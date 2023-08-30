@@ -4,7 +4,7 @@
  * ZephyrJS is licensed under the MIT License.
  * 
  * Consider contributing to the project!
- * https://github.com/ZephyrJS-Project/ZephyrJS
+ * https://github.com/ZephyrStudio/ZephyrJS
  */
 const ZEPHYR = { VERSION: '23.9' };
 (function (exports) {
