@@ -25494,4 +25494,3 @@ ${e}`);
   return exports;
 
 })({});
-//# sourceMappingURL=pixi.js.map

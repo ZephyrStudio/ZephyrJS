@@ -14,12 +14,6 @@ const tex = {
 // const emitter = PIXI.Particles.from('assets/star.png', 512);
 // emitter.life = 2000;
 // Object parameter, specify all of the attributes you want at creation time
-const emitter = PIXI.Particles.from({
-    life: 2000,
-    maxCount: 512,
-    src: 'assets/star.png',
-});
-app.stage.addChild(emitter);
 
 let wreight = 0;
 
@@ -62,7 +56,7 @@ const subtitleStyle = {
     dropShadowBlur: 5,
 };
 
-let subtitle = new PIXI.Text('PixiJS + FOSS Game Engine Features', subtitleStyle);
+let subtitle = new PIXI.Text('FOSS Game Engine Features for any Stack', subtitleStyle);
 subtitle.y = wreight += 32;
 subtitle.anchor = {x: 0.5, y: 0};
 content.addChild(subtitle);
@@ -88,7 +82,7 @@ txt.anchor = {x: 0.5, y: 0};
 content.addChild(txt);
 
 wreight += txt.height + 16;
-txt = new PIXI.Text("What's the point in making a game if it's not interactive? ZephyrJS' mouse and keyboard handling uses an extremely efficient backend, benchmarked in both Chromium and Firefox to ensure the best performance no matter the user.\n\nUsage is even easier, just call the PIXI.Mouse and/or PIXI.Keys functions! Due to the way ZephyrJS actually stores input data, you can determine if a key/mouse button is newly pressed with fired(keyOrBtnName), or if it's held down with down(keyOrBtnName)", basicTextStyle);
+txt = new PIXI.Text("What's the point in making a game if it's not interactive? ZephyrJS' mouse and keyboard handling uses an extremely efficient backend, benchmarked in both Chromium and Firefox to ensure the best performance no matter the user.\n\nUsage is even easier, just call the ZEPHYR.Mouse and/or ZEPHYR.Keys functions! Due to the way ZephyrJS actually stores input data, you can determine if a key/mouse button is newly pressed with fired(keyOrBtnName), or if it's held down with down(keyOrBtnName)", basicTextStyle);
 txt.y = wreight;
 txt.anchor = {x: 0.5, y: 0};
 content.addChild(txt);
@@ -100,19 +94,19 @@ txt.anchor = {x: 0.5, y: 0};
 content.addChild(txt);
 
 wreight += txt.height + 16;
-txt = new PIXI.Text("A game without sound effects sounds... like nothing at all? But YOU want sound for your games, so why bother wrestling with having <audio> elements offscreen, or trying to wrangle WebAudio? Well ZephyrJS does the latter for you, using the extremely fast API with a backend to minimize memory usage while providing a dead-simple interface for it!\n\nUse PIXI.Audio.from(src) to get an object back with a customizable attributes like gain and pan, as well as play() and start functions. Zephyr takes care of the audio storing, buffering, and creating WebAudio nodes!", basicTextStyle);
+txt = new PIXI.Text("A game without sound effects sounds... like nothing at all? But YOU want sound for your games, so why bother wrestling with having <audio> elements offscreen, or trying to wrangle WebAudio? Well ZephyrJS does the latter for you, using the extremely fast API with a backend to minimize memory usage while providing a dead-simple interface for it!\n\nUse ZEPHYR.Audio.from(src) to get an object back with a customizable attributes like gain and pan, as well as play() and start functions. Zephyr takes care of the audio storing, buffering, and creating WebAudio nodes!", basicTextStyle);
 txt.y = wreight;
 txt.anchor = {x: 0.5, y: 0};
 content.addChild(txt);
 
 wreight += txt.height + (window.innerHeight * 0.15);
-txt = new PIXI.Text('Particles', subtitleStyle);
+txt = new PIXI.Text('File IO', subtitleStyle);
 txt.y = wreight;
 txt.anchor = {x: 0.5, y: 0};
 content.addChild(txt);
 
 wreight += txt.height + 16;
-txt = new PIXI.Text("PixiJS provides a particle container, but it acts just like a faster but more limited container. So why not use ZephyrJS' particle emitters, which take care of all of the hard work and further optimization to provide an extremely customizable particle emitter!\n\nAll it takes to create an emitter is PIXI.Particles.from(options). After that, add it to your scene and call the step() function in the returned object from your ticker loop!", basicTextStyle);
+txt = new PIXI.Text("Whether it's level data or player save states, you'll need to handle files input/output. Zephyr adds a super-simple interface for using the native file dialogue system to open and save data in file format.", basicTextStyle);
 txt.y = wreight;
 txt.anchor = {x: 0.5, y: 0};
 content.addChild(txt);
@@ -124,18 +118,9 @@ let time = {
 app.ticker.add(function () {
     time.elapsedMS = -time.now + (time.now = performance.now());
     let applied = {
-        x: (PIXI.Keys.down('ArrowRight') - PIXI.Keys.down('ArrowLeft')),
-        y: (PIXI.Keys.down('ArrowDown') - PIXI.Keys.down('ArrowUp'))
+        x: (ZEPHYR.Keys.down('ArrowRight') - ZEPHYR.Keys.down('ArrowLeft')),
+        y: (ZEPHYR.Keys.down('ArrowDown') - ZEPHYR.Keys.down('ArrowUp'))
     }
-
-    emitter.fresh = false;
-    emitter.spawn.x = player.x - emitter.x;
-    emitter.spawn.y = player.y - emitter.y;
-    emitter.fresh = applied.x != 0 || applied.y != 0;
-    if (emitter.fresh) {
-        emitter.direction = (applied.y != 0 ? Math.PI * 0.5 * -applied.y : (1 + applied.x) * Math.PI * 0.5); 
-    }
-    emitter.step(time.elapsedMS);
 
     player.vec.x *= 0.97;
     player.vec.y *= 0.97;
@@ -150,9 +135,9 @@ app.ticker.add(function () {
         player.scale.x = applied.x;
     
 
-    player.x = PIXI.utils.clamp(player.x, 0, app.view.width);
-    player.y = PIXI.utils.clamp(player.y, 0, app.view.height);
+    player.x = Math.clamp(player.x, 0, app.view.width);
+    player.y = Math.clamp(player.y, 0, app.view.height);
 
-    content.x = emitter.x = (app.view.width * 0.5 - player.x) * mvScale + app.view.width * 0.5;
-    content.y = emitter.y = ((window.innerHeight * 0.25) - player.y) * mvScale;
+    content.x = (app.view.width * 0.5 - player.x) * mvScale + app.view.width * 0.5;
+    content.y = ((window.innerHeight * 0.25) - player.y) * mvScale;
 });

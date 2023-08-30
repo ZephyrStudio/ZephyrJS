@@ -6,84 +6,73 @@
  * Consider contributing to the project!
  * https://github.com/ZephyrJS-Project/ZephyrJS
  */
-PIXI = (function (exports) {
+const ZEPHYR = { VERSION: '23.9' };
+(function (exports) {
     'use strict';
 
     // NON-BUNDLE SETUP
     let index = exports.utils;
 
     /* START ZEPHYR BUNDLE ZONE */
+    Math.clamp = (x, min, max) => Math.min(Math.max(x, min), max);
+    Math.mix = (a, b, m) => a * (1 - m) + b * (m);
+    Math.rand_int = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+    Math.withinRange = (x, min, max) => Math.abs(x - (min + max) / 2) - (max - min) / 2;
 
-    var Zephyr = (function (z) {
-        z.VERSION = '23.7.28'; // Version number, yy.mm.dd format
-        z._audio = {};
-        z._audio.buffers = new Map(); // Store all decoded audio buffers in one location
-        z._audio.ctx = new AudioContext(); // More than one audio context causes lag
-        z._audio.buffer = function (sound) {
-            let onload = function (sound) {
-                if (sound.autoplay) sound.start();
-                if (typeof sound.onload === 'function') sound.onload();
+    exports._audio = {};
+    exports._audio.buffers = new Map(); // Store all decoded audio buffers in one location
+    exports._audio.ctx = new AudioContext(); // More than one audio context causes lag
+    exports._audio.buffer = function (sound) {
+        let onload = function (sound) {
+            if (sound.autoplay) sound.start();
+            if (typeof sound.onload === 'function') sound.onload();
+        }
+        if (!exports._audio.buffers.get(sound.src)) {
+            exports._audio.buffers.set(sound.src, false);
+            let r = new XMLHttpRequest();
+            r.open('GET', sound.src, true);
+            r.responseType = 'arraybuffer';
+            r.onload = function () {
+                exports._audio.ctx.decodeAudioData(r.response, function (buffer) {
+                    exports._audio.buffers.set(sound.src, buffer)
+                    onload(sound);
+                });
+            };
+            r.send();
+        } else {
+            onload(sound);
+        }
+    };
+    exports._spriteFix = {
+        rect: function (s) { // Returns the actual x/y width/height of a scaled and anchored Sprite
+            if (!s.scale) s.scale = { x: 1, y: 1 };
+            let w = s.width * (s.scale.x < 0 ? -1 : 1);
+            let h = s.height * (s.scale.y < 0 ? -1 : 1);
+            return {
+                x: s.x - (s.anchor ? s.anchor.x * w : 0) + Math.min(0, w),
+                y: s.y - (s.anchor ? s.anchor.y * h : 0) + Math.min(0, h),
+                width: Math.abs(w),
+                height: Math.abs(h)
             }
-            if (!z._audio.buffers.get(sound.src)) {
-                z._audio.buffers.set(sound.src, false);
-                let r = new XMLHttpRequest();
-                r.open('GET', sound.src, true);
-                r.responseType = 'arraybuffer';
-                r.onload = function () {
-                    z._audio.ctx.decodeAudioData(r.response, function (buffer) {
-                        z._audio.buffers.set(sound.src, buffer)
-                        onload(sound);
-                    });
-                };
-                r.send();
-            } else {
-                onload(sound);
-            }
-        };
-        z.SpriteFix = {
-            rect: function (s) { // Returns the actual x/y width/height of a scaled and anchored Sprite
-                if (!s.scale) s.scale = { x: 1, y: 1 };
-                let w = s.width * (s.scale.x < 0 ? -1 : 1);
-                let h = s.height * (s.scale.y < 0 ? -1 : 1);
-                return {
-                    x: s.x - (s.anchor ? s.anchor.x * w : 0) + Math.min(0, w),
-                    y: s.y - (s.anchor ? s.anchor.y * h : 0) + Math.min(0, h),
-                    width: Math.abs(w),
-                    height: Math.abs(h)
-                }
-            },
-            circ: function (s) {
-                if (!s.scale) s.scale = { x: 1, y: 1 };
-                return {
-                    x: (0.5 - s.anchor.x) * s.width * (s.scale.x < 0 ? -1 : 1) + s.x,
-                    y: (0.5 - s.anchor.y) * s.height * (s.scale.y < 0 ? -1 : 1) + s.y,
-                    r: (s.width + s.height) * 0.25
-                }
+        },
+        circ: function (s) {
+            if (!s.scale) s.scale = { x: 1, y: 1 };
+            return {
+                x: (0.5 - s.anchor.x) * s.width * (s.scale.x < 0 ? -1 : 1) + s.x,
+                y: (0.5 - s.anchor.y) * s.height * (s.scale.y < 0 ? -1 : 1) + s.y,
+                r: (s.width + s.height) * 0.25
             }
         }
-        z.useAudio = () => { console.error('ZephyrJS: useAudio() is deprecated') };
-        z.useFile = () => { console.error('ZephyrJS: useFile() is deprecated') };
-        z.useKeys = () => { console.error('ZephyrJS: useKeys() is deprecated') };
-        z.useMouse = () => { console.error('ZephyrJS: useMouse() is deprecated') };
-        z.useParticles = () => { console.error('ZephyrJS: useParticles() is deprecated') };
-        return z;
-    })(Zephyr || {});
+    }
 
     // UTILITIES (For some reason it's called index inside PIXI setup?)
     index = (function (u) {
-        u.clamp = function (x, min, max) { return Math.min(Math.max(x, min), max) };
         u.merge = function (tgt, arr) {
             let b;
             let i = 0;
             while (b = arr[i++])
                 for (const k in b) tgt[k] = b[k];
         };
-        u.mix = function (a, b, m) { return a * (1 - m) + b * (m) };
-        u.random = function random(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min };
-        u.withinRange = function (x, min, max) {
-            // Would only return 0 if in between, negative to determine how "middle" it is preferred
-            return Math.abs(x - (min + max) * 0.5) - (max - min) * 0.5;
-        }
         u.toggleFullScreen = function (view) {
             if (!view.fullscreenElement &&
                 !view.mozFullScreenElement && !view.webkitFullscreenElement) {
@@ -111,14 +100,14 @@ PIXI = (function (exports) {
     var collision = (function (c) {
         c.rectangle = function (a, b) { // Axis-Aligned Bounding Box method
             if (!a || !b) return false;
-            let aFix = PIXI.Zephyr.SpriteFix.rect(a);
-            let bFix = PIXI.Zephyr.SpriteFix.rect(b);
+            let aFix = PIXI.Zephyr_spriteFix.rect(a);
+            let bFix = PIXI.Zephyr_spriteFix.rect(b);
             return !(aFix.x + a.width < bFix.x || aFix.y + a.height < bFix.y || aFix.x > bFix.x + b.width || aFix.y > bFix.y + b.height);
         };
         c.circle = function (a, b) { // Circle collision, for objects a and b
             if (!a || !b) return false;
-            let aFix = PIXI.Zephyr.SpriteFix.circ(a);
-            let bFix = PIXI.Zephyr.SpriteFix.circ(b);
+            let aFix = exports._spriteFix.circ(a);
+            let bFix = exports._spriteFix.circ(b);
             return Math.hypot(bFix.x - aFix.x, bFix.y - aFix.y) <= aFix.r + bFix.r;
         };
         return c;
@@ -126,8 +115,8 @@ PIXI = (function (exports) {
 
     // DirectAudio
     var DirectAudio = (function (d) {
-        let ctx = Zephyr._audio.ctx;
-        let buffers = Zephyr._audio.buffers;
+        let ctx = exports._audio.ctx;
+        let buffers = exports._audio.buffers;
         d._starter = function () {
             if (buffers.has(this.src)) {
                 if (buffers.get(this.src)) {
@@ -146,7 +135,7 @@ PIXI = (function (exports) {
                     console.warn('ZephyrJS DirectAudio: ' + this.src + ' decoding is in progress.');
                 }
             } else {
-                Zephyr._audio.buffer(this.src);
+                exports._audio.buffer(this.src);
                 console.warn('ZephyrJS DirectAudio: ' + this.src + ' has not been buffered, starting now.');
             }
         }
@@ -175,14 +164,14 @@ PIXI = (function (exports) {
             switch (typeof arg) {
                 case 'string':
                     DSound.src = arg;
-                    Zephyr._audio.buffer(DSound);
+                    exports._audio.buffer(DSound);
                     break;
                 case 'object':
                     DSound = {
                         ...DSound,
                         ...arg
                     }
-                    Zephyr._audio.buffer(DSound);
+                    exports._audio.buffer(DSound);
                     break;
             }
             return DSound;
@@ -298,79 +287,10 @@ PIXI = (function (exports) {
         return m;
     })(Mouse || {});
 
-    // Particles
-    var Particles = (function (p) {
-        p._init = function (particle) {
-            let r = (Math.random() - 0.5) * this.spread + this.direction;
-            particle.move = { x: this.distance / (this.life * 0.001) * Math.cos(r), y: this.distance / (this.life * 0.001) * Math.sin(r) };
-            particle.x = this.spawn.x;
-            particle.y = this.spawn.y;
-            particle.life = this.life;
-            particle.scale.x = particle.scale.y = this.scaling;
-            if (this.rotate)
-                particle.rotation = r + Math.PI * 0.5;
-        };
-        p._step = function (elapsedMS) {
-            let msPerParticle = this.life / this.maxCount;
-            this.children.forEach(p => {
-                if ((p.life -= elapsedMS) < 0) {
-                    this.removeChild(p);
-                } else {
-                    p.x += p.move.x * elapsedMS * 0.001;
-                    p.y += p.move.y * elapsedMS * 0.001;
-                }
-            });
-            if (this.children.length < this.maxCount && this.fresh) {
-                this._spawnTimer -= elapsedMS;
-                while (this._spawnTimer < 0) {
-                    let p = new PIXI.Sprite(this.baseTexture);
-                    p.anchor = { x: 0.5, y: 0.5 }
-                    this._init(p);
-                    this.addChild(p);
-                    this._spawnTimer += msPerParticle;
-                }
-            }
-        };
-        p.from = function (arg1, arg2) {
-            const DEFAULTS = {
-                _init: p._init,
-                _spawnTimer: 0,
-                direction: 0,
-                distance: 256,
-                life: 1000,
-                maxCount: 512,
-                rotate: false,
-                scaling: 1,
-                spawn: { x: 0, y: 0 },
-                spread: Math.PI * 0.5,
-                step: p._step
-            }
-            let res;
-            switch (typeof arg1) {
-                case 'string':
-                    res = index.merge([new PIXI.ParticleContainer(arg2), DEFAULTS]);
-                    res.baseTexture = PIXI.Texture.from(arg1);
-                    res.maxCount = arg2;
-                    res.src = arg1;
-                    break;
-                case 'object':
-                    res = new PIXI.ParticleContainer(arg1.maxCount);
-                    index.merge(res, [
-                        DEFAULTS,
-                        arg1
-                    ]);
-                    res.baseTexture = PIXI.Texture.from(arg1.src);
-                    break;
-            }
-            return res;
-        }
-        return p;
-    })(Particles || {});
-
     // SpatialAudio - In progress
     var SpatialAudio = (function (s) {
-        let ctx = Zephyr._audio.ctx;
-        let buffers = Zephyr._audio.buffers;
+        let ctx = exports._audio.ctx;
+        let buffers = exports._audio.buffers;
         s._starter = function () {
             if (buffers.has(this.src)) {
                 if (buffers.get(this.src)) {
@@ -387,7 +307,7 @@ PIXI = (function (exports) {
                     console.warn('ZephyrJS SpatialAudio: ' + this.src + ' decoding is in progress.');
                 }
             } else {
-                Zephyr._audio.buffer(this.src);
+                exports._audio.buffer(this.src);
                 console.warn('ZephyrJS SpatialAudio: ' + this.src + ' has not been buffered, starting now.');
             }
         }
@@ -400,7 +320,7 @@ PIXI = (function (exports) {
         }
         s.from = function (src) {
             console.warning("Creating SpatialAudio of " + src + ". Please not this is VERY unstable currently")
-            Zephyr._audio.buffer(src);
+            exports._audio.buffer(src);
             return {
                 _source: null,
                 _gainNode: ctx.createGain(),
@@ -425,25 +345,23 @@ PIXI = (function (exports) {
 
         // MOUSE
         window.addEventListener('resize', () => { Mouse._bounds = Mouse._container.getBoundingClientRect() });
-        window.addEventListener('mouseup', e => { Mouse._map.delete(Mouse._btns[e.button])});
-        window.addEventListener('mousedown', e => { Mouse._map.set(Mouse._btns[e.button], true)});
+        window.addEventListener('mouseup', e => { Mouse._map.delete(Mouse._btns[e.button]) });
+        window.addEventListener('mousedown', e => { Mouse._map.set(Mouse._btns[e.button], true) });
         window.addEventListener('mousemove', e => {
             Mouse.x = (e.x - Mouse._bounds.left + window.scrollX) / Mouse._bounds.width * Mouse._container.width;
             Mouse.y = (e.y - Mouse._bounds.top + window.scrollY) / Mouse._bounds.height * Mouse._container.height;
         });
     })();
 
-    exports.Zephyr = Zephyr;
     exports.collision = collision;
     exports.DirectAudio = DirectAudio;
     exports.File = File;
     exports.Keys = Keys;
     exports.Mouse = Mouse;
-    exports.Particles = Particles;
     exports.SpatialAudio = SpatialAudio;
 
     /* END ZEPHYR BUNDLE ZONE */
     exports.utils = index;
 
     return exports;
-})(PIXI || {});
+})(ZEPHYR);
