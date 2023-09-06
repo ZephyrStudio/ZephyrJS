@@ -4,7 +4,7 @@
  * ZephyrJS is licensed under the MIT License.
  * 
  * Consider contributing to the project!
- * https://github.com/ZephyrStudio/ZephyrJS
+ * https://github.com/ZephyrJS-Project/ZephyrJS
  */
 const ZEPHYR = { VERSION: '23.9' };
 (function (exports) {
@@ -73,25 +73,10 @@ const ZEPHYR = { VERSION: '23.9' };
             while (b = arr[i++])
                 for (const k in b) tgt[k] = b[k];
         };
-        u.toggleFullScreen = function (view) {
-            if (!view.fullscreenElement &&
-                !view.mozFullScreenElement && !view.webkitFullscreenElement) {
-                if (view.requestFullscreen) {
-                    view.requestFullscreen();
-                } else if (view.mozRequestFullScreen) {
-                    view.mozRequestFullScreen();
-                } else if (view.webkitRequestFullscreen) {
-                    view.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-                }
-            } else {
-                if (view.cancelFullScreen) {
-                    view.cancelFullScreen();
-                } else if (view.mozCancelFullScreen) {
-                    view.mozCancelFullScreen();
-                } else if (view.webkitCancelFullScreen) {
-                    view.webkitCancelFullScreen();
-                }
-            }
+        u.toggleFullScreen = function (view = document.body) {
+            view.requestFullScreen = view.requestFullScreen || view.webkitRequestFullScreen || view.mozRequestFullScreen || function () { return false };
+            document.cancelFullScreen = document.cancelFullScreen || document.webkitCancelFullScreen || document.mozCancelFullScreen || function () { return false };
+            (document.webkitIsFullScreen || document.mozFullScreen || false) ? document.cancelFullScreen() : view.requestFullScreen();
         }
         return u;
     })(index || {});
@@ -232,14 +217,22 @@ const ZEPHYR = { VERSION: '23.9' };
     })(File || {});
 
     var Keys = (function (k) {
-        k._map = new Map(),
-            k.down = function (key) {
-                if (k._map.size > 0 && k._map.has(key)) {
-                    k._map.set(key, false);
-                    return true;
-                }
-                return false;
-            };
+        k._map = new Map();
+        k._bind = new Map();
+        k.bind = function (key, fn, event = 'keydown') {
+            if (fn) k._bind.set(key + event, fn);
+            else {
+                k._bind.delete(key + 'keydown');
+                k._bind.delete(key + 'keyup');
+            }
+        }
+        k.down = function (key) {
+            if (k._map.size > 0 && k._map.has(key)) {
+                k._map.set(key, false);
+                return true;
+            }
+            return false;
+        };
         k.fired = function (key) {
             if (k._map.size > 0 && k._map.get(key)) {
                 k._map.set(key, false);
@@ -340,8 +333,14 @@ const ZEPHYR = { VERSION: '23.9' };
         window.addEventListener('contextmenu', e => { e.preventDefault() });
 
         // KEYBOARD
-        window.addEventListener('keydown', e => { if (!Keys._map.has(e.code)) Keys._map.set(e.code, true) });
-        window.addEventListener('keyup', e => { Keys._map.delete(e.code) });
+        window.addEventListener('keydown', e => {
+            if (!Keys._map.has(e.code)) Keys._map.set(e.code, true)
+            if (Keys._bind.has(e.code + 'keydown')) Keys._bind.get(e.code + 'keydown')();
+        });
+        window.addEventListener('keyup', e => {
+            if (Keys._bind.has(e.code + 'keyup')) Keys._bind.get(e.code + 'keyup')();
+            Keys._map.delete(e.code);
+        });
 
         // MOUSE
         window.addEventListener('resize', () => { Mouse._bounds = Mouse._container.getBoundingClientRect() });
