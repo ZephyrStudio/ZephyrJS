@@ -5,7 +5,7 @@
 <p class="pixi">Compatible with any stack, tested with PixiJS 7.2.4</p>
 
 <h1>What is ZephyrJS</h2>
-<p>ZephyrJS is a Free and Open Source Software (FOSS) javascript library that adds game-engine features like input handling, file io, audio and music, and more. There's tons of web renderers out there (we started with building with <a href="https://github.com/pixijs/pixijs">PixiJS</a>) so there's no sense reinventing the wheel. We provide what other libraries don't: a focus on commonly needed and often neglected (or poorly implemented) features. REGARDLESS of your graphics stack.</p>
+<p>ZephyrJS is a Free and Open Source Software (FOSS) javascript library that adds game-engine features like input handling, file io, audio and music, and more. There's tons of web renderers out there (we started with building on <a href="https://github.com/pixijs/pixijs">PixiJS</a>) so there's no sense reinventing the wheel. We provide what other libraries don't: a focus on commonly needed and often neglected (or poorly implemented) features. REGARDLESS of your graphics stack.</p>
 
 <p>The project is maintained by <a href="https://zephyrstudios.pages.dev/">Zephyr Studios</a>, which is a small but passionate indie development team. We test our work with ZephyrJS through actual game development and compatibility testing with PixiJS. Consider joining our <a href="https://discord.gg/NFXKE5kxXN">Discord Server</a> to keep up with ZephyrJS or our studio's projects!</p>
 
