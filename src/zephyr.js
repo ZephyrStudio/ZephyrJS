@@ -6,7 +6,7 @@
  * Consider contributing to the project!
  * https://github.com/ZephyrJS-Project/ZephyrJS
  */
-const ZEPHYR = { VERSION: '23.9.6' };
+const ZEPHYR = { VERSION: '24.1.29' };
 (function (exports) {
     'use strict';
 
