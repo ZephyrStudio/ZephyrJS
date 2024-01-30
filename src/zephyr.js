@@ -217,6 +217,7 @@ const ZEPHYR = { VERSION: '24.1.30' };
     var Keys = (function (k) {
         k._map = new Map();
         k._bind = new Map();
+        k.preventDefault = false; // Stops default key events if true
         k.bind = function (key, fn, event = 'keydown') {
             if (fn) k._bind.set(key + event, fn);
             else {
@@ -338,13 +339,13 @@ const ZEPHYR = { VERSION: '24.1.30' };
 
         // KEYBOARD
         window.addEventListener('keydown', e => {
-            e.preventDefault();
+            if (Keys.preventDefault) e.preventDefault();
             let code = e.code;
             if (!Keys._map.has(code)) Keys._map.set(code, true)
             if (Keys._bind.has(code + 'keydown')) Keys._bind.get(code + 'keydown')();
         });
         window.addEventListener('keyup', e => {
-            e.preventDefault();
+            if (Keys.preventDefault) e.preventDefault();
             let code = e.code;
             if (Keys._bind.has(code + 'keyup')) Keys._bind.get(code + 'keyup')();
             Keys._map.delete(code);

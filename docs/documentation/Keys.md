@@ -3,8 +3,10 @@
 <p><strong class="warning">NOTE </strong>keyName is a string that is returned by keyboardEvent.code. Check out the <a href="keyName.html">Key Namer</a> to get specific key names.</p>
 
 <dl>
+<dt>ZEPHYR.Keys.preventDefault</dt>
+<dd>Boolean (default false): Setting this to true will stop default key events from occuring (i.e. browser shortcuts)</dd>
 <dt>ZEPHYR.Keys.bind(keyName, function, event)</dt>
-<dd>Any time event happens with the key specified, function() will be called.</dd>
+<dd>Any time an event happens with the key specified, function() will be called.</dd>
 <dd><strong class="warning">NOTE </strong>If you call this function with just a keyName, it'll remove all bound functions from it.</dd>
 <dt>ZEPHYR.Keys.down(keyName)</dt>
 <dd>Returns true if the key is actively pressed down.</dd>
