@@ -277,6 +277,12 @@ const ZEPHYR = { VERSION: '24.1.29' };
             }
             return false;
         }
+        m._scrollY = 0;
+        m.scrollY = function () {
+            let d = m._scrollY;
+            m._scrollY = 0;
+            return (d > 0) - (d < 0);
+        }
         return m;
     })(Mouse || {});
 
