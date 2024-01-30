@@ -340,22 +340,30 @@ const ZEPHYR = { VERSION: '24.1.29' };
 
         // KEYBOARD
         window.addEventListener('keydown', e => {
-            if (!Keys._map.has(e.code)) Keys._map.set(e.code, true)
-            if (Keys._bind.has(e.code + 'keydown')) Keys._bind.get(e.code + 'keydown')();
+            e.preventDefault();
+            let code = e.code;
+            if (!Keys._map.has(code)) Keys._map.set(code, true)
+            if (Keys._bind.has(code + 'keydown')) Keys._bind.get(code + 'keydown')();
         });
         window.addEventListener('keyup', e => {
-            if (Keys._bind.has(e.code + 'keyup')) Keys._bind.get(e.code + 'keyup')();
-            Keys._map.delete(e.code);
+            e.preventDefault();
+            let code = e.code;
+            if (Keys._bind.has(code + 'keyup')) Keys._bind.get(code + 'keyup')();
+            Keys._map.delete(code);
         });
 
         // MOUSE
-        window.addEventListener('resize', () => { Mouse._bounds = Mouse._container.getBoundingClientRect() });
+        window.addEventListener('resize', e => { Mouse._bounds = Mouse._container.getBoundingClientRect() });
         window.addEventListener('mouseup', e => { Mouse._map.delete(Mouse._btns[e.button]) });
         window.addEventListener('mousedown', e => { Mouse._map.set(Mouse._btns[e.button], true) });
         window.addEventListener('mousemove', e => {
             Mouse.x = (e.x - Mouse._bounds.left + window.scrollX) / Mouse._bounds.width * Mouse._container.width;
             Mouse.y = (e.y - Mouse._bounds.top + window.scrollY) / Mouse._bounds.height * Mouse._container.height;
         });
+        window.addEventListener('wheel', e => {
+            e.preventDefault();
+            Mouse._scrollY += e.deltaY;
+        })
     })();
 
     exports.collision = collision;
