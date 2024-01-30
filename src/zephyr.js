@@ -1,24 +1,22 @@
 /* 
- * ZephyrJS - FOSS Game Engine Features for PixiJS
+ * ZephyrJS - FOSS Game Engine Features for Web Renderers
  * 
  * ZephyrJS is licensed under the MIT License.
  * 
  * Consider contributing to the project!
  * https://github.com/ZephyrJS-Project/ZephyrJS
  */
-const ZEPHYR = { VERSION: '24.1.29' };
+const ZEPHYR = { VERSION: '24.1.30' };
 (function (exports) {
     'use strict';
 
-    // NON-BUNDLE SETUP
-    let index = exports.utils;
-
-    /* START ZEPHYR BUNDLE ZONE */
+    // Add widely used math functions
     Math.clamp = (x, min, max) => Math.min(Math.max(x, min), max);
     Math.mix = (a, b, m) => a * (1 - m) + b * (m);
     Math.rand_int = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
     Math.withinRange = (x, min, max) => Math.abs(x - (min + max) / 2) - (max - min) / 2;
 
+    // Behind the scenes data storage & functions
     exports._audio = {};
     exports._audio.buffers = new Map(); // Store all decoded audio buffers in one location
     exports._audio.ctx = new AudioContext(); // More than one audio context causes lag
@@ -65,8 +63,8 @@ const ZEPHYR = { VERSION: '24.1.29' };
         }
     }
 
-    // UTILITIES (For some reason it's called index inside PIXI setup?)
-    index = (function (u) {
+    // Utilities
+    var utils = (function (u) {
         u.merge = function (tgt, arr) {
             let b;
             let i = 0;
@@ -79,7 +77,7 @@ const ZEPHYR = { VERSION: '24.1.29' };
             (document.webkitIsFullScreen || document.mozFullScreen || false) ? document.cancelFullScreen() : view.requestFullScreen();
         }
         return u;
-    })(index || {});
+    })(utils || {});
 
     // Collision
     var collision = (function (c) {
@@ -372,9 +370,7 @@ const ZEPHYR = { VERSION: '24.1.29' };
     exports.Keys = Keys;
     exports.Mouse = Mouse;
     exports.SpatialAudio = SpatialAudio;
-
-    /* END ZEPHYR BUNDLE ZONE */
-    exports.utils = index;
+    exports.utils = utils;
 
     return exports;
 })(ZEPHYR);
