@@ -1,11 +1,11 @@
 <div class="github"> 
-<p><a href="https://github.com/ZephyrStudio/ZephyrJS/blob/main/docs/STARTGUIDE.md">Getting Started Guide</a> | <a href="https://github.com/ZephyrStudio/ZephyrJS/blob/main/docs/CONTRIBUTE.md">Looking to help?</a> | <a href="https://github.com/ZephyrStudio/ZephyrJS/tree/main/docs/documentation">Documentation</a> | <a href="https://discord.gg/4GgT3aHTJ4">Discord Server</a></p>
+<p><a href="https://github.com/ZephyrStudio/ZephyrJS/blob/main/docs/STARTGUIDE.md">Getting Started Guide</a> | <a href="https://github.com/ZephyrStudio/ZephyrJS/blob/main/docs/CONTRIBUTE.md">Looking to help?</a> | <a href="https://github.com/ZephyrStudio/ZephyrJS/tree/main/docs/documentation">Documentation</a> | <a href="https://zephyrjs.pages.dev/discord" target="_blank">Join our Discord!</a></p>
 </div>
 
 <h1>What is ZephyrJS</h2>
 <p>ZephyrJS is a Free and Open Source Software (FOSS) javascript library that adds game-engine features like input handling, file io, audio and music, and more. There's tons of web renderers out there (we started with building on <a href="https://github.com/pixijs/pixijs">PixiJS</a>) so there's no sense reinventing the wheel. We provide what other libraries don't: a focus on commonly needed and often neglected (or poorly implemented) features. REGARDLESS of your graphics stack.</p>
 
-<p>The project is maintained by <a href="https://zephyrstudios.pages.dev/">Zephyr Studios</a>, which is a small but passionate indie development team. We test our work with ZephyrJS through actual game development and compatibility testing with PixiJS. Consider joining our <a href="https://discord.gg/4GgT3aHTJ4">Discord Server</a> to keep up with ZephyrJS or our studio's projects!</p>
+<p>The project is maintained by <a href="https://zephyrstudios.pages.dev/">Zephyr Studios</a>, which is a small but passionate indie development team. We test our work with ZephyrJS through actual game development and compatibility testing with PixiJS. Consider joining our <a href="/discord" target="_blank">Discord Server</a> to keep up with ZephyrJS or our studio's projects!</p>
 
 <h1>Zephyr is Open-Source</h1>
 
