@@ -360,7 +360,7 @@ const ZEPHYR = { VERSION: '24.1.30' };
             Mouse.y = (e.y - Mouse._bounds.top + window.scrollY) / Mouse._bounds.height * Mouse._container.height;
         });
         window.addEventListener('wheel', e => {
-            e.preventDefault();
+            // e.preventDefault();
             Mouse._scrollY += e.deltaY;
         })
     })();
